@@ -1,0 +1,13 @@
+[package]
+name = "bmt"
+version = "0.0.1"
+authors = ["rubycop"]
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+near-sdk = "4.0.0"
+near-contract-standards = "4.0.0"
+fast-math = "0.1"
