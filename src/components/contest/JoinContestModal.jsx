@@ -3,7 +3,6 @@ import { convertToTera, convertToYocto } from "../../utils/utils";
 import { Input } from "../Form";
 import { Modal } from "../Modal";
 import { NFTStorage } from "../../../node_modules/nft.storage/dist/bundle.esm.min.js";
-import { ColorSwatchIcon } from "@heroicons/react/solid";
 import { Skeleton } from "../Skeleton";
 import { ImageUploader } from "../ImageUploader";
 
@@ -19,8 +18,7 @@ export const JoinContestModal = ({
 
   const uploadImage = async () => {
     isLoading(true);
-    const NFT_STORAGE_KEY =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDQ1YzBERTY0RTQ2ZjQ2ZjNmMzM3NEU4QjA0Y0U0MURmMDI2QkQ5M2QiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2ODgxMjYwNDMyNCwibmFtZSI6ImJtdCJ9.sqv613mu8dRHLCaeBNFJpthgh8k-Cs-wwVj9VbgfwsU";
+    const NFT_STORAGE_KEY = process.env.IPFS_API_KEY;
     const client = new NFTStorage({ token: NFT_STORAGE_KEY });
 
     const metadata = await client.store({

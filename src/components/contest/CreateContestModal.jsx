@@ -12,19 +12,13 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
 
   const handleCreate = async () => {
     isLoading(true);
-    console.log({
-      title: title,
-      entry_fee: entryFee.toString(),
-      size: size,
-      start_time: startTime,
-      end_time: endTime,
-    });
     await window.contract.create_contest({
       title: title,
       entry_fee: entryFee,
       size: size,
       start_time: startTime,
       end_time: endTime,
+      image: "", // temp  solution
     });
     setShowModal(false);
     isLoading(false);
