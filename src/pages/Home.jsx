@@ -12,7 +12,7 @@ export const Home = ({ currentUser }) => {
 
   const getParticipants = async () => {
     isLoading(true);
-    const _participants = await window.contract.get_participants({});
+    const _participants = await window.contract?.get_participants({});
     setParticipants(_participants);
     isLoading(false);
   };

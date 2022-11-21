@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { convertToTera, convertToYocto } from "../../utils/utils";
 import { Input } from "../Form";
 import { Modal } from "../Modal";
-import { NFTStorage, File, Blob } from "nft.storage";
+import { NFTStorage } from "../../../node_modules/nft.storage/dist/bundle.esm.min.js";
 import { ColorSwatchIcon } from "@heroicons/react/solid";
 import { Skeleton } from "../Skeleton";
 import { ImageUploader } from "../ImageUploader";

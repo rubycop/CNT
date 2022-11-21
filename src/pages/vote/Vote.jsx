@@ -28,7 +28,7 @@ export const Vote = ({ currentUser }) => {
     isLoading(true);
 
     const contests = await window.contract.get_contests({});
-    const activeContests = [contests[3]].filter(
+    const activeContests = contests.filter(
       (c) =>
         new Date(c.start_time) < new Date() && new Date(c.end_time) > new Date()
     );
