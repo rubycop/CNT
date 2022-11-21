@@ -64,7 +64,7 @@ export const Vote = ({ currentUser }) => {
         <Skeleton />
       </>
     );
-  if (!contest || participants.length === 0)
+  if (!contest || participants.length < 2)
     return (
       <>
         <Header currentUser={currentUser} />
