@@ -47,7 +47,7 @@ export const JoinContestModal = ({
         accountId: currentUser.accountId,
       },
       convertToTera("20"),
-      convertToYocto("1")
+      convertToYocto(contest.entry_fee)
     );
   };
 

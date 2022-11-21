@@ -28,7 +28,7 @@ neardev/
 .env.development
 .env.production
 /.cache
-.parcel-cache/
+.parcel-cache/*
 
 npm-debug.log*
 yarn-debug.log*

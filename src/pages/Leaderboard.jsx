@@ -9,6 +9,7 @@ export const Leaderboard = ({ currentUser }) => {
   const [loading, isLoading] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [nfts, setNFTs] = useState([]);
+  const [defaultImg, setDefaultImg] = useState(false);
 
   const getParticipants = async () => {
     isLoading(true);
@@ -77,7 +78,15 @@ export const Leaderboard = ({ currentUser }) => {
                   key={i}
                 >
                   <div className="font-semibold text-base text-gray-700">
-                    <img className="w-12" src={p.nft_src} />
+                    <img
+                      className="w-12"
+                      src={defaultImg || p.nft_src}
+                      onError={() =>
+                        setDefaultImg(
+                          "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg"
+                        )
+                      }
+                    />
                   </div>
                   <div className="flex flex-row">
                     {p.votes_count}

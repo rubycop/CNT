@@ -8,7 +8,7 @@ import { groupBy } from "../utils/utils";
 export const Home = ({ currentUser }) => {
   const [loading, isLoading] = useState(false);
   const [participants, setParticipants] = useState([]);
-  const [nfts, setNFTs] = useState([]);
+  const [defaultImg, setDefaultImg] = useState(false);
 
   const getParticipants = async () => {
     isLoading(true);
@@ -18,8 +18,8 @@ export const Home = ({ currentUser }) => {
   };
 
   useEffect(() => {
-    getParticipants();
-  }, []);
+    if (currentUser) getParticipants();
+  }, [currentUser]);
 
   if (loading)
     return (
@@ -37,13 +37,26 @@ export const Home = ({ currentUser }) => {
       <Wrapper>
         <Container className="pt-20 flex flex-col items-center w-full justify-center">
           <div className="mb-5 text-lg font-bold">Popular NFTs</div>
-          <div className="w-3/4 flex flex-wrap">
+          <div className="w-3/5 flex flex-wrap">
             {participants
               .sort((a, b) => b.votes_count - a.votes_count)
               .map((p, i) => (
                 <div className="flex m-3 mb-5 rounded-3xl relative" key={i}>
-                  <div className="font-semibold text-base text-gray-700">
-                    <img className="w-72 rounded-3xl" src={p.nft_src} />
+                  <div className="font-semibold text-base border rounded-3xl text-gray-700">
+                    <img
+                      className="w-72 h-90 bg-cover rounded-3xl"
+                      src={defaultImg || p.nft_src}
+                      onError={() =>
+                        setDefaultImg(
+                          "https://media.tenor.com/xnZaQ3O98dMAAAAM/thinking-processing.gif"
+                        )
+                      }
+                    />
+                    {defaultImg && (
+                      <div className="absolute top-5 w-full text-center text-sm">
+                        Image is processing on IPFS
+                      </div>
+                    )}
                     <div className="absolute items-center -bottom-1 w-full rounded-l-3xl rounded-br-3xl  p-5 bg-white border">
                       <div className="flex justify-between">
                         <div className="text-base mt-2 w-40 text-gray-400 truncate">
@@ -55,7 +68,9 @@ export const Home = ({ currentUser }) => {
                         </div>
                       </div>
                       <div className="">
-                        <a className="text-blue-500 text-xs" href="...">Link to origin ></a>
+                        <a className="text-blue-500 text-xs" href={p.nft_src}>
+                          Link to origin >
+                        </a>
                       </div>
                     </div>
                   </div>

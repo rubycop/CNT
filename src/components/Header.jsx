@@ -13,7 +13,7 @@ export const Header = ({ currentUser }) => {
 
   const getReward = async () => {
     isLoading(true);
-    const _reward = await window.contract.get_voter_rewards({
+    const _reward = await window.contract?.get_voter_rewards({
       owner_id: currentUser.accountId,
     });
     setReward(_reward);
@@ -21,8 +21,8 @@ export const Header = ({ currentUser }) => {
   };
 
   useEffect(() => {
-    getReward();
-  }, []);
+    if (currentUser) getReward();
+  }, [currentUser]);
 
   return (
     <div className="sticky top-0 z-50 py-5 bg-violet-800">

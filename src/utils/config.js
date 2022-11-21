@@ -1,4 +1,4 @@
-export const CONTRACT_NAME = process.env.CONTRACT_NAME
+export const CONTRACT_NAME = "beat_my_nft.testnet";
 
 export function getConfig(env) {
   console.log(env);

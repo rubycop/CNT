@@ -9,6 +9,7 @@ export const Vote = ({ currentUser }) => {
   const [loading, isLoading] = useState(false);
   const [contest, setContest] = useState();
   const [participants, setParticipants] = useState([]);
+  const [defaultImg, setDefaultImg] = useState(false);
 
   const vote = async (participant) => {
     isLoading(true);
@@ -86,18 +87,32 @@ export const Vote = ({ currentUser }) => {
             <div className="flex flex-row gap-x-5">
               {participants.map((p, i) => (
                 <div key={i}>
-                  <img
-                    src={p.nft_src}
-                    className={`rounded-md object-cover w-60 h-90 ${
+                  <div
+                    className={`w-72 h-90 border-2 rounded-3xl ${
                       i === 0 ? "-rotate-12" : "rotate-12"
                     } hover:border-2 hover:border-green-500 hover:p-1`}
-                  />
-                  <div className="w-full mt-10">
+                    key={i}
+                  >
+                    <img
+                      className={`w-72 h-90 bg-cover rounded-3xl`}
+                      src={defaultImg || p.nft_src}
+                      onError={() =>
+                        setDefaultImg(
+                          "https://media.tenor.com/xnZaQ3O98dMAAAAM/thinking-processing.gif"
+                        )
+                      }
+                    />
+                    {defaultImg && (
+                      <div className="absolute top-5 w-full text-center text-sm">
+                        Image is processing on IPFS
+                      </div>
+                    )}
+                  </div>
+                  <div className="w-full px-20 mt-16">
                     <Button
-                      title="Vote"
+                      title="+1"
                       icon={<ThumbUpIcon className="ml-3 h-5 w-5" />}
                       handleClick={() => vote(p)}
-                      full
                     />
                   </div>
                 </div>
