@@ -24,8 +24,8 @@ export const JoinContestModal = ({
 
     const blobData = await resizeFileImage(image, 600, 800);
     const resultImg = await uploadMediaToIPFS(blobData);
-
-    if (resultImg) setImageUrl(resultImg);
+    console.log(`https://ipfs.io/ipfs/${resultImg}`);
+    if (resultImg) setImageUrl(`https://ipfs.io/ipfs/${resultImg}`);
 
     isLoading(false);
   };
