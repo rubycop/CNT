@@ -45,7 +45,7 @@ export const Home = ({ currentUser }) => {
                   <div className="font-semibold text-base border rounded-3xl text-gray-700">
                     <img
                       className="w-72 h-90 bg-cover rounded-3xl"
-                      src={defaultImg || p.nft_src}
+                      src={defaultImg || `https://ipfs.io/ipfs/{p.nft_src}`}
                       onError={() =>
                         setDefaultImg(
                           "https://media.tenor.com/xnZaQ3O98dMAAAAM/thinking-processing.gif"

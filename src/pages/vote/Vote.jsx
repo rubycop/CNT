@@ -95,7 +95,7 @@ export const Vote = ({ currentUser }) => {
                   >
                     <img
                       className={`w-72 h-90 bg-cover rounded-3xl`}
-                      src={defaultImg || p.nft_src}
+                      src={defaultImg || `https://ipfs.io/ipfs/${p.nft_src}`}
                       onError={() =>
                         setDefaultImg(
                           "https://media.tenor.com/xnZaQ3O98dMAAAAM/thinking-processing.gif"
