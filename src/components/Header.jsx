@@ -25,7 +25,7 @@ export const Header = ({ currentUser }) => {
   }, [currentUser]);
 
   return (
-    <div className="sticky top-0 z-50 py-5 bg-violet-800">
+    <div className="header-area  sticky top-0 z-50 py-5 bg-violet-800">
       <Container>
         <Row className="justify-between">
           <Row>
@@ -35,19 +35,19 @@ export const Header = ({ currentUser }) => {
           </Row>
           <Row>
             <button
-              className="flex flex-row items-center font-medium text-white mx-5 hover:text-violet-300"
+              className="flex font-regular text-sm tracking-widest flex-row items-center text-white mx-5 hover:text-violet-300 uppercase"
               onClick={() => navigate("/contests")}
             >
-              Browse Contests
+              contests
             </button>
             <button
-              className="flex flex-row items-center font-medium text-white mx-5 hover:text-violet-300"
+              className="flex flex-row items-center font-regular text-sm tracking-widest text-white mx-5 hover:text-violet-300 uppercase"
               onClick={() => navigate("/vote")}
             >
               Start Voting
             </button>
             <button
-              className="flex flex-row items-center font-medium text-white mx-5 hover:text-violet-300"
+              className="flex flex-row items-center font-regular text-sm tracking-widest text-white mx-5 hover:text-violet-300 uppercase"
               onClick={() => navigate("/leaderboard")}
             >
               Leaderboard
@@ -55,11 +55,11 @@ export const Header = ({ currentUser }) => {
           </Row>
           {currentUser ? (
             <div className="flex flex-row items-center">
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-              <div className="ml-3 mr-10 text-white">
+              <div className="w-3 h-3 rounded-full bg-green-300"></div>
+              <div className="ml-3 mr-10 text-white text-md tracking-widest">
                 {currentUser.accountId}
               </div>
-              <div className="ml-3 mr-10 font-semibold text-green-300">
+              <div className="ml-3 mr-10 font-semibold text-green-300 text-sm tracking-widest">
                 {reward} BMT
               </div>
 

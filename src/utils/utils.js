@@ -120,3 +120,7 @@ export const resizeFileImage = (file, max_width, max_height) => {
     reader.readAsDataURL(file);
   });
 };
+
+export const mediaURL = (ipfsHash) => {
+  return `https://ipfs.io/ipfs/${ipfsHash}`;
+};

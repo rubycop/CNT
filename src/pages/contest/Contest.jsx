@@ -73,9 +73,9 @@ export const Contest = ({ currentUser }) => {
     <>
       <Header currentUser={currentUser} />
       <Wrapper>
-        <Container className="pt-20 flex">
-          <div className="w-full">
-            <>
+        <div className="w-full">
+          <>
+            <Container className="pt-20 flex">
               <div className="sm:flex items-center justify-between">
                 <div className="flex items-center">
                   <FilterTab title="Active" tab={0} />
@@ -84,6 +84,7 @@ export const Contest = ({ currentUser }) => {
                 </div>
 
                 <Button
+                  disabled
                   title="Create Contest"
                   icon={<PlusIcon className="ml-3 h-5 w-5" />}
                   handleClick={() => setShowModal(true)}
@@ -94,36 +95,25 @@ export const Contest = ({ currentUser }) => {
                   setShowModal={setShowModal}
                 />
               </div>
-              {loading ? (
-                <Skeleton />
-              ) : (
-                <div className="mt-7 h-screen">
-                  <table className="w-full whitespace-nowrap">
-                    <tbody>
-                      {contests?.map((contest, index) => (
-                        <>
-                          <ContestItem
-                            contest={contest}
-                            currentUser={currentUser}
-                            index={index}
-                            handleJoin={() => setShowJoinModal(true)}
-                          />
-
-                          <JoinContestModal
-                            showModal={showJoinModal}
-                            setShowModal={setShowJoinModal}
-                            currentUser={currentUser}
-                            contest={contest}
-                          />
-                        </>
-                      ))}
-                    </tbody>
-                  </table>
+            </Container>
+            {loading ? (
+              <Skeleton />
+            ) : (
+              <div className="infos px-20">
+                <div className="w-full flex gap-x-10 gap-y-16 flex-wrap justify-center">
+                  {contests?.map((contest, index) => (
+                    <ContestItem
+                      contest={contest}
+                      currentUser={currentUser}
+                      index={index}
+                      handleJoin={() => setShowJoinModal(true)}
+                    />
+                  ))}
                 </div>
-              )}
-            </>
-          </div>
-        </Container>
+              </div>
+            )}
+          </>
+        </div>
       </Wrapper>
     </>
   );

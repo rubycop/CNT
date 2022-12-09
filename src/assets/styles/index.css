@@ -1,5 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Exo:wght@200;400;500;600;800&display=swap");
 
+@import "../template/css/templatemo.css";
+@import "../template/css/fontawesome.css";
+@import "../template/css/owl.css";
+@import "../template/css/animate.css";
+@import "../template/css/flex-slider.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
