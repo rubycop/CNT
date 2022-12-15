@@ -1,7 +1,18 @@
-use near_sdk::{AccountId, Balance, env, near_bindgen, Promise};
-use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::serde::{Deserialize, Serialize};
+
+use std::fmt;
+
 use near_contract_standards::non_fungible_token::TokenId;
+use near_sdk::{AccountId, assert_one_yocto, Balance, BorshStorageKey, env, Gas, near_bindgen, Promise, serde_json::json, ext_contract, Timestamp};
+use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+use near_sdk::collections::{LookupMap, LookupSet, UnorderedMap};
+use near_sdk::json_types::{U128, U64};
+use near_sdk::serde::{Deserialize, Serialize};
+use near_sdk::serde_json::Value as JsonValue;
+
+mod utils;
+
+pub const ONE_NEAR: u128 = 1_000_000_000_000_000_000_000_000 as u128;
+pub const XCC_GAS: Gas = Gas(30_000_000_000_000);
 
 #[derive(Serialize, Deserialize, BorshDeserialize, BorshSerialize)]
 #[serde(crate = "near_sdk::serde")]
@@ -42,6 +53,15 @@ pub struct Contract {
     contests: Vec<Contest>,
     participants: Vec<Participant>,
     voters: Vec<Voter>,
+    contract_ft: AccountId
+}
+
+
+#[ext_contract(ext_self)]
+pub trait ExtSelf {
+    fn callback_join_contest(
+        #[callback] token_id: String
+    ) -> String;
 }
 
 impl Default for Contract {
@@ -50,6 +70,7 @@ impl Default for Contract {
             contests: vec![],
             participants: vec![],
             voters: vec![],
+            contract_ft: format!("ft.{}", env::current_account_id()).try_into().unwrap(),
         }
     }
 }
@@ -158,21 +179,31 @@ impl Contract {
         self.contests.clone()
     }
 
-    fn to_yocto(&self, tokens: f64) -> Balance {
-        let amount = tokens * 10u128.pow(24) as f64;
-        amount.to_string().parse().unwrap()
+    #[payable]
+    pub fn join_contest(&mut self, contest_id: String, nft_src: String, amount: String) -> Promise {
+        let ft_amount_transfer = u128::from(amount) * ONE_NEAR;
+
+        Promise::new(self.contract_ft.clone()).function_call(
+            "ft_transfer".to_string(),
+            json!({
+                "receiver_id": env::current_account_id().to_string(),
+                "amount": ft_amount_transfer.to_string()
+            }).to_string().as_bytes().to_vec(),
+            1,
+            Contract::convert_to_tera(10),
+        ).then(
+            Self::ext(env::current_account_id())
+                .with_static_gas(Contract::convert_to_tera(50))
+                .callback_join_contest(
+                    contest_id.clone(),
+                    nft_src.to_string(),
+                )
+        );
     }
 
-    #[payable]
-    pub fn join_contest(&mut self, contest_id: String, nft_src: String) -> Promise {
+    pub fn callback_join_contest(&mut self, contest_id: String, nft_src: String) -> Participant {
         let contest = self.get_contest_by_id(contest_id.clone()).unwrap();
         let participants = self.get_contest_participants(contest_id.clone());
-        let deposit = env::attached_deposit();
-        let platform_fee = deposit * 0.01 as u128;
-
-        if deposit != self.to_yocto(contest.entry_fee.parse::<f64>().unwrap()) {
-            env::panic_str("Wrong amount of attached deposit value");
-        }
 
         if contest.size == participants.len() {
             env::panic_str("There is no free space in this contest");
@@ -187,9 +218,7 @@ impl Contract {
         };
 
         self.participants.push(participant);
-    
-        Promise::new(env::current_account_id()).transfer(platform_fee);
-        Promise::new(contest.owner_id).transfer(deposit - platform_fee)
+        participant
     }
 
     pub fn vote(&mut self, participant_id: String, contest_id: String, reward: String) -> Vec<Voter> {

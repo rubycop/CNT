@@ -31,10 +31,11 @@ export const JoinContestModal = ({
       {
         contest_id: contest.id,
         nft_src: chosen,
+        entry_fee: contest.entry_fee,
         accountId: currentUser.accountId,
       },
       convertToTera("20"),
-      convertToYocto(contest.entry_fee)
+      1
     );
   };
 

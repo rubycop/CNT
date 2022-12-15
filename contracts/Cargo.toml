@@ -1,0 +1,25 @@
+[package]
+name = "bmt"
+version = "0.3.0"
+authors = ["Near Inc <hello@near.org>"]
+edition = "2021"
+
+[dependencies]
+near-sdk = "4.0.0"
+near-contract-standards = "4.0.0"
+ft = { path = "./ft" }
+main = { path = "./main" }
+
+[dev-dependencies]
+near-sdk-sim = "3.2.0"
+
+[workspace]
+members = ["ft", "main"]
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
