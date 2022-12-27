@@ -1,4 +1,4 @@
-export const CONTRACT_NAME = "beat_my_nft.testnet";
+export const CONTRACT_NAME = "dev-1671650800948-21411166369867";
 
 export function getConfig(env) {
   console.log(env);

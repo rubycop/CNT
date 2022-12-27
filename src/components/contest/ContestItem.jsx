@@ -1,17 +1,17 @@
 import { CurrencyDollarIcon, UserIcon } from "@heroicons/react/outline";
 import React, { useEffect, useRef, useState } from "react";
-import { timeDiffSeconds } from "../../utils/utils";
+import { currency, PLATFORM_FEE } from "../../utils/utils";
 import { Button } from "../Button";
 import { ProgressBar } from "../ProgressBar";
 import { Timer } from "../Timer";
 import { JoinContestModal } from "./JoinContestModal";
 
 export const isIncomming = (contest) =>
-  new Date(contest.start_time) > new Date();
+  new Date(parseInt(contest.start_time)) > new Date();
 
 export const isActive = (contest) =>
-  new Date(contest.start_time) < new Date() &&
-  new Date(contest.end_time) > new Date();
+  new Date(parseInt(contest.start_time)) < new Date() &&
+  new Date(parseInt(contest.end_time)) > new Date();
 
 export const ContestItem = ({ contest, currentUser, handleJoin }) => {
   const [participants, setParticipants] = useState([]);
@@ -43,6 +43,9 @@ export const ContestItem = ({ contest, currentUser, handleJoin }) => {
     (a, b) => b.votes_count - a.votes_count
   )[0];
 
+  const getPrizePool =
+    participants.length * contest.entry_fee * (1 - PLATFORM_FEE);
+
   useEffect(() => {
     getContestParticipants();
   }, []);
@@ -70,25 +73,27 @@ export const ContestItem = ({ contest, currentUser, handleJoin }) => {
 
   return (
     <div className="main-content w-[45%]">
-      <div className="flex flex-row">
-        <div className="w-1/3">
-          <div className="left-image">
-            <img
-              src={require("../../assets/template/images/left-infos.jpg")}
-              alt=""
-            />
-          </div>
+      <div className="flex flex-row h-full">
+        <div className="w-1/3 h-full">
+          <img
+            className="w-full h-full object-center object-cover"
+            src={contest.image}
+            alt=""
+            onError={(error) =>
+              (error.target.src = require("../../assets/template/images/left-infos.jpg"))
+            }
+          />
         </div>
-        <div className="w-2/3 p-10">
+        <div className="w-2/3 p-10 h-full">
           <div className="mb-10">
-            <h2 className="text-4xl leading-snug font-normal w-3/4 mb-5">
+            <h2 className="text-4xl leading-snug font-normal w-full mb-5">
               {contest.title}
             </h2>
             <div className="font-bold text-base mb-5 text-gray-600">
               Prize pool:
               <span className="ml-2 text-green-500">
                 {participants?.length > 0
-                  ? `${participants.length * contest.entry_fee} NEAR`
+                  ? `${getPrizePool} ${currency(contest)}`
                   : "-"}
               </span>
             </div>
@@ -104,7 +109,11 @@ export const ContestItem = ({ contest, currentUser, handleJoin }) => {
               <>
                 <Timer contest={contest} />
                 <ProgressBar
-                  time={isActive ? contest.end_time : contest.start_time}
+                  time={
+                    isActive
+                      ? parseInt(contest.end_time)
+                      : parseInt(contest.start_time)
+                  }
                 />
               </>
             ))}
@@ -114,7 +123,7 @@ export const ContestItem = ({ contest, currentUser, handleJoin }) => {
               <>
                 <Button
                   full
-                  title={`Join for ${contest.entry_fee} NEAR`}
+                  title={`Join for ${contest.entry_fee} ${currency(contest)}`}
                   handleClick={() => setShowJoinModal(true)}
                 />
 

@@ -124,3 +124,7 @@ export const resizeFileImage = (file, max_width, max_height) => {
 export const mediaURL = (ipfsHash) => {
   return `https://ipfs.io/ipfs/${ipfsHash}`;
 };
+
+export const PLATFORM_FEE = 0.05;
+
+export const currency = (contest) => (contest.currency_ft ? "NB" : "NEAR");

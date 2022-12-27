@@ -1,6 +1,3 @@
-
-use std::fmt;
-
 use near_contract_standards::non_fungible_token::TokenId;
 use near_sdk::{AccountId, assert_one_yocto, Balance, BorshStorageKey, env, Gas, near_bindgen, Promise, serde_json::json, ext_contract, Timestamp};
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
@@ -12,7 +9,15 @@ use near_sdk::serde_json::Value as JsonValue;
 mod utils;
 
 pub const ONE_NEAR: u128 = 1_000_000_000_000_000_000_000_000 as u128;
+pub const REWARD_MIN: usize = 1;
+pub const REWARD_MAX: usize = 3;
 pub const XCC_GAS: Gas = Gas(30_000_000_000_000);
+
+
+#[derive(BorshStorageKey, BorshSerialize)]
+pub enum StorageKeys {
+    FtStorageAccounts,
+}
 
 #[derive(Serialize, Deserialize, BorshDeserialize, BorshSerialize)]
 #[serde(crate = "near_sdk::serde")]
@@ -30,7 +35,7 @@ pub struct Voter {
     pub owner_id: String,
     pub contest_id: String,
     pub participant_id: String,
-    pub reward: u8,
+    pub reward: u32,
 }
 
 #[derive(Serialize, Deserialize, BorshDeserialize, BorshSerialize)]
@@ -42,6 +47,7 @@ pub struct Contest {
     pub title: String,
     pub size: usize,
     pub entry_fee: String,
+    pub currency_ft: bool,
     pub start_time: String,
     pub end_time: String,
     pub winner_id: Option<String>
@@ -53,7 +59,8 @@ pub struct Contract {
     contests: Vec<Contest>,
     participants: Vec<Participant>,
     voters: Vec<Voter>,
-    contract_ft: AccountId
+    contract_ft: AccountId,
+    ft_storage_accounts: LookupSet<AccountId>,
 }
 
 
@@ -71,6 +78,7 @@ impl Default for Contract {
             participants: vec![],
             voters: vec![],
             contract_ft: format!("ft.{}", env::current_account_id()).try_into().unwrap(),
+            ft_storage_accounts: LookupSet::new(StorageKeys::FtStorageAccounts)
         }
     }
 }
@@ -84,6 +92,7 @@ impl Clone for Contest {
             size: self.size.clone(),
             image: self.image.clone(),
             entry_fee: self.entry_fee.clone(),
+            currency_ft: self.currency_ft.clone(),
             start_time: self.start_time.clone(),
             end_time: self.end_time.clone(),
             winner_id: self.winner_id.clone(),
@@ -116,6 +125,24 @@ impl Clone for Participant {
 
 #[near_bindgen]
 impl Contract {
+
+    pub fn add_token_storage(&mut self, account_id: &AccountId) {
+        let ft_mint_deposit: Balance = Contract::convert_to_yocto("0.00125");
+        let ft_mint_gas: Gas = Contract::convert_to_tera(10);
+
+        Promise::new(self.contract_ft.clone()).function_call(
+            "ft_mint".to_string(),
+            json!({
+            "receiver_id": account_id,
+            "amount": "0"
+        }).to_string().as_bytes().to_vec(),
+            ft_mint_deposit,
+            ft_mint_gas,
+        );
+
+        self.ft_storage_accounts.insert(account_id);
+    }
+
     pub fn get_contests(&self) -> Vec<Contest> {
         self.contests.clone()
     }
@@ -147,7 +174,7 @@ impl Contract {
             .collect()
     }
 
-    pub fn get_voter_rewards(&self, owner_id: String) -> u8 {
+    pub fn get_voter_rewards(&self, owner_id: String) -> u32 {
         self.get_voters()
             .into_iter()
             .filter(|v| v.owner_id == owner_id)
@@ -161,47 +188,73 @@ impl Contract {
             entry_fee: String,
             start_time: String,
             image: String,
-            end_time: String
-        ) -> Vec<Contest> {
+            end_time: String,
+            currency_ft: bool
+        ) -> String {
+        let id = env::block_timestamp();
         let new_contest = Contest {
-            id: env::block_timestamp().to_string(),
+            id: id.to_string(),
             owner_id: env::predecessor_account_id(),
             title: title.to_string(),
             entry_fee: entry_fee.to_string(),
             image: image.to_string(),
             size: size.parse().unwrap_or(1),
+            currency_ft: currency_ft,
             start_time: start_time.to_string(),
             end_time: end_time.to_string(),
             winner_id: None
         };
 
-        self.contests.push(new_contest);
-        self.contests.clone()
+        self.contests.push(new_contest.clone());
+        id.to_string()
     }
 
     #[payable]
-    pub fn join_contest(&mut self, contest_id: String, nft_src: String, amount: String) -> Promise {
-        let ft_amount_transfer = u128::from(amount) * ONE_NEAR;
+    pub fn join_contest(&mut self, contest_id: String, nft_src: String) -> () {
+        let contest = self.get_contest_by_id(contest_id.clone()).unwrap();
+        let transfer_amount: u128 = contest.entry_fee.parse::<u128>().unwrap() * u128::from(ONE_NEAR);
 
-        Promise::new(self.contract_ft.clone()).function_call(
-            "ft_transfer".to_string(),
-            json!({
-                "receiver_id": env::current_account_id().to_string(),
-                "amount": ft_amount_transfer.to_string()
-            }).to_string().as_bytes().to_vec(),
-            1,
-            Contract::convert_to_tera(10),
-        ).then(
-            Self::ext(env::current_account_id())
-                .with_static_gas(Contract::convert_to_tera(50))
-                .callback_join_contest(
-                    contest_id.clone(),
-                    nft_src.to_string(),
-                )
-        );
+        if contest.currency_ft == true {
+            if !self.ft_storage_accounts.contains(&env::predecessor_account_id()) {
+                self.add_token_storage(&env::predecessor_account_id());
+            }
+
+            Promise::new(self.contract_ft.clone()).function_call(
+                "internal_withdraw".to_string(),
+                json!({
+                    "account_id": &env::predecessor_account_id(),
+                    "amount": transfer_amount.to_string(),
+                }).to_string().as_bytes().to_vec(),
+                1,
+                Contract::convert_to_tera(10),
+            ).then(
+                Self::ext(env::current_account_id())
+                    .with_static_gas(Contract::convert_to_tera(30))
+                    .callback_join_contest(
+                        contest_id.clone(),
+                        env::predecessor_account_id(),
+                        nft_src.to_string(),
+                    )
+            );
+        } else {
+            if env::attached_deposit() != transfer_amount {
+                env::panic_str("Attached amount does not match entry fee");
+            }
+
+            Promise::new(env::current_account_id()).transfer(transfer_amount).then(
+                Self::ext(env::current_account_id())
+                    .with_static_gas(Contract::convert_to_tera(30))
+                    .callback_join_contest(
+                        contest_id.clone(),
+                        env::predecessor_account_id(),
+                        nft_src.to_string(),
+                    )
+            );
+        }
+        
     }
 
-    pub fn callback_join_contest(&mut self, contest_id: String, nft_src: String) -> Participant {
+    pub fn callback_join_contest(&mut self, contest_id: String, owner_id: AccountId, nft_src: String) -> bool {
         let contest = self.get_contest_by_id(contest_id.clone()).unwrap();
         let participants = self.get_contest_participants(contest_id.clone());
 
@@ -212,17 +265,19 @@ impl Contract {
         let participant = Participant {
             id: env::block_timestamp().to_string(),
             contest_id: contest_id,
-            owner_id: env::predecessor_account_id(),
+            owner_id: owner_id,
             nft_src: nft_src.to_string(),
             votes_count: 0
         };
 
         self.participants.push(participant);
-        participant
+        true
     }
 
     pub fn vote(&mut self, participant_id: String, contest_id: String, reward: String) -> Vec<Voter> {
         let mut participant = self.get_participant_by_id(participant_id.clone()).unwrap();
+        let rand_val = self.random_in_range(REWARD_MIN, REWARD_MAX);
+
         participant.votes_count += 1;
         let index = self.participants
                                .iter()
@@ -235,7 +290,7 @@ impl Contract {
             contest_id: contest_id,
             participant_id: participant_id,
             owner_id: env::predecessor_account_id().to_string(),
-            reward: reward.parse().unwrap_or(0)
+            reward: rand_val
         };
 
         self.voters.push(voter);

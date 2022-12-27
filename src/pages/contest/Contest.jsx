@@ -22,7 +22,8 @@ export const Contest = ({ currentUser }) => {
     const contests = await window.contract.get_contests({});
     const active = contests.filter(
       (c) =>
-        new Date(c.start_time) < new Date() && new Date(c.end_time) > new Date()
+        new Date(parseInt(c.start_time)) < new Date() &&
+        new Date(parseInt(c.end_time)) > new Date()
     );
     setContests(active);
     setMode(0);
@@ -33,7 +34,7 @@ export const Contest = ({ currentUser }) => {
     isLoading(true);
     const contests = await window.contract.get_contests({});
     const incomming = contests.filter(
-      (c) => new Date(c.start_time) > new Date()
+      (c) => new Date(parseInt(c.start_time)) > new Date()
     );
     setContests(incomming);
     setMode(1);
@@ -45,7 +46,8 @@ export const Contest = ({ currentUser }) => {
     const contests = await window.contract.get_contests({});
     const past = contests.filter(
       (c) =>
-        new Date(c.start_time) < new Date() && new Date(c.end_time) < new Date()
+        new Date(parseInt(c.start_time)) < new Date() &&
+        new Date(parseInt(c.end_time)) < new Date()
     );
     setContests(past);
     setMode(2);

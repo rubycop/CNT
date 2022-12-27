@@ -25,17 +25,16 @@ export const JoinContestModal = ({
   const [nfts, setNFTs] = useState([]);
 
   const joinContest = async () => {
-    if (!image || !imageUrl) return;
+    if (!chosen) return;
 
     await window.contract.join_contest(
       {
         contest_id: contest.id,
         nft_src: chosen,
-        entry_fee: contest.entry_fee,
         accountId: currentUser.accountId,
       },
-      convertToTera("20"),
-      1
+      convertToTera("50"),
+      contest.currency_ft ? 1 : convertToYocto(contest.entry_fee)
     );
   };
 
@@ -62,58 +61,62 @@ export const JoinContestModal = ({
       loading={loading}
       collection={nfts}
     >
-      <div className="block p-6">
-        <div className="form-group mb-6">
-          {loading ? (
-            <Skeleton />
-          ) : (
-            <>
-              {nfts.length > 0 ? (
-                nfts.map((imgUrl, index) => (
+      <div className="mb-6 w-full h-full flex flex-wrap gap-3 overflow-y-auto">
+        {loading ? (
+          <Skeleton />
+        ) : (
+          <>
+            {nfts.length > 0 ? (
+              nfts.map((imgUrl, index) => (
+                <div
+                  key={index}
+                  className="w-48 h-48 rounded-2xl item mx-2 relative"
+                  onMouseOver={() => !chosen && setChosenBtn(index)}
+                  onMouseOut={() => !chosen && setChosenBtn()}
+                >
+                  <img
+                    className={`w-48 h-48 bg-cover rounded-2xl object-cover ${
+                      chosenBtn === index && "blur-xs opacity-70"
+                    }`}
+                    src={mediaURL(imgUrl)}
+                  />
                   <div
-                    key={index}
-                    className="w-72 h-72 rounded-2xl item mx-2 relative"
-                    onMouseOver={() => setChosenBtn(index)}
-                    onMouseOut={() => setChosenBtn(false)}
+                    className={`absolute flex w-full h-full top-0 justify-center items-center z-10 down-content ${
+                      chosenBtn === index ? "cursor-pointer block" : "hidden"
+                    }`}
                   >
-                    <img
-                      className={`w-72 h-72 bg-cover rounded-2xl object-cover ${
-                        chosenBtn === index && "blur-xs opacity-70"
-                      }`}
-                      src={mediaURL(imgUrl)}
+                    <Button
+                      title="choose"
+                      outlined={chosen != mediaURL(imgUrl)}
+                      icon={<CheckIcon className="w-5 h-5 ml-3" />}
+                      handleClick={() => {
+                        if (chosen) {
+                          setChosen();
+                          setChosenBtn();
+                        } else {
+                          setChosenBtn(index);
+                          setChosen(mediaURL(imgUrl));
+                        }
+                      }}
                     />
-                    <div
-                      className={`absolute flex w-full h-full top-0 justify-center items-center z-10 down-content ${
-                        chosenBtn === index || chosen
-                          ? "cursor-pointer block"
-                          : "hidden"
-                      }`}
-                    >
-                      <Button
-                        title="choose"
-                        outlined={!chosen}
-                        icon={<CheckIcon className="w-5 h-5 ml-3" />}
-                        handleClick={() => setChosen(mediaURL(imgUrl))}
-                      />
-                    </div>
                   </div>
-                ))
-              ) : (
-                <p className="text-2xl font-normal text-center leading-relaxed">
-                  You don't have any NFTs on Paras. <br />
-                  Visit{" "}
-                  <a
-                    className="text-violet-600 underline"
-                    href="https://paras.id/"
-                  >
-                    paras.id
-                  </a>{" "}
-                  and buy some
-                </p>
-              )}
-            </>
-          )}
-        </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-2xl font-normal text-center leading-relaxed">
+                You don't have any NFTs on Paras. <br />
+                Visit{" "}
+                <a
+                  className="text-violet-600 underline"
+                  href="https://paras.id/"
+                >
+                  paras.id
+                </a>{" "}
+                and buy some
+              </p>
+            )}
+          </>
+        )}
       </div>
     </Modal>
   );

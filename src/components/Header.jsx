@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Row } from "../assets/styles/common.style";
 import { login, logout } from "../utils/nearApi";
 import { Button } from "./Button";
+import logo from "../assets/images/logo.png";
 
 export const Header = ({ currentUser }) => {
   let navigate = useNavigate();
@@ -13,8 +14,8 @@ export const Header = ({ currentUser }) => {
 
   const getReward = async () => {
     isLoading(true);
-    const _reward = await window.contract?.get_voter_rewards({
-      owner_id: currentUser.accountId,
+    const _reward = await window.ftContract?.ft_balance_of({
+      account_id: currentUser.accountId,
     });
     setReward(_reward);
     isLoading(false);
@@ -25,42 +26,33 @@ export const Header = ({ currentUser }) => {
   }, [currentUser]);
 
   return (
-    <div className="header-area  sticky top-0 z-50 py-5 bg-violet-800">
+    <div className="top-0 z-50 py-5 text-white">
       <Container>
         <Row className="justify-between">
-          <Row>
-            <a className="text-xl font-bold text-white" href="/">
-              Beat My Nft
+          <Row className="">
+            <a href="/">
+              <img className="h-10" src={logo} />
             </a>
           </Row>
-          <Row>
-            <button
-              className="flex font-regular text-sm tracking-widest flex-row items-center text-white mx-5 hover:text-violet-300 uppercase"
-              onClick={() => navigate("/contests")}
-            >
-              contests
-            </button>
-            <button
-              className="flex flex-row items-center font-regular text-sm tracking-widest text-white mx-5 hover:text-violet-300 uppercase"
-              onClick={() => navigate("/vote")}
-            >
-              Start Voting
-            </button>
-            <button
-              className="flex flex-row items-center font-regular text-sm tracking-widest text-white mx-5 hover:text-violet-300 uppercase"
-              onClick={() => navigate("/leaderboard")}
-            >
+          <Row className="font-regular text-base justify-around gap-x-10">
+            <a className="tracking-widest" href="/contests">
+              Browse Contests
+            </a>
+            <a className="tracking-widest" href="/vote">
+              Vote
+            </a>
+            <a className="tracking-widest" href="/leaderboard">
               Leaderboard
-            </button>
+            </a>
           </Row>
           {currentUser ? (
-            <div className="flex flex-row items-center">
-              <div className="w-3 h-3 rounded-full bg-green-300"></div>
-              <div className="ml-3 mr-10 text-white text-md tracking-widest">
+            <Row className="items-center ">
+              <div className="w-3 h-3 rounded-full bg-green-400"></div>
+              <div className="ml-3 mr-10 text-base tracking-widest truncate w-32">
                 {currentUser.accountId}
               </div>
-              <div className="ml-3 mr-10 font-semibold text-green-300 text-sm tracking-widest">
-                {reward} BMT
+              <div className="ml-3 mr-10 font-semibold text-green-400 text-base tracking-widest">
+                {reward} CNT
               </div>
 
               <Button
@@ -68,14 +60,15 @@ export const Header = ({ currentUser }) => {
                 icon={<LogoutIcon className="ml-3 h-5 w-5" />}
                 handleClick={logout}
                 outlined
+                white
               />
-            </div>
+            </Row>
           ) : (
             <Button
               title="Connect wallet"
               icon={<LoginIcon className="ml-3 h-5 w-5" />}
               handleClick={login}
-              outlined
+              white
             />
           )}
         </Row>

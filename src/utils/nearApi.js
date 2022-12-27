@@ -29,6 +29,15 @@ export async function initContract() {
     }
   );
 
+  window.ftContract = await new Contract(
+    window.walletConnection.account(),
+    `ft.${nearConfig.contractName}`,
+    {
+      viewMethods: ["ft_balance_of"],
+      changeMethods: ["ft_mint", "ft_transfer", "ft_transfer_call"],
+    }
+  );
+
   window.parasContract = await new Contract(
     window.walletConnection.account(),
     `${process.env.PARAS_TOKEN_CONTRACT}`,

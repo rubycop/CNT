@@ -10,6 +10,8 @@ import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import { Button } from "../components/Button";
 import { ContestItem } from "../components/contest/ContestItem";
+import banner from "../assets/images/banner.png";
+import boost from "../assets/images/boost.png";
 
 const images = [
   {
@@ -87,9 +89,9 @@ export const Home = ({ currentUser }) => {
     isLoading(true);
     const contests = await window.contract.get_contests({});
     const incomming = contests.filter(
-      (c) => new Date(c.start_time) > new Date()
+      (c) => new Date(parseInt(c.start_time)) > new Date()
     );
-    setContests(incomming);
+    setContests(incomming.reverse().slice(0, 2));
     isLoading(false);
   };
 
@@ -100,28 +102,31 @@ export const Home = ({ currentUser }) => {
   return (
     <>
       <Header currentUser={currentUser} />
+      <img src={banner} className="w-full absolute object-cover -z-10 top-0" />
       <Wrapper>
-        <div className="main-banner" id="top">
+        <div className="pt-[180px]" id="top">
           <div className="container">
-            <div className="w-1/2 pl-20">
-              <h4 className="tracking-wide">
-                Make <em>The NFT</em> World{" "}
-                <div className="text-purple-700">Better</div>
-              </h4>
-              <p className="w-full text-neutral-800 font-normal tracking-wide">
-                Beat My Nft (BMT) - is a first WEB3 NFT contest service that
-                helps people evaluate a NFTs and arrange them in one place.
-              </p>
+            <div className="pl-40">
+              <div className="w-1/2  text-6xl tracking-wide leading-tight">
+                <span className="font-semibold pr-3 text-violet-100">
+                  Make The NFT World Better
+                </span>
+              </div>
+              <div className="w-1/2  text-base font-normal my-10 leading-relaxed tracking-wide text-white">
+                Contesty - is a first WEB3 NFT contest app. Compete in contests
+                to win big prize, vote and predict a winner to get rewards.
+              </div>
               <div className="flex gap-x-5">
                 <Button
                   title="Discover More"
+                  white
                   icon={<ArrowDownIcon className=" ml-2 h-5" />}
                   handleClick={() => scrollTo(serviceRef)}
                 />
                 <Button
                   title="Check our Whitepaper"
                   outlined
-                  secondary
+                  white
                   icon={<DocumentSearchIcon className=" ml-2 h-5" />}
                   handleClick={() => {}}
                 />
@@ -130,21 +135,23 @@ export const Home = ({ currentUser }) => {
           </div>
         </div>
 
-        <div className="services w-full section pt-32" ref={serviceRef}>
-          <div className="flex-col w-full">
-            <div className="flex flex-col items-end">
-              <div className="w-1/2">
+        <div
+          className="services flex section py-16 mt-48 bg-violet-50"
+          ref={serviceRef}
+        >
+          <div className="w-1/2 flex items-center justify-center">
+            <img src={boost} className="w-1/2 object-contain" />
+          </div>
+          <div className="flex-col w-1/2 justify-center">
+            <div className="flex flex-col items-start">
+              <div>
                 <div className="section-heading text-4xl leading-normal tracking-wide">
-                  <h2>
-                    <p className="font-semibold text-5xl mt-5 text-violet-600">
-                      Contestant & Voter
-                    </p>
-                  </h2>
-                  <div className="line-dec"></div>
-                  <p className="w-3/4 text-neutral-700">
-                    As a Contestant you can take a part in contests and become
-                    famous. Voter can nominate NFT artist by his vote and
-                    receive token rewards for that.
+                  <div className="font-semibold text-5xl my-5">
+                    Compete, Vote & Predict
+                  </div>
+                  <div className="line-dec bg-black"></div>
+                  <p className="w-1/2 text-neutral-700">
+                    The best way to boost your NFT and win contest prize pool
                   </p>
                 </div>
                 <div className="flex flex-row gap-x-5">
@@ -157,7 +164,7 @@ export const Home = ({ currentUser }) => {
                           className="templatemo-feature"
                         />
                       </div>
-                      <div className="font-regular mt-5 hover:text-violet-600 text-xl tracking-wide">
+                      <div className="font-regular mt-5 hover:text-violet-600 text-lg tracking-wide">
                         Take a part in contests and win big prize
                       </div>
                     </div>
@@ -166,48 +173,46 @@ export const Home = ({ currentUser }) => {
                     <div className="service-item">
                       <div className="icon">
                         <img
-                          src={require("../assets/template/images/services-04.jpg")}
+                          src={require("../assets/template/images/services-01.jpg")}
                           alt="SEO marketing"
                           className="templatemo-feature"
                         />
                       </div>
-                      <div className="font-regular mt-5 hover:text-violet-600 text-xl tracking-wide">
-                        Become famous NFT artist in web3 world
+                      <div className="font-regular mt-5 hover:text-violet-600 text-lg tracking-wide">
+                        Receive CNT token everytime you vote
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col items-end">
-              <div className="w-1/2">
-                <div className="flex flex-row gap-x-5">
-                  <div className="w-72 h-56">
-                    <div className="service-item">
-                      <div className="icon">
-                        <img
-                          src={require("../assets/template/images/services-01.jpg")}
-                          alt="discover SEO"
-                          className="templatemo-feature"
-                        />
-                      </div>
-                      <div className="font-regular mt-5 hover:text-violet-600 text-xl tracking-wide">
-                        Earn BMT everytime you vote
-                      </div>
+            <div className="flex flex-col items-start">
+              <div className="flex flex-row gap-x-5">
+                <div className="w-72 h-56">
+                  <div className="service-item">
+                    <div className="icon">
+                      <img
+                        src={require("../assets/template/images/services-04.jpg")}
+                        alt="discover SEO"
+                        className="templatemo-feature"
+                      />
+                    </div>
+                    <div className="font-regular mt-5 hover:text-violet-600 text-lg tracking-wide">
+                      Boost you NFT on TOP marketplaces
                     </div>
                   </div>
-                  <div className="w-72 h-56">
-                    <div className="service-item">
-                      <div className="icon">
-                        <img
-                          src={require("../assets/template/images/services-02.jpg")}
-                          alt="data analysis"
-                          className="templatemo-feature"
-                        />
-                      </div>
-                      <div className="font-regular mt-5 hover:text-violet-600 text-xl tracking-wide">
-                        Discover trending NFTs in NEAR ecosystem
-                      </div>
+                </div>
+                <div className="w-72 h-56">
+                  <div className="service-item">
+                    <div className="icon">
+                      <img
+                        src={require("../assets/template/images/services-02.jpg")}
+                        alt="data analysis"
+                        className="templatemo-feature"
+                      />
+                    </div>
+                    <div className="font-regular mt-5 hover:text-violet-600 text-lg tracking-wide">
+                      Discover trending NFTs in NEAR ecosystem
                     </div>
                   </div>
                 </div>
@@ -216,8 +221,8 @@ export const Home = ({ currentUser }) => {
           </div>
         </div>
 
-        <div className="infos section" id="infos">
-          <h1 className="-mt-5 mb-16 text-center text-white text-5xl">
+        <div className="infos py-16" id="infos">
+          <h1 className="mb-16 text-center text-white text-5xl">
             Incomming Contests
           </h1>
           <div className="w-full px-20 flex gap-x-10 flex-row justify-between">
@@ -231,18 +236,14 @@ export const Home = ({ currentUser }) => {
           </div>
         </div>
 
-        <div className="projects section" id="projects">
+        <div className="projects py-16" id="projects">
           <div className="container">
             <div className="row">
               <div className="w-full justify-center">
                 <div className="section-heading ml-20">
                   <div className="section-heading">
-                    <h2 className="font-semibold">Find your best NFT</h2>
+                    <h2 className="font-semibold">Latest Winners</h2>
                     <div className="line-dec"></div>
-                    <p>
-                      More than 10 of NEAR projects already evaluated. Choose
-                      your best
-                    </p>
                   </div>
                 </div>
               </div>

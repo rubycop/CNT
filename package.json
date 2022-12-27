@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build:contract": "(cd contracts && ./build.sh)",
+    "build:contracts": "(cd contracts && ./build.sh)",
     "local:build:web": "NODE_ENV=local parcel build src/index.html --public-url ./",
     "dev:build:web": "NODE_ENV=development parcel build src/index.html --public-url ./",
-    "local:deploy:contract": "rm -rf ./neardev && yarn build:contract && NEAR_ENV=testnet near deploy --accountId \"beat_my_nft.testnet\" --wasmFile out/main.wasm",
+    "local:deploy:contract": "yarn build:contracts && rm -rf ./neardev && ./local-deploy.sh",
     "dev:deploy:contract": "NEAR_ENV=testnet near deploy --accountId \"beat_my_nft.testnet\" --wasmFile out/main.wasm",
     "prod:deploy:contract": "NEAR_ENV=mainnet near deploy --accountId \"beat_my_nft.near\" --wasmFile out/main.wasm",
     "prestart": "rm -rf ./parcel-cache",

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Exo:wght@200;400;500;600;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500;600;800&display=swap");
 
 @import "../template/css/templatemo.css";
 @import "../template/css/fontawesome.css";
@@ -16,12 +16,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-size: cover;
   background-color: #fff;
-  line-height: 1.35;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
   visibility: visible;
-  font-family: "Exo", sans-serif;
-  color: #0f0f0f;
-  letter-spacing: 0.02em;
+  font-family: "Poppins", sans-serif;
+  color: #242424;
 }
