@@ -49,8 +49,8 @@ export const JoinContestModal = ({
   };
 
   useEffect(() => {
-    fetchNfts();
-  }, []);
+    showModal && fetchNfts();
+  }, [showModal]);
 
   return (
     <Modal

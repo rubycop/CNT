@@ -1,11 +1,10 @@
 use near_contract_standards::non_fungible_token::TokenId;
-use near_sdk::{AccountId, assert_one_yocto, Balance, BorshStorageKey, env, Gas, near_bindgen, Promise, serde_json::json, ext_contract, Timestamp};
+use near_sdk::collections::LookupSet;
+use near_sdk::{AccountId, Balance, BorshStorageKey, env, Gas, near_bindgen, Promise, serde_json::json, ext_contract};
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::collections::{LookupMap, LookupSet, UnorderedMap};
-use near_sdk::json_types::{U128, U64};
 use near_sdk::serde::{Deserialize, Serialize};
-use near_sdk::serde_json::Value as JsonValue;
 
+mod ft;
 mod utils;
 
 pub const ONE_NEAR: u128 = 1_000_000_000_000_000_000_000_000 as u128;
@@ -125,24 +124,6 @@ impl Clone for Participant {
 
 #[near_bindgen]
 impl Contract {
-
-    pub fn add_token_storage(&mut self, account_id: &AccountId) {
-        let ft_mint_deposit: Balance = Contract::convert_to_yocto("0.00125");
-        let ft_mint_gas: Gas = Contract::convert_to_tera(10);
-
-        Promise::new(self.contract_ft.clone()).function_call(
-            "ft_mint".to_string(),
-            json!({
-            "receiver_id": account_id,
-            "amount": "0"
-        }).to_string().as_bytes().to_vec(),
-            ft_mint_deposit,
-            ft_mint_gas,
-        );
-
-        self.ft_storage_accounts.insert(account_id);
-    }
-
     pub fn get_contests(&self) -> Vec<Contest> {
         self.contests.clone()
     }
@@ -213,20 +194,24 @@ impl Contract {
     pub fn join_contest(&mut self, contest_id: String, nft_src: String) -> () {
         let contest = self.get_contest_by_id(contest_id.clone()).unwrap();
         let transfer_amount: u128 = contest.entry_fee.parse::<u128>().unwrap() * u128::from(ONE_NEAR);
+        let receiver_id = format!("burn.{}", env::current_account_id()).try_into().unwrap();
 
         if contest.currency_ft == true {
             if !self.ft_storage_accounts.contains(&env::predecessor_account_id()) {
                 self.add_token_storage(&env::predecessor_account_id());
             }
+            if !self.ft_storage_accounts.contains(&receiver_id) {
+                self.add_token_storage(&receiver_id);
+            }
 
             Promise::new(self.contract_ft.clone()).function_call(
-                "internal_withdraw".to_string(),
+                "ft_transfer".to_string(),
                 json!({
-                    "account_id": &env::predecessor_account_id(),
+                    "receiver_id": receiver_id,
                     "amount": transfer_amount.to_string(),
                 }).to_string().as_bytes().to_vec(),
                 1,
-                Contract::convert_to_tera(10),
+                Contract::convert_to_tera(20),
             ).then(
                 Self::ext(env::current_account_id())
                     .with_static_gas(Contract::convert_to_tera(30))

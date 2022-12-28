@@ -20,13 +20,20 @@ use near_contract_standards::fungible_token::metadata::{
     FT_METADATA_SPEC, FungibleTokenMetadata, FungibleTokenMetadataProvider,
 };
 use near_contract_standards::fungible_token::FungibleToken;
-use near_sdk::{AccountId, Balance, env, log, near_bindgen, PanicOnDefault, Promise, PromiseOrValue, BorshStorageKey};
+use near_sdk::serde_json::json;
+use near_sdk::{AccountId, Balance, env, log, near_bindgen, PanicOnDefault, Promise, PromiseOrValue, BorshStorageKey, Gas};
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::{LazyOption, LookupMap};
 use near_sdk::json_types::{U128};
 
-const FT_IMAGE_ICON: &str = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAJ1BMVEUAAADuw0fNfR3quUHShyPgpDXlsDvXkSn126/cmy/xyH7wxVzxu1mK0HLnAAAAAXRSTlMAQObYZgAAA2dJREFUSMd1VT1PG0EQJUqDnBS8nO/OBpocZ58oFxtFlD4TUEobAUp5hECNFROlM0qDEho7X0oHSoNCA0oTUYU6fypvZ3d9Bw4PIdmet2/ezOzH1B0cHw+m7sX0xa8GAHV9D+cDxjj/X/wjAO/15pctBaAyGf8BBNtpRMT9DN7sxPorLEtYKBvA79vxErAiofVVoX0CTm8R/sLnz+vMTx9v+HGIuWItJwi48FDBYJ9SWTHJ9BW6IuvAdDVgUBCocj0KeBZFB6gUBHpcoRG8/OqBoGKSuygh1DkJOolX17dAqykl/ljCGUZRW//4NjVt2JMklLAZWGKsdCMjiw0QaTScM714jB0RWIoc+prRjOqYMRlIzmSJRRpv87sXxTATUb6UEJoobXrp80wKGUorStQ+ALBjDIZRwh9eZXrFggzkAUaSoWcISGsoi6QXLaIiFqJEvhpkuzVU428AuFBpEzc+pYCqI3iL8GM/UyyLJnQXysaCI+AzgiRoiYkWBuKx4ywQHewiqKOtO8dOnLJN3VjlXaBaMwueog+CfmdI6CXICVxUPgzaMC4TEh4ilZocIVGh8to0AlCbdb73uCgvgrVX4dXxDmKcdZ4FUmWYE3x4NbyAjC/ThHyU9RFTIIDXwhoANqAzp/vUcoQWa41J8DvegSXAEcpSohA8JgmEEBYIVSGMZLtTI2zdVfAi1jkkrQ2N5kZOYBWuUZ2AKkJg3Jp0ZYLq5Kf813oKtsy5qSM2Sr4YAudi4Rp1hHTROKYH+AkcXKsf2mH5Mkl8LxIYqehxR0rKkAoagIKkUXbcbsPQnz2gms0/s2EuueVCStsyasjhthw7RaLblCJhCxHpgZw8cVneNzY9yWG3vT7fR/bg+L5sOBdW44PzCE3msnWQ6iBH79JcD6S6bVm3HvLDS5fomYVp3LPDhJyKGGBYm1gy8+rVnkTK+LMXSEUIJXsFYbTgH9r1krAjFiSHucS60rCxQIL58UsRiv2dTh4P0sJNWmJ6XcjKeAxKLtL8wj/Te3YNBezrps4WX4uuu6zzy1wEnIR0qa/ssOU5cAJOQk8i2WoADfegUCDHCWWpwavcPUmuhDwJlnvFR212cOfVvWFu9ywqYN7Fi88SKXubm3tiVeKTDAd5ayYZ48f752TQUS6A6/Nby/8BNBAG258AcBEAAAAASUVORK5CYII=";
+mod helpers;
 
+const FT_IMAGE_ICON: &str = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF4AAABgCAMAAACjfDWBAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAJcEhZcwAALiMAAC4jAXilP3YAAALEUExURUdwTBwbGBwbGBwaFwEBARwbFxwbGAEBARwbGBwbGAEBAQEBARwbGBwbGBsbFxsbFxwbGBsbGBwPDxwbGBwaGBsbDhcXFxwbGAEBAQEBARwaGBwaGBsbFxwbGBsbFwEBARoaFxwaGBwbFxAQEBUVFRwZFhwbGBwbGBkZERgYGBwbGAEBARwaGBwbGBUVFRkZARsbFxsbARwaFxoaGBsbEhISEhwbGBsbGBoaGBwbGBsbFhsbFxkZERwXFxoaFBwbGBoaFxwbGBwbGBwaGBoaFxwbGBwaGBsbGBsbFxwZFRoaDhwbGBsbFxwaGBwbFxsbFhwXFxwbGBoaEhcXFxsbGBwbGAEBARwaGBsbFhwbGBwaFxwaFxsbFxsbFxwaFxsbGBQUFBwZFhwbGBgYGBwbGBwbGBwbGBwbGBsbGBwbGBwaGBwaFxwTExwbFxQUFBwbGBwbFxsbGBwbGBkZExwbGBwYGBwbGBsbGBwaGBsbGBsbFhwaGBoaGBwbGBwYGBwbGBoaFxsbFxgYGBoaFhwaFxwbGBwbGBQUFBgYGBsbGBwZFhwbGBoaFRwaGBoaFxkZDRkZExkZFBsbGBwaFxwbGBERERwaFxsbFhwbGBwZFxoaFhsbGBwaFxwbGBsbFxwaGBwbFxwaFxAQEBsbGBsbFxsbGBoaFRwaGBwaGBwaFxsbFRwZFxwbFxsbFxwaGBwbGBwVFRwaGBwaGBsbGBsbGBwbGBwYGBwWFhsbFxoaGBkZFRsbGBsbGBsbGBwbGBwbFxoaGBsbFhoaFxwaGBwbGBwaGBkZFRwbGBYWFhsbFxwaGBwaGBwYGBcXFxwZFxwaGBwbFxoaFBwbFxsbGBsbGBsbGBsbGBsbGBgYGBsbGBkZFBwbGBwaGBsbGBwZFhwZFxkZFhsbGBoaFhsbFxkZFRsbGBoaFhsbFhsbFxwZFRwbGBwbGLpuFywAAADrdFJOUwD5/JkCl/0B/u8GA8v3jYDbzhP7fhQMoQQFh82BymwJXpuYEQ1W5vggOL0IzNIaC4sKmnoeD/CpcPMxfyE6KvpSyc98VNWR14xCFe26hY5iMN4fJJX1B/Qy8o+jsEalWg5M3y7x5Ojln7PguR3nHL6EivYswDnib62TWJxm2UTdSDwtPq610xsisVfINH1dFis2lq/jEKR57GBKnnTHg8LGXxK8u2QzwYhoKGrQgurpJ3u3lInuTiZ2XDXr2OGr3GduU6bUckG/GUeGkEMjdcPRKaKyUJ2nRRdPN9qSWWFrS1tJeECoPW3FTaBGoACGAAAGRklEQVQYGa3BA2MrjQJF0VOkSWrb9rXRa9u2bdv6bNu29Wzb1v4TL5mkbTCTpJ2upZ5w5l34IF99ruhfH3045fP/bGjAY9PU5oLiryaNVd/In7TSjYnM/mMSZVPeQ9fTsFTvOJesXiuc++0cgoyY2UGwoWsOq3fWT6ZT0oQVz73f1FghacAdC5f9NuOeDS78XMMWquee34uP68rxcdkKs256+hf4xE3JU880rnFhKLk9T5YOTnRjGDqoQrG7L70BL9fl6YosC78jlU7F6KeZeMUVbFQ0WXQZVqGYrHbjEV+9R9Fl0a3sO4pBeQ4eT85TLLIIsPl5RVN4N163pSgmJQRa+jVFVvMshg1rnYpFCUFcE52KoPE0nVq/pRiUEGJliizlt+GRGo9h+1hFVUKoabLiPIbHcN15jwuvnIR2RdFKmEpZyMDjAXn87gkMi2cPUUSthEm7S6bGuYBR8hl3GsOD31yiCFoJt7VdJi6MAPqrU9EruzHseChFllox8dgShcmbD/w8Ud365S7H0LZeVlIx84hCOZ8BJq9TkBlT4jAcapK5VEyVK0QdkHZQoUavScLLdexNmUnF1NBsBSn6PfCoTIzciSEnoV3hUjGXriAvAS8kytQPUjEsLq5RqFTMpQ1WgH71cGC0LDhPZGKY+WiLgpVhYZsCDAJelLXk8i0Y7p2bokBlWIi/U12yh8LM+xRJbcZyDJN/oQBlWLmuLtOAHymy/Cr8nryoLmVYGiO/q2mwtUWROCu30m37BfmNx9Ih+R0FXlMkTTcJklSwQIbxWHINlk8zJDXKWnuBi1ANK2bIYzzWymWo6YBZstQyaARmlmfUSuOxNkuGvwJ1sjJuPlZeH75kPNbihshrGGxKlrmNe4lkxxYiuCGP5E2wSqbyFsVjwxp5rAZekYmi4e9hy3tFkt4BFirc36Zi13RJZ+Gswrx5GfumSYXxUKAQQ9Lj6AOXpHbgLQVJOfUGfeKmdAuoU6CLWRh2TMCmz6T/AiPVbcEwF15LcytOYlOcU18Cteo0oPQAXq6Cq9JJ7JqhDPhEfs4/HsHwWJM8TmLXRiXAZvmMfALD5kqnvKqw65y2ww55zUiIx+tAaT/5VGHXn9QKX0hKHu7GyzVsgTpVYdcgtcGnctZlYkg9r25V2JWhnTD54k0Mu+cmKkAVdn2p/0E8hrTiWgUZiF3vqxi/Y9cUYiB2fax/Y/jJdIUZiF1XNQmPN06lKNxAbEoq1Bjg/iEyMxCbtkijgVEylYBNWVIL8LZMJWDTZUmfwEynzCRgU4KkfwIvy0wCNt2QtBZ4SmYSsCdunaSaDrhfZhKwZ6e8mmFprUxUY8+f5XUUeEomqoFVh+gt12B5jQaaZaIamKjVr9I7WfJpg6TBClcN5EqJH82nNzLksw94XOGqgVHyWDL8dXpumXxGApuyFcYBlMpQW7qUHjrrlN8qoFhhHMBr8vvNog56pFKdxsbDiDsUygHsU5eFv3IRu7ZEdXkEmKNQDmC2Atx6hpitV7ddaRA3TyEcQLGCrM4iNi8oUH/g1WQFWwS8qGDOE5nEYowCPe0G9inYO8B+hUou30JUqxTsASDnYwX5AzBN4fJzlxNZ/FgFG7ABuHeXAn0fSJeZGVPiiMShUCMXA9+oUYA5wByZG70yCUupFQpzwwX8uELd0oFpsjLvbSzs3iMT38PjUoq69Af2y9r0MszEjZGZxO14ONTlXaBYETgnfUq452RuyFQ85qTIbz8wWxEVvVRPiOOy8oEbj1nZ8kkHHlcUAwYNJdDeQln6bhoe8+fJsAIoVVTZ6Q10mZqnCO6qx2PxWnlNATIUgwXb4vF5tkYR7ZqAV3qRpOPAKMXkL0l43V2oKPpdwqvtsLQIGKUYJP99BB455YoucbYLj6Rtgx1ArqI7MxUv968Vk9sb8Go4AuQqmjOzMGS+rBg1TaDTbYqo8EQJhqSfPa2YJVZ+hk/mxLGykvzwLx/Ep3mZeqTlQzd+k0sP91Mo57W6Ajd+Vx5Wj2WviKNT0unPJ477x8Y9+U7nusZlZ9a+2+ymy+a5KeqNH349jRA5HYSof2uAeit/0ko3EWT2P58oW5LPOeoxNSH3oPpCYlPGtp1XZtIpfmvqdcdXjepbLdfO1x09tf5We4pi9n9mvewoDJr4vwAAAABJRU5ErkJggg==";
+#[derive(BorshStorageKey, BorshSerialize)]
+pub enum StorageKeys {
+    Token,
+    TokeBalance
+}
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct OldContract {
     token: FungibleToken,
@@ -49,8 +56,8 @@ impl Contract {
             total_supply,
             FungibleTokenMetadata {
                 spec: FT_METADATA_SPEC.to_string(),
-                name: "BMT token".to_string(),
-                symbol: "BMT".to_string(),
+                name: "Contesty".to_string(),
+                symbol: "CNT".to_string(),
                 icon: Some(FT_IMAGE_ICON.to_string()),
                 reference: None,
                 reference_hash: None,
@@ -71,8 +78,10 @@ impl Contract {
             token: FungibleToken::new(b"a".to_vec()),
             metadata: LazyOption::new(b"m".to_vec(), Some(&metadata)),
         };
+
         this.token.internal_register_account(&owner_id);
         this.token.internal_deposit(&owner_id, total_supply.into());
+
         near_contract_standards::fungible_token::events::FtMint {
             owner_id: &owner_id,
             amount: &total_supply,

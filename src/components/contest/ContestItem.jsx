@@ -72,9 +72,9 @@ export const ContestItem = ({ contest, currentUser, handleJoin }) => {
   );
 
   return (
-    <div className="main-content w-[45%]">
-      <div className="flex flex-row h-full">
-        <div className="w-1/3 h-full">
+    <div className="main-content w-full lg:w-[45%] shadow-lg">
+      <div className="flex flex-col lg:flex-row h-full">
+        <div className="w-full lg:w-1/3 h-64 lg:h-full">
           <img
             className="w-full h-full object-center object-cover"
             src={contest.image}
@@ -84,7 +84,7 @@ export const ContestItem = ({ contest, currentUser, handleJoin }) => {
             }
           />
         </div>
-        <div className="w-2/3 p-10 h-full">
+        <div className="w-full lg:w-2/3 p-10 h-full">
           <div className="mb-10">
             <h2 className="text-4xl leading-snug font-normal w-full mb-5">
               {contest.title}
@@ -123,8 +123,9 @@ export const ContestItem = ({ contest, currentUser, handleJoin }) => {
               <>
                 <Button
                   full
+                  disabled={!currentUser}
                   title={`Join for ${contest.entry_fee} ${currency(contest)}`}
-                  handleClick={() => setShowJoinModal(true)}
+                  handleClick={() => currentUser && setShowJoinModal(true)}
                 />
 
                 <JoinContestModal

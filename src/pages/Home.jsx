@@ -12,6 +12,8 @@ import { Button } from "../components/Button";
 import { ContestItem } from "../components/contest/ContestItem";
 import banner from "../assets/images/banner.png";
 import boost from "../assets/images/boost.png";
+import banner2 from "../assets/images/banner2.png";
+import { Footer } from "../components/Footer";
 
 const images = [
   {
@@ -99,30 +101,46 @@ export const Home = ({ currentUser }) => {
     showIncoming();
   }, []);
 
+  const ServiceItem = ({ image, text }) => (
+    <div className="w-full md:w-72 min-h-56">
+      <div className="service-item flex flex-row md:flex-col">
+        <div className="icon">
+          <img src={image} alt="precise data" className="templatemo-feature" />
+        </div>
+        <div className="font-regular ml-5 md:ml-0 md:mt-5 hover:text-violet-600 text-lg tracking-wide">
+          {text}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <Header currentUser={currentUser} />
-      <img src={banner} className="w-full absolute object-cover -z-10 top-0" />
-      <Wrapper>
-        <div className="pt-[180px]" id="top">
-          <div className="container">
-            <div className="pl-40">
-              <div className="w-1/2  text-6xl tracking-wide leading-tight">
-                <span className="font-semibold pr-3 text-violet-100">
-                  Make The NFT World Better
-                </span>
-              </div>
-              <div className="w-1/2  text-base font-normal my-10 leading-relaxed tracking-wide text-white">
+      <img
+        className="absolute -z-10 top-0 h-[1150px] md:h-[700px] object-cover"
+        src={banner}
+      />
+
+      <div className="flex flex-col md:flex-row mx-5 md:mx-20 mt-32">
+        <div className="w-full md:w-2/3 z-0 h-full md:mt-10">
+          <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
+            <div className="flex flex-col w-full md:w-4/5 justify-center items-start md:items-center text-center md:text-left">
+              <h1 className="my-4 text-5xl font-semibold leading-tight text-violet-100">
+                Make The NFT World Better
+              </h1>
+              <p className="my-5 text-center md:text-left leading-normal text-base mb-8 text-white">
                 Contesty - is a first WEB3 NFT contest app. Compete in contests
                 to win big prize, vote and predict a winner to get rewards.
-              </div>
-              <div className="flex gap-x-5">
+              </p>
+              <div className="flex flex-col md:flex-row w-full justify-center md:justify-start gap-5 ">
                 <Button
                   title="Discover More"
                   white
                   icon={<ArrowDownIcon className=" ml-2 h-5" />}
                   handleClick={() => scrollTo(serviceRef)}
                 />
+
                 <Button
                   title="Check our Whitepaper"
                   outlined
@@ -135,148 +153,117 @@ export const Home = ({ currentUser }) => {
           </div>
         </div>
 
-        <div
-          className="services flex section py-16 mt-48 bg-violet-50"
-          ref={serviceRef}
-        >
-          <div className="w-1/2 flex items-center justify-center">
-            <img src={boost} className="w-1/2 object-contain" />
-          </div>
-          <div className="flex-col w-1/2 justify-center">
-            <div className="flex flex-col items-start">
-              <div>
-                <div className="section-heading text-4xl leading-normal tracking-wide">
-                  <div className="font-semibold text-5xl my-5">
-                    Compete, Vote & Predict
-                  </div>
-                  <div className="line-dec bg-black"></div>
-                  <p className="w-1/2 text-neutral-700">
-                    The best way to boost your NFT and win contest prize pool
-                  </p>
-                </div>
-                <div className="flex flex-row gap-x-5">
-                  <div className="w-72 h-56">
-                    <div className="service-item">
-                      <div className="icon">
-                        <img
-                          src={require("../assets/template/images/services-03.jpg")}
-                          alt="precise data"
-                          className="templatemo-feature"
-                        />
-                      </div>
-                      <div className="font-regular mt-5 hover:text-violet-600 text-lg tracking-wide">
-                        Take a part in contests and win big prize
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-72 h-56">
-                    <div className="service-item">
-                      <div className="icon">
-                        <img
-                          src={require("../assets/template/images/services-01.jpg")}
-                          alt="SEO marketing"
-                          className="templatemo-feature"
-                        />
-                      </div>
-                      <div className="font-regular mt-5 hover:text-violet-600 text-lg tracking-wide">
-                        Receive CNT token everytime you vote
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col items-start">
-              <div className="flex flex-row gap-x-5">
-                <div className="w-72 h-56">
-                  <div className="service-item">
-                    <div className="icon">
-                      <img
-                        src={require("../assets/template/images/services-04.jpg")}
-                        alt="discover SEO"
-                        className="templatemo-feature"
-                      />
-                    </div>
-                    <div className="font-regular mt-5 hover:text-violet-600 text-lg tracking-wide">
-                      Boost you NFT on TOP marketplaces
-                    </div>
-                  </div>
-                </div>
-                <div className="w-72 h-56">
-                  <div className="service-item">
-                    <div className="icon">
-                      <img
-                        src={require("../assets/template/images/services-02.jpg")}
-                        alt="data analysis"
-                        className="templatemo-feature"
-                      />
-                    </div>
-                    <div className="font-regular mt-5 hover:text-violet-600 text-lg tracking-wide">
-                      Discover trending NFTs in NEAR ecosystem
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="flex mt-10 md:mt-0 md:w-1/3 z-0 items-center justify-center h-full">
+          <img className="w-full object-cover" src={banner2} />
         </div>
+      </div>
 
-        <div className="infos py-16" id="infos">
-          <h1 className="mb-16 text-center text-white text-5xl">
-            Incomming Contests
-          </h1>
-          <div className="w-full px-20 flex gap-x-10 flex-row justify-between">
-            {contests.map((contest, index) => (
-              <ContestItem
-                contest={contest}
-                currentUser={currentUser}
-                index={index}
+      <div
+        className="services flex px-10 md:flex-row flex-col py-16 mt-16 md:mt-24 bg-violet-50"
+        ref={serviceRef}
+      >
+        <div className="hidden md:flex w-1/2 items-center justify-center">
+          <img src={boost} className="w-1/2 object-contain" />
+        </div>
+        <div className="flex-col w-full md:w-1/2 justify-center">
+          <div className="flex flex-col items-start gap-y-3">
+            <div
+              className="section-heading flex-col
+             text-4xl leading-normal tracking-wide"
+            >
+              <div className="font-semibold text-center leading-snug text-5xl my-5">
+                Compete, Vote & Predict
+              </div>
+              <div className="flex w-full justify-center md:justify-start">
+                <div className=" line-dec bg-black"></div>
+              </div>
+              <p className="md:w-1/2 text-neutral-700 md:text-left text-center">
+                The best way to boost your NFT and win contest prize pool
+              </p>
+            </div>
+
+            <div className="flex flex-wrap md:flex-row gap-3">
+              <ServiceItem
+                image={require("../assets/template/images/services-03.jpg")}
+                text="Take a part in contests and win big prize"
               />
-            ))}
-          </div>
-        </div>
 
-        <div className="projects py-16" id="projects">
-          <div className="container">
-            <div className="row">
-              <div className="w-full justify-center">
-                <div className="section-heading ml-20">
-                  <div className="section-heading">
-                    <h2 className="font-semibold">Latest Winners</h2>
-                    <div className="line-dec"></div>
-                  </div>
-                </div>
-              </div>
+              <ServiceItem
+                image={require("../assets/template/images/services-01.jpg")}
+                text="Receive CNT token everytime you vote"
+              />
+            </div>
+
+            <div className="flex flex-wrap md:flex-row gap-3">
+              <ServiceItem
+                image={require("../assets/template/images/services-04.jpg")}
+                text="Boost you NFT on TOP marketplaces"
+              />
+              <ServiceItem
+                image={require("../assets/template/images/services-02.jpg")}
+                text="Discover trending NFTs in NEAR ecosystem"
+              />
             </div>
           </div>
-          <div className="container-fluid">
-            <div className="row">
-              <div className="w-full justify-center">
-                <AliceCarousel
-                  mouseTracking
-                  autoPlay
-                  autoPlayInterval={2000}
-                  disableButtonsControls
-                  disableDotsControls
-                  infinite
-                  responsive={{
-                    0: {
-                      items: 5,
-                    },
-                  }}
-                  items={images.map((img) => (
-                    <div className="item mx-2">
-                      <img className="w-72 h-72 bg-cover " src={img.src} />
-                      <div className="down-content">
-                        <h5>{img.title}</h5>
-                        <a href="#">
-                          <i className="fa fa-link"></i>
-                        </a>
-                      </div>
+        </div>
+      </div>
+
+      <div className="infos py-16" id="infos">
+        <h1 className="mb-16 mx-10 text-center text-white text-5xl">
+          Incoming Contests
+        </h1>
+        <div className="w-full px-10 md:px-24 flex gap-10 flex-col md:flex-row justify-between">
+          {contests.map((contest, index) => (
+            <ContestItem
+              contest={contest}
+              currentUser={currentUser}
+              index={index}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="projects py-16" id="projects">
+        <h1 className="mb-16 mx-10 text-center text-black text-5xl">
+          Latest Winners
+        </h1>
+        <div className="container-fluid">
+          <div className="flex-row">
+            <div className="w-full justify-center">
+              <AliceCarousel
+                mouseTracking
+                autoPlay
+                autoPlayInterval={2000}
+                disableButtonsControls
+                disableDotsControls
+                infinite
+                responsive={{
+                  2000: {
+                    items: 11,
+                  },
+                  1200: {
+                    items: 5,
+                  },
+                  800: {
+                    items: 3,
+                  },
+                  0: {
+                    items: 1,
+                  },
+                }}
+                items={images.map((img) => (
+                  <div className="item mx-2">
+                    <img className="w-full h-72 object-cover" src={img.src} />
+                    <div className="down-content">
+                      <h5>{img.title}</h5>
+                      <a href="#">
+                        <i className="fa fa-link"></i>
+                      </a>
                     </div>
-                  ))}
-                />
-                {/* {participants
+                  </div>
+                ))}
+              />
+              {/* {participants
                     .sort((a, b) => b.votes_count - a.votes_count)
                     .map((p, i) => (
                       <Carousel.Item>
@@ -301,11 +288,11 @@ export const Home = ({ currentUser }) => {
                         </div>
                       </Carousel.Item>
                     ))} */}
-              </div>
             </div>
           </div>
         </div>
-      </Wrapper>
+      </div>
+      <Footer />
     </>
   );
 };

@@ -9,8 +9,10 @@ near deploy --accountId $CONTRACT_ID --wasmFile out/main.wasm
 
 near create-account ft.$CONTRACT_ID --masterAccount $CONTRACT_ID --initialBalance 10
 near deploy --accountId ft.$CONTRACT_ID --wasmFile out/ft.wasm
+
+near create-account burn.$CONTRACT_ID --masterAccount $CONTRACT_ID --initialBalance 1
+
 near call ft.$CONTRACT_ID new_default_meta '{"owner_id":"'$CONTRACT_ID'", "total_supply": "1000000000000000000000000000000"}' --accountId $CONTRACT_ID
-near call $CONTRACT_ID add_token_storage '{"account_id":"ft.'$CONTRACT_ID'"}' --accountId $CONTRACT_ID
 
 #echo "--- Seed Contests Data:"
 near call $CONTRACT_ID create_contest '{"currency_ft":false, "title": "Paras Weekly Contest", "size": "3", "entry_fee": "1", "start_time": "1768372926143", "end_time": "1768372936143", "image": "https://ehow.ng/wp-content/uploads/2022/01/How-to-Make-an-NFT-768x432.png"}' --accountId $CONTRACT_ID

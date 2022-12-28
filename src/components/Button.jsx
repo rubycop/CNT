@@ -30,15 +30,11 @@ export const Button = ({
     } ${
       secondary &&
       "text-violet-500 hover:text-violet-700 border-2 hover:border-violet-700 border-violet-500"
-    } ${disabled && "bg-violet-500 hover:bg-violet-500 cursor-not-allowed"}
+    } ${disabled && "bg-violet-300 hover:bg-violet-300 cursor-not-allowed"}
     `}
     onClick={handleClick}
   >
-    <div
-      className={`w-full flex flex-row ${
-        icon ? "justify-between" : "justify-center"
-      } tracking-wider`}
-    >
+    <div className={`w-full flex flex-row justify-center tracking-wider`}>
       {title}
       {icon}
     </div>
