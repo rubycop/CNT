@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Contest, Home, Leaderboard, Vote } from "./pages";
+import { Privacy } from "./pages/Privacy";
+import { Terms } from "./pages/Terms";
 import { CONTRACT_NAME } from "./utils/config";
 import { initContract } from "./utils/nearApi";
 
@@ -51,6 +53,16 @@ export const App = () => {
             exact
             path="/leaderboard"
             element={<Leaderboard currentUser={currentUser} />}
+          />
+          <Route
+            exact
+            path="/privacy"
+            element={<Privacy currentUser={currentUser} />}
+          />
+          <Route
+            exact
+            path="/terms"
+            element={<Terms currentUser={currentUser} />}
           />
         </Routes>
       )}

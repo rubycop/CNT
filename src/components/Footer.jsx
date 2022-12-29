@@ -13,7 +13,7 @@ export const Footer = () => {
     >
       <img
         src={banner}
-        className="absolute -z-10 -mt-96 h-[700px] object-cover"
+        className="absolute -z-10 -mt-96 h-[800px] object-cover"
       />
       <div className="container">
         <div className="flex flex-row mx-10 md:mx-32 text-white text-sm">
@@ -29,7 +29,7 @@ export const Footer = () => {
             <div className="flex items-center justify-center md:justify-start">
               <a
                 aria-label="social-link"
-                href="https://twitter.com/contesty"
+                href="https://twitter.com/ContestyNFT"
                 target="_blank"
                 className="text-white hover:text-violet-300 cursor-pointer mr-6"
               >
@@ -47,7 +47,7 @@ export const Footer = () => {
               </a>
               <a
                 aria-label="social-link"
-                href="https://discord.gg/pcvvn4EJpa"
+                href="https://discord.gg/75G7jaSdWT"
                 target="_blank"
                 className="text-white hover:text-violet-300 cursor-pointer mr-6"
               >
@@ -65,7 +65,7 @@ export const Footer = () => {
               </a>
               <a
                 aria-label="social-link"
-                href="https://t.me/chatme_near"
+                href="https://t.me/ContestyNFT"
                 target="_blank"
                 className="text-white hover:text-violet-300 cursor-pointer mr-6"
               >
@@ -94,7 +94,7 @@ export const Footer = () => {
                 <li>
                   <a
                     target="_blank"
-                    href="https://chatme.gitbook.io/chatme/"
+                    href="https://contesty.gitbook.io/contesty"
                     className="hover:text-violet-200"
                   >
                     Overview
@@ -103,10 +103,28 @@ export const Footer = () => {
                 <li>
                   <a
                     target="_blank"
-                    href="https://chatme.gitbook.io/chatme/documentation/get-started"
+                    href="https://contesty.gitbook.io/contesty/contest"
                     className="hover:text-violet-200"
                   >
-                    Get Started
+                    Contest
+                  </a>
+                </li>
+                <li>
+                  <a
+                    target="_blank"
+                    href="https://contesty.gitbook.io/contesty/voting"
+                    className="hover:text-violet-200"
+                  >
+                    Voting
+                  </a>
+                </li>
+                <li>
+                  <a
+                    target="_blank"
+                    href="https://contesty.gitbook.io/contesty/prediction"
+                    className="hover:text-violet-200"
+                  >
+                    Prediction
                   </a>
                 </li>
               </ul>

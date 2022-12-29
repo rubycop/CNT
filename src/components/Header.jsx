@@ -6,8 +6,7 @@ import { login, logout } from "../utils/nearApi";
 import { Button } from "./Button";
 import logo from "../assets/images/logo.png";
 
-export const Header = ({ currentUser }) => {
-
+export const Header = ({ currentUser, dark }) => {
   const [reward, setReward] = useState("-");
   const [loading, isLoading] = useState(false);
   const [small, setSmall] = useState(false);
@@ -25,9 +24,13 @@ export const Header = ({ currentUser }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", () =>
-        setSmall(window.pageYOffset > 100)
+        setSmall(dark || window.pageYOffset > 100)
       );
     }
+  }, []);
+
+  useEffect(() => {
+    if (dark) setSmall(dark);
   }, []);
 
   useEffect(() => {
