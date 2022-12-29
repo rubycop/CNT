@@ -14,6 +14,7 @@ import banner from "../assets/images/banner.png";
 import boost from "../assets/images/boost.png";
 import banner2 from "../assets/images/banner2.png";
 import { Footer } from "../components/Footer";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const images = [
   {
@@ -60,6 +61,8 @@ export const Home = ({ currentUser }) => {
   const [defaultImg, setDefaultImg] = useState(false);
   const serviceRef = useRef(null);
 
+  let navigate = useNavigate();
+
   const scrollTo = (ref) => {
     if (ref && ref.current /* + other conditions */) {
       ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -102,12 +105,12 @@ export const Home = ({ currentUser }) => {
   }, []);
 
   const ServiceItem = ({ image, text }) => (
-    <div className="w-full md:w-72 min-h-56">
-      <div className="service-item flex flex-row md:flex-col">
+    <div className="w-full lg:w-72 min-h-56">
+      <div className="service-item flex flex-row lg:flex-col bg-violet-50">
         <div className="icon">
-          <img src={image} alt="precise data" className="templatemo-feature" />
+          <img src={image} alt="precise data" className="rounded-full w-16" />
         </div>
-        <div className="font-regular ml-5 md:ml-0 md:mt-5 hover:text-violet-600 text-lg tracking-wide">
+        <div className="font-regular ml-5 lg:ml-0 lg:mt-5 hover:text-violet-600 text-lg tracking-wide">
           {text}
         </div>
       </div>
@@ -118,22 +121,23 @@ export const Home = ({ currentUser }) => {
     <>
       <Header currentUser={currentUser} />
       <img
-        className="absolute -z-10 top-0 h-[1150px] md:h-[700px] object-cover"
+        className="absolute -z-10 top-0 h-[1150px] lg:h-[800px] object-cover"
         src={banner}
       />
 
-      <div className="flex flex-col md:flex-row mx-5 md:mx-20 mt-32">
-        <div className="w-full md:w-2/3 z-0 h-full md:mt-10">
-          <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-            <div className="flex flex-col w-full md:w-4/5 justify-center items-start md:items-center text-center md:text-left">
-              <h1 className="my-4 text-5xl font-semibold leading-tight text-violet-100">
+      <div className="flex flex-col lg:flex-row mx-5 lg:mx-20 mt-32">
+        <div className="w-full lg:w-3/4 z-0 h-full lg:mt-20">
+          <div className="container px-3 mx-auto flex flex-wrap flex-col lg:flex-row items-center">
+            <div className="flex flex-col w-full lg:w-4/5 justify-center items-start lg:items-center text-center lg:text-left">
+              <h1 className="my-4 text-6xl font-semibold leading-tight text-violet-100">
                 Make The NFT World Better
               </h1>
-              <p className="my-5 text-center md:text-left leading-normal text-base mb-8 text-white">
-                Contesty - is a first WEB3 NFT contest app. Compete in contests
-                to win big prize, vote and predict a winner to get rewards.
+              <p className="my-5 text-center lg:text-left leading-normal text-base mb-8 text-white">
+                Contesty - is a first WEB3 NFT contest app. Participate in
+                contests to win a big prize, vote and predict a winner to get
+                rewards. Boost your NFT and discover new trends today
               </p>
-              <div className="flex flex-col md:flex-row w-full justify-center md:justify-start gap-5 ">
+              <div className="flex flex-col lg:flex-row w-full justify-center lg:justify-start gap-5 ">
                 <Button
                   title="Discover More"
                   white
@@ -142,30 +146,36 @@ export const Home = ({ currentUser }) => {
                 />
 
                 <Button
-                  title="Check our Whitepaper"
+                  title={
+                    <a
+                      href="https://contesty.gitbook.io/contesty"
+                      target="_blank"
+                    >
+                      Check our Whitepaper
+                    </a>
+                  }
                   outlined
                   white
                   icon={<DocumentSearchIcon className=" ml-2 h-5" />}
-                  handleClick={() => {}}
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex mt-10 md:mt-0 md:w-1/3 z-0 items-center justify-center h-full">
+        <div className="flex mt-10 lg:mt-0 lg:w-1/2 z-0 items-center justify-center h-full">
           <img className="w-full object-cover" src={banner2} />
         </div>
       </div>
 
       <div
-        className="services flex px-10 md:flex-row flex-col py-16 mt-16 md:mt-24 bg-violet-50"
+        className="services flex px-10 lg:flex-row flex-col py-16 mt-16 lg:mt-24"
         ref={serviceRef}
       >
-        <div className="hidden md:flex w-1/2 items-center justify-center">
+        <div className="hidden lg:flex w-1/2 items-center justify-center">
           <img src={boost} className="w-1/2 object-contain" />
         </div>
-        <div className="flex-col w-full md:w-1/2 justify-center">
+        <div className="flex-col w-full lg:w-1/2 justify-center">
           <div className="flex flex-col items-start gap-y-3">
             <div
               className="section-heading flex-col
@@ -174,15 +184,15 @@ export const Home = ({ currentUser }) => {
               <div className="font-semibold text-center leading-snug text-5xl my-5">
                 Compete, Vote & Predict
               </div>
-              <div className="flex w-full justify-center md:justify-start">
+              <div className="flex w-full justify-center lg:justify-start">
                 <div className=" line-dec bg-black"></div>
               </div>
-              <p className="md:w-1/2 text-neutral-700 md:text-left text-center">
+              <p className="lg:w-1/2 text-neutral-700 lg:text-left text-center">
                 The best way to boost your NFT and win contest prize pool
               </p>
             </div>
 
-            <div className="flex flex-wrap md:flex-row gap-3">
+            <div className="flex flex-wrap lg:flex-row gap-3">
               <ServiceItem
                 image={require("../assets/template/images/services-03.jpg")}
                 text="Take a part in contests and win big prize"
@@ -194,7 +204,7 @@ export const Home = ({ currentUser }) => {
               />
             </div>
 
-            <div className="flex flex-wrap md:flex-row gap-3">
+            <div className="flex flex-wrap lg:flex-row gap-3">
               <ServiceItem
                 image={require("../assets/template/images/services-04.jpg")}
                 text="Boost you NFT on TOP marketplaces"
@@ -212,7 +222,7 @@ export const Home = ({ currentUser }) => {
         <h1 className="mb-16 mx-10 text-center text-white text-5xl">
           Incoming Contests
         </h1>
-        <div className="w-full px-10 md:px-24 flex gap-10 flex-col md:flex-row justify-between">
+        <div className="w-full px-10 lg:px-24 flex gap-10 flex-col lg:flex-row justify-between">
           {contests.map((contest, index) => (
             <ContestItem
               contest={contest}
@@ -223,7 +233,7 @@ export const Home = ({ currentUser }) => {
         </div>
       </div>
 
-      <div className="projects py-16" id="projects">
+      <div className="relative projects py-16 z-10" id="projects">
         <h1 className="mb-16 mx-10 text-center text-black text-5xl">
           Latest Winners
         </h1>

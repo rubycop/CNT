@@ -8,7 +8,7 @@ export const Footer = () => {
 
   return (
     <footer
-      className="relative -z-10 bg-primary bg-opacity-5 pt-[50px] md:pt-[100px] wow fadeInUp"
+      className="relative z-0 bg-primary bg-opacity-5 pt-[50px] md:pt-[100px] wow fadeInUp"
       data-wow-delay=".1s"
     >
       <img
@@ -16,7 +16,7 @@ export const Footer = () => {
         className="absolute -z-10 -mt-96 h-[700px] object-cover"
       />
       <div className="container">
-        <div className="flex flex-row mx-10 md:mx-32 text-white">
+        <div className="flex flex-row mx-10 md:mx-32 text-white text-sm">
           <div className="w-full flex flex-col">
             <div className="flex items-center justify-center md:justify-start">
               <a href="/">
@@ -26,7 +26,7 @@ export const Footer = () => {
             <div className="my-6 text-center md:text-left">
               Discover NFT world with Contesty
             </div>
-            <div className="flex items-center  justify-center md:justify-start">
+            <div className="flex items-center justify-center md:justify-start">
               <a
                 aria-label="social-link"
                 href="https://twitter.com/contesty"
@@ -90,12 +90,12 @@ export const Footer = () => {
                 Documentation
               </div>
               <div className="line-dec bg-white"></div>
-              <ul>
+              <ul className="flex flex-col gap-y-2">
                 <li>
                   <a
                     target="_blank"
                     href="https://chatme.gitbook.io/chatme/"
-                    className="footer-link"
+                    className="hover:text-violet-200"
                   >
                     Overview
                   </a>
@@ -104,7 +104,7 @@ export const Footer = () => {
                   <a
                     target="_blank"
                     href="https://chatme.gitbook.io/chatme/documentation/get-started"
-                    className="footer-link"
+                    className="hover:text-violet-200"
                   >
                     Get Started
                   </a>
@@ -118,19 +118,19 @@ export const Footer = () => {
                 Support & Terms
               </div>
               <div className="line-dec bg-white"></div>
-              <ul>
+              <ul className="flex flex-col gap-y-2">
                 <li>
-                  <a className="footer-link" href="/faq">
+                  <a className="hover:text-violet-200" href="/faq">
                     FAQ
                   </a>
                 </li>
                 <li>
-                  <a className="footer-link" href="/privacy">
+                  <a className="hover:text-violet-200" href="/privacy">
                     Privacy Policy
                   </a>
                 </li>
                 <li>
-                  <a className="footer-link" href="/terms">
+                  <a className="hover:text-violet-200" href="/terms">
                     Terms &amp; Conditions
                   </a>
                 </li>

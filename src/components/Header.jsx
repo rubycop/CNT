@@ -7,7 +7,6 @@ import { Button } from "./Button";
 import logo from "../assets/images/logo.png";
 
 export const Header = ({ currentUser }) => {
-  let navigate = useNavigate();
 
   const [reward, setReward] = useState("-");
   const [loading, isLoading] = useState(false);
@@ -67,7 +66,7 @@ export const Header = ({ currentUser }) => {
             </button>
           </div>
           <div
-            className={`w-full flex-grow lg:flex lg:items-center lg:w-auto  my-3 lg:my-3 lg:bg-transparent text-white p-4 lg:p-0 z-20  ${
+            className={`w-full flex-grow lg:flex lg:items-center lg:w-auto my-3 lg:my-0 lg:bg-transparent text-white p-4 lg:p-0 z-20  ${
               show
                 ? "flex flex-col justify-center items-center shadow-lg gap-y-7 text-black"
                 : "hidden"
@@ -80,17 +79,26 @@ export const Header = ({ currentUser }) => {
               }`}
             >
               <li>
-                <a className="tracking-widest" href="/contests">
+                <a
+                  className="tracking-widest hover:text-violet-200"
+                  href="/contests"
+                >
                   Browse Contests
                 </a>
               </li>
               <li>
-                <a className="tracking-widest" href="/vote">
+                <a
+                  className="tracking-widest hover:text-violet-200"
+                  href="/vote"
+                >
                   Vote
                 </a>
               </li>
               <li>
-                <a className="tracking-widest" href="/leaderboard">
+                <a
+                  className="tracking-widest hover:text-violet-200"
+                  href="/leaderboard"
+                >
                   Leaderboard
                 </a>
               </li>
