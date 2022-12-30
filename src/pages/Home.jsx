@@ -134,8 +134,8 @@ export const Home = ({ currentUser }) => {
               </h1>
               <p className="my-5 text-center lg:text-left leading-normal text-base mb-8 text-white">
                 Contesty - is a first WEB3 NFT contest app. Participate in
-                contests to win a big prize, vote and predict a winner to get
-                rewards. Boost your NFT and discover new trends today
+                contests, vote and predict a winner to get
+                rewards. Boost your NFT activity and discover new trends in WEB3 world.
               </p>
               <div className="flex flex-col lg:flex-row w-full justify-center lg:justify-start gap-5 ">
                 <Button
