@@ -43,7 +43,7 @@ export const Header = ({ currentUser, dark }) => {
         id="header"
         className={`fixed w-full z-30 top-0 py-2 text-white ${
           (small || show) &&
-          "backdrop-filter backdrop-blur-sm bg-black bg-opacity-80"
+          "backdrop-filter backdrop-blur-sm bg-[#59488d] bg-opacity-80 shadow-lg"
         }`}
       >
         <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
@@ -108,6 +108,7 @@ export const Header = ({ currentUser, dark }) => {
             </ul>
             {currentUser ? (
               <Row className="items-center">
+                <div className="absolute animate-ping w-3 h-3 rounded-full bg-green-400"></div>
                 <div className="w-3 h-3 rounded-full bg-green-400"></div>
                 <div className="ml-3 mr-10 text-base tracking-widest truncate w-32">
                   {currentUser.accountId}

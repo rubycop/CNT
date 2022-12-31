@@ -16,6 +16,9 @@ import banner2 from "../assets/images/banner2.png";
 import { Footer } from "../components/Footer";
 import { Navigate, useNavigate } from "react-router-dom";
 
+import "animate.css";
+import WOW from "wow.js";
+
 const images = [
   {
     src: "https://apollo42.world/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2FxIaXPYWmFX0Hqo8zQuuo-FW4tLwJ2p7HZ8G_G0bFFUEU_iGtmHVt9yg_vxfId8pE7Zi4qX2PDnIbC-Dq016AGAB7uuqcDaBYKQCkdmtKbzDa9Q&w=3840&q=75",
@@ -58,7 +61,6 @@ export const Home = ({ currentUser }) => {
   const [loading, isLoading] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [contests, setContests] = useState([]);
-  const [defaultImg, setDefaultImg] = useState(false);
   const serviceRef = useRef(null);
 
   let navigate = useNavigate();
@@ -77,6 +79,7 @@ export const Home = ({ currentUser }) => {
   };
 
   useEffect(() => {
+    new WOW().init();
     if (currentUser) getParticipants();
   }, [currentUser]);
 
@@ -120,28 +123,32 @@ export const Home = ({ currentUser }) => {
   return (
     <>
       <Header currentUser={currentUser} />
-      <img
-        className="absolute -z-10 top-0 h-[1150px] lg:h-[800px] object-cover"
-        src={banner}
-      />
-
       <div className="flex flex-col lg:flex-row mx-5 lg:mx-20 mt-32">
         <div className="w-full lg:w-3/4 z-0 h-full lg:mt-20">
           <div className="container px-3 mx-auto flex flex-wrap flex-col lg:flex-row items-center">
             <div className="flex flex-col w-full lg:w-4/5 justify-center items-start lg:items-center text-center lg:text-left">
-              <h1 className="my-4 text-6xl font-semibold leading-tight text-violet-100">
+              <h1
+                data-wow-delay="0.2s"
+                className="wow fadeIn my-4 text-6xl font-semibold leading-tight text-white"
+              >
                 Make The NFT World Better
               </h1>
-              <p className="my-5 text-center lg:text-left leading-normal text-base mb-8 text-white">
+              <p
+                data-wow-delay="0.2s"
+                className={`wow fadeIn my-5 text-center lg:text-left leading-normal text-base mb-8 text-violet-100`}
+              >
                 Contesty - is a first WEB3 NFT contest app. Participate in
-                contests, vote and predict a winner to get
-                rewards. Boost your NFT activity and discover new trends in WEB3 world.
+                contests, vote and predict a winner to get rewards. Boost your
+                NFT activity and discover new trends in WEB3 world.
               </p>
-              <div className="flex flex-col lg:flex-row w-full justify-center lg:justify-start gap-5 ">
+              <div
+                data-wow-delay="0.5s"
+                className=" wow fadeInUp flex flex-col lg:flex-row w-full justify-center lg:justify-start gap-5 "
+              >
                 <Button
                   title="Discover More"
                   white
-                  icon={<ArrowDownIcon className=" ml-2 h-5" />}
+                  icon={<ArrowDownIcon className="mt-1 ml-2 h-5" />}
                   handleClick={() => scrollTo(serviceRef)}
                 />
 
@@ -156,24 +163,27 @@ export const Home = ({ currentUser }) => {
                   }
                   outlined
                   white
-                  icon={<DocumentSearchIcon className=" ml-2 h-5" />}
+                  icon={<DocumentSearchIcon className="ml-2 h-5" />}
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="flex mt-10 lg:mt-0 lg:w-1/2 z-0 items-center justify-center h-full">
+        <div
+          data-wow-delay="0.2s"
+          className="wow fadeIn flex mt-10 lg:mt-0 lg:w-1/2 z-0 items-center justify-center h-full"
+        >
           <img className="w-full object-cover" src={banner2} />
         </div>
       </div>
 
       <div
-        className="services flex px-10 lg:flex-row flex-col py-16 mt-16 lg:mt-24"
+        className="services flex px-10 lg:flex-row flex-col py-16 mt-10"
         ref={serviceRef}
       >
-        <div className="hidden lg:flex w-1/2 items-center justify-center">
-          <img src={boost} className="w-1/2 object-contain" />
+        <div className="hidden lg:flex w-1/2 wow fadeIn items-center justify-center">
+          <img src={boost} className="h-96 mt-10 object-contain" />
         </div>
         <div className="flex-col w-full lg:w-1/2 justify-center">
           <div className="flex flex-col items-start gap-y-3">
@@ -181,13 +191,13 @@ export const Home = ({ currentUser }) => {
               className="section-heading flex-col
              text-4xl leading-normal tracking-wide"
             >
-              <div className="font-semibold text-center leading-snug text-5xl my-5">
+              <div className="font-semibold text-center leading-snug text-5xl my-5 text-white">
                 Compete, Vote & Predict
               </div>
               <div className="flex w-full justify-center lg:justify-start">
-                <div className=" line-dec bg-black"></div>
+                <div className=" line-dec bg-violet-200"></div>
               </div>
-              <p className="lg:w-1/2 text-neutral-700 lg:text-left text-center">
+              <p className="lg:w-1/2 text-violet-200 lg:text-left text-center">
                 The best way to boost your NFT and win contest prize pool
               </p>
             </div>
@@ -219,7 +229,7 @@ export const Home = ({ currentUser }) => {
       </div>
 
       <div className="infos py-16" id="infos">
-        <h1 className="mb-16 mx-10 text-center text-white text-5xl">
+        <h1 className="mb-16 mx-10 text-center text-white text-3xl font-semibold tracking-wider">
           Incoming Contests
         </h1>
         <div className="w-full px-10 lg:px-24 flex gap-10 flex-col lg:flex-row justify-between">
@@ -234,7 +244,7 @@ export const Home = ({ currentUser }) => {
       </div>
 
       <div className="relative projects py-16 z-10" id="projects">
-        <h1 className="mb-16 mx-10 text-center text-black text-5xl">
+        <h1 className="mb-16 mx-10 text-center text-white text-3xl font-semibold tracking-wider">
           Latest Winners
         </h1>
         <div className="container-fluid">
