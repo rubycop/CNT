@@ -8,8 +8,8 @@ export const Footer = () => {
 
   return (
     <footer
-      className="relative z-0 bg-primary bg-opacity-5 pt-[50px] md:pt-[100px] wow fadeInUp"
-      data-wow-delay=".1s"
+      className="relative z-0 bg-primary bg-opacity-5 pt-[50px] md:pt-[100px] wow fadeIn"
+      data-wow-delay=".2s"
     >
       <div className="container">
         <div className="flex flex-row mx-10 md:mx-32 text-white text-sm">

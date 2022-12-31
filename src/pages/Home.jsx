@@ -107,8 +107,11 @@ export const Home = ({ currentUser }) => {
     showIncoming();
   }, []);
 
-  const ServiceItem = ({ image, text }) => (
-    <div className="w-full lg:w-72 min-h-56">
+  const ServiceItem = ({ image, text, delay }) => (
+    <div
+      className="wow fadeInUp w-full lg:w-72 min-h-56"
+      data-wow-delay={delay}
+    >
       <div className="service-item flex flex-row lg:flex-col bg-violet-50">
         <div className="icon">
           <img src={image} alt="precise data" className="rounded-full w-16" />
@@ -182,7 +185,10 @@ export const Home = ({ currentUser }) => {
         className="services flex px-10 lg:flex-row flex-col py-16 mt-10"
         ref={serviceRef}
       >
-        <div className="hidden lg:flex w-1/2 wow fadeIn items-center justify-center">
+        <div
+          className="hidden lg:flex w-1/2 wow fadeIn items-center justify-center"
+          data-wow-delay=".5s"
+        >
           <img src={boost} className="h-96 mt-10 object-contain" />
         </div>
         <div className="flex-col w-full lg:w-1/2 justify-center">
@@ -191,24 +197,32 @@ export const Home = ({ currentUser }) => {
               className="section-heading flex-col
              text-4xl leading-normal tracking-wide"
             >
-              <div className="font-semibold text-center leading-snug text-5xl my-5 text-white">
+              <div
+                data-wow-delay=".5s"
+                className="wow fadeIn font-semibold text-center leading-snug text-5xl my-5 text-white"
+              >
                 Compete, Vote & Predict
               </div>
               <div className="flex w-full justify-center lg:justify-start">
                 <div className=" line-dec bg-violet-200"></div>
               </div>
-              <p className="lg:w-1/2 text-violet-200 lg:text-left text-center">
+              <p
+                data-wow-delay=".5s"
+                className="lg:w-1/2 wow fadeIn text-violet-200 lg:text-left text-center"
+              >
                 The best way to boost your NFT and win contest prize pool
               </p>
             </div>
 
             <div className="flex flex-wrap lg:flex-row gap-3">
               <ServiceItem
+                delay="0.5s"
                 image={require("../assets/template/images/services-03.jpg")}
                 text="Take a part in contests and win big prize"
               />
 
               <ServiceItem
+                delay="1s"
                 image={require("../assets/template/images/services-01.jpg")}
                 text="Receive CNT token everytime you vote"
               />
@@ -216,10 +230,12 @@ export const Home = ({ currentUser }) => {
 
             <div className="flex flex-wrap lg:flex-row gap-3">
               <ServiceItem
+                delay="1.5s"
                 image={require("../assets/template/images/services-04.jpg")}
                 text="Boost you NFT on TOP marketplaces"
               />
               <ServiceItem
+                delay="2s"
                 image={require("../assets/template/images/services-02.jpg")}
                 text="Discover trending NFTs in NEAR ecosystem"
               />
@@ -229,10 +245,10 @@ export const Home = ({ currentUser }) => {
       </div>
 
       <div className="infos py-16" id="infos">
-        <h1 className="mb-16 mx-10 text-center text-white text-3xl font-semibold tracking-wider">
+        <h1 className="wow fadeIn mb-16 mx-10 text-center text-white text-3xl font-semibold tracking-wider">
           Incoming Contests
         </h1>
-        <div className="w-full px-10 lg:px-24 flex gap-10 flex-col lg:flex-row justify-between">
+        <div className="wow fadeInUp w-full px-10 lg:px-24 flex gap-10 flex-col lg:flex-row justify-between">
           {contests.map((contest, index) => (
             <ContestItem
               contest={contest}
@@ -244,10 +260,10 @@ export const Home = ({ currentUser }) => {
       </div>
 
       <div className="relative projects py-16 z-10" id="projects">
-        <h1 className="mb-16 mx-10 text-center text-white text-3xl font-semibold tracking-wider">
+        <h1 className="wow fadeIn mb-16 mx-10 text-center text-white text-3xl font-semibold tracking-wider">
           Latest Winners
         </h1>
-        <div className="container-fluid">
+        <div className="wow fadeIn container-fluid">
           <div className="flex-row">
             <div className="w-full justify-center">
               <AliceCarousel
