@@ -4,6 +4,7 @@ import { Row } from "../assets/styles/common.style";
 export const Button = ({
   disabled,
   icon,
+
   title,
   handleClick,
   outlined,
@@ -17,7 +18,7 @@ export const Button = ({
       full && "w-full"
     } flex flex-row items-center text-white p-4 px-6 rounded-full ${
       outlined
-        ? `border ${
+        ? `border-2 ${
             white
               ? "border-violet-200 text-violet-200 hover:border-white hover:text-white"
               : "hover:border-violet-500 hover:text-violet-500"

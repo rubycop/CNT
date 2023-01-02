@@ -32,18 +32,23 @@ export const Leaderboard = ({ currentUser }) => {
     getParticipants();
   }, []);
 
-  if (loading)
-    return (
-      <>
-        <Header currentUser={currentUser} />
-        <Skeleton />
-      </>
-    );
+  // if (loading)
+  //   return (
+  //     <>
+  //       <Header currentUser={currentUser} />
+  //       <Skeleton />
+  //     </>
+  //   );
 
   return (
     <>
-      <Header currentUser={currentUser} />
-      <Wrapper>
+      <Header currentUser={currentUser} dark />
+      <div className="bg-white h-screen">
+        <div className="flex justify-center items-center w-full h-full text-3xl font-bold">
+          Coming soon
+        </div>
+      </div>
+      {/* <Wrapper>
         <Container className="pt-20 flex justify-center">
           <div className="w-1/2">
             <div className="pb-5 text-lg font-bold">Creators Leaderboard</div>
@@ -96,7 +101,7 @@ export const Leaderboard = ({ currentUser }) => {
               ))}
           </div>
         </Container>
-      </Wrapper>
+      </Wrapper> */}
     </>
   );
 };

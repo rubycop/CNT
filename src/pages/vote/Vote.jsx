@@ -65,22 +65,27 @@ export const Vote = ({ currentUser }) => {
         <Skeleton />
       </>
     );
-  if (!contest || participants.length < 2)
-    return (
-      <>
-        <Header currentUser={currentUser} />
-        <div className="justify-center items-center flex h-screen">
-          <div className="text-4xl font-bold text-center w-64">
-            There is no contest to vote
-          </div>
-        </div>
-      </>
-    );
+  // if (!contest || participants.length < 2)
+  //   return (
+  //     <>
+  //       <Header currentUser={currentUser} />
+  //       <div className="justify-center items-center flex h-screen">
+  //         <div className="text-4xl font-bold text-center w-64">
+  //           There is no contest to vote
+  //         </div>
+  //       </div>
+  //     </>
+  //   );
 
   return (
     <>
-      <Header currentUser={currentUser} />
-      <Wrapper>
+      <Header currentUser={currentUser} dark />
+      <div className="bg-white h-screen">
+        <div className="flex justify-center items-center w-full h-full text-3xl font-bold">
+          Coming soon
+        </div>
+      </div>
+      {/* <Wrapper>
         <div className="flex w-full justify-center items-center">
           <div className="flex flex-col h-screen w-1/2 justify-center items-center gap-x-3">
             <div className="text-4xl font-semibold mb-16">{contest.title}</div>
@@ -120,7 +125,7 @@ export const Vote = ({ currentUser }) => {
             </div>
           </div>
         </div>
-      </Wrapper>
+      </Wrapper> */}
     </>
   );
 };

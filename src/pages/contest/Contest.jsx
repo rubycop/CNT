@@ -73,9 +73,12 @@ export const Contest = ({ currentUser }) => {
 
   return (
     <>
-      <Header currentUser={currentUser} />
-      <Wrapper>
-        <div className="w-full">
+      <Header currentUser={currentUser} dark />
+      <div className="bg-white h-screen">
+        <div className="flex justify-center items-center w-full h-full text-3xl font-bold">
+          Coming soon
+        </div>
+        {/* <div className="w-full">
           <>
             <Container className="pt-20 flex">
               <div className="sm:flex items-center justify-between">
@@ -115,8 +118,8 @@ export const Contest = ({ currentUser }) => {
               </div>
             )}
           </>
-        </div>
-      </Wrapper>
+        </div> */}
+      </div>
     </>
   );
 };

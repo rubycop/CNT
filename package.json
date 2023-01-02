@@ -30,6 +30,7 @@
     "@sentry/node": "^7.11.0",
     "@sentry/react": "^6.19.7",
     "@sentry/tracing": "^7.11.0",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "animate.css": "^4.1.1",
     "axios": "^0.27.2",
     "better-react-carousel": "^1.1.1",

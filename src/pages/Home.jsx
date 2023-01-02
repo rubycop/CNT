@@ -244,11 +244,11 @@ export const Home = ({ currentUser }) => {
         </div>
       </div>
 
-      <div className="infos py-16" id="infos">
-        <h1 className="wow fadeIn mb-16 mx-10 text-center text-white text-3xl font-semibold tracking-wider">
+      <div className="infos bg-violet-100 shadow-md py-16" id="infos">
+        <h1 className="wow fadeIn mb-16 mx-10 text-center text-black text-3xl font-semibold tracking-wider">
           Incoming Contests
         </h1>
-        <div className="wow fadeInUp w-full px-10 lg:px-24 flex gap-10 flex-col lg:flex-row justify-between">
+        <div className="wow fadeInUp w-full px-10 lg:px-24 flex gap-16 flex-col lg:flex-row justify-center">
           {contests.map((contest, index) => (
             <ContestItem
               contest={contest}

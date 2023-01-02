@@ -26,18 +26,18 @@ export const secondsToString = (countSec) => {
   return hours + " hours " + minutes + " min " + seconds + " sec.";
 };
 
-export const diffDays = (lastClaimTime) => {
+export const diffDays = (time) => {
   const timeNow = new Date().getTime();
   const oneDay = 24 * 60 * 60 * 1000;
-  const diff = new Date(lastClaimTime).getTime() - timeNow;
+  const diff = new Date(time).getTime() - timeNow;
   return parseInt(diff / oneDay);
 };
 
 // time diff for seconds
-export const timeDiffSeconds = (lastClaimTime) => {
+export const timeDiffSeconds = (time) => {
   const timeNow = new Date().getTime();
   const oneDay = 24 * 60 * 60 * 1000;
-  const diff = timeNow - new Date(lastClaimTime).getTime();
+  const diff = timeNow - new Date(time).getTime();
   return (oneDay - diff) / 1000;
 };
 

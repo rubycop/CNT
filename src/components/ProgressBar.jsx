@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { timeDiffSeconds } from "../utils/utils";
 
-export const ProgressBar = ({ time }) => {
+export const ProgressBar = ({ time, plain }) => {
   const funRef = useRef(null);
   const [currentDate, setCurrentDate] = useState(Date.now());
 
@@ -15,17 +15,22 @@ export const ProgressBar = ({ time }) => {
   }, []);
 
   const timeRange = timeDiffSeconds(time) / (3600 * 24 * 7);
-  console.log(timeRange);
   useEffect(() => {}, [currentDate]);
 
   return (
-    <div className="relative mt-2">
-      <div className="absolute h-2 rounded-full w-full bg-purple-200" />
+    <div className={`relative ${!plain && "mt-2"}`}>
+      <div
+        className={`absolute h-2 ${
+          plain ? "shadow-sm" : "rounded-full"
+        } w-full bg-purple-200`}
+      />
       <div
         style={{
           width: timeRange > 1 ? 10 : parseInt((1 - timeRange) * 100) + "%",
         }}
-        className={`absolute z-10 h-2 rounded-full bg-violet-700`}
+        className={`absolute z-10 h-2 ${
+          !plain && "rounded-full"
+        } bg-violet-700`}
       />
     </div>
   );

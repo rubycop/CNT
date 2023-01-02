@@ -18,14 +18,23 @@ export const Timer = ({ contest }) => {
   useEffect(() => {}, [currentDate]);
 
   return (
-    <div className={`flex text-sm text-center rounded-full text-violet-600`}>
+    <div className={`flex tracking-wide text-center rounded-full`}>
       {isIncomming(contest) ? (
-        <>Started at: {secondsToString(timeDiffSeconds(contest.start_time))}</>
+        <>
+          <span>
+            {secondsToString(timeDiffSeconds(parseInt(contest.start_time)))}
+          </span>
+          <span className="ml-2">left</span>
+        </>
       ) : isActive(contest) ? (
-        <>Ended at: {secondsToString(timeDiffSeconds(contest.end_time))}</>
+        <>
+          Ended at:{" "}
+          {secondsToString(timeDiffSeconds(parseInt(contest.end_time)))}
+        </>
       ) : (
         <>
-          {formatDate(contest.start_time)} - {formatDate(contest.end_time)}
+          {formatDate(contest.start_time)} -{" "}
+          {formatDate(parseInt(contest.end_time))}
         </>
       )}
     </div>
