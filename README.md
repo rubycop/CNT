@@ -1,3 +1,3 @@
-Beat My NFT
+Contesty
 ==================
-WEB3 NFT evaluation service that helps people to understand NFT value and arrange them in one place.
+WEB3 NFT contest based service that connects people, marketplaces and end users in one place. Built on NEAR

@@ -1,5 +1,5 @@
 import { PlusIcon } from "@heroicons/react/solid";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Container, Row, Wrapper } from "../../assets/styles/common.style";
 import { Button } from "../../components/Button";
 import { ContestItem } from "../../components/contest/ContestItem";
@@ -7,8 +7,11 @@ import { CreateContestModal } from "../../components/contest/CreateContestModal"
 import { JoinContestModal } from "../../components/contest/JoinContestModal";
 import { Header } from "../../components/Header";
 import { Skeleton } from "../../components/Skeleton";
+import { NearContext } from "../../context/near";
 
 export const Contest = ({ currentUser }) => {
+  const near = useContext(NearContext);
+
   const [loading, isLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
@@ -17,9 +20,9 @@ export const Contest = ({ currentUser }) => {
 
   const showActive = async () => {
     isLoading(true);
-    if (!window.contract) return;
+    if (!near.isSigned) return;
 
-    const contests = await window.contract.get_contests({});
+    const contests = await near.mainContract.getContests();
     const active = contests.filter(
       (c) =>
         new Date(parseInt(c.start_time)) < new Date() &&
@@ -32,7 +35,7 @@ export const Contest = ({ currentUser }) => {
 
   const showIncoming = async () => {
     isLoading(true);
-    const contests = await window.contract.get_contests({});
+    const contests = await near.mainContract.getContests();
     const incomming = contests.filter(
       (c) => new Date(parseInt(c.start_time)) > new Date()
     );
@@ -43,7 +46,7 @@ export const Contest = ({ currentUser }) => {
 
   const showPast = async () => {
     isLoading(true);
-    const contests = await window.contract.get_contests({});
+    const contests = await near.mainContract.getContests();
     const past = contests.filter(
       (c) =>
         new Date(parseInt(c.start_time)) < new Date() &&
@@ -75,10 +78,7 @@ export const Contest = ({ currentUser }) => {
     <>
       <Header currentUser={currentUser} dark />
       <div className="bg-white h-screen">
-        <div className="flex justify-center items-center w-full h-full text-3xl font-bold">
-          Coming soon
-        </div>
-        {/* <div className="w-full">
+        <div className="w-full">
           <>
             <Container className="pt-20 flex">
               <div className="sm:flex items-center justify-between">
@@ -118,7 +118,7 @@ export const Contest = ({ currentUser }) => {
               </div>
             )}
           </>
-        </div> */}
+        </div>
       </div>
     </>
   );

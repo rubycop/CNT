@@ -2,36 +2,7 @@ import { Menu } from "@headlessui/react";
 import { DotsHorizontalIcon } from "@heroicons/react/solid";
 import { utils } from "near-api-js";
 
-const getAmount = (amount) => utils.format.parseNearAmount(amount);
-
-const GAS = getAmount("0.00000000003");
-
 export const Dropdown = ({ currentUser, order, isLoading, showAllOrders }) => {
-  const handleApprove = async (order) => {
-    console.log(order);
-    isLoading(true);
-    await window.contract.approve_order({
-      owner_id: currentUser.accountId,
-      order_id: order.id,
-    });
-    await showAllOrders();
-    isLoading(false);
-  };
-
-  const handlePay = async (order) => {
-    isLoading(true);
-    await window.contract.pay_for_order(
-      {
-        receiver_id: order.owner_id,
-        order_id: order.id,
-      },
-      GAS,
-      getAmount(order.price)
-    );
-    await showAllOrders();
-    isLoading(false);
-  };
-
   return (
     <>
       {order.status !== "Paid" && (
@@ -46,7 +17,7 @@ export const Dropdown = ({ currentUser, order, isLoading, showAllOrders }) => {
               {order.status !== "Paid" && (
                 <Menu.Item>
                   <button
-                    onClick={() => handleApprove(order)}
+                    onClick={() => {}}
                     className="block px-4 py-2 text-sm"
                   >
                     Approve
@@ -56,7 +27,7 @@ export const Dropdown = ({ currentUser, order, isLoading, showAllOrders }) => {
               {order.status === "Approved" && order.status !== "Paid" && (
                 <Menu.Item>
                   <button
-                    onClick={() => handlePay(order)}
+                    onClick={() => {}}
                     className="block px-4 py-2 text-sm"
                   >
                     Pay

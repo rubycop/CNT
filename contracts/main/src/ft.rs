@@ -15,6 +15,6 @@ impl Contract {
             ft_mint_gas,
         );
 
-        self.ft_storage_accounts.insert(account_id);
+        self.accounts.insert(account_id, &0);
     }
 }

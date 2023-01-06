@@ -1,11 +1,14 @@
 import { ThumbUpIcon } from "@heroicons/react/solid";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container, Wrapper } from "../assets/styles/common.style";
 import { Header } from "../components/Header";
 import { Skeleton } from "../components/Skeleton";
+import { NearContext } from "../context/near";
 import { groupBy } from "../utils/utils";
 
 export const Leaderboard = ({ currentUser }) => {
+  const near = useContext(NearContext);
+
   const [loading, isLoading] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [nfts, setNFTs] = useState([]);
@@ -13,7 +16,7 @@ export const Leaderboard = ({ currentUser }) => {
 
   const getParticipants = async () => {
     isLoading(true);
-    const _participants = await window.contract.get_participants({});
+    const _participants = await near.mainContract.getParticipants({});
     const groupedByVotes = groupBy(_participants, (p) => p.owner_id);
     const arr = [];
 

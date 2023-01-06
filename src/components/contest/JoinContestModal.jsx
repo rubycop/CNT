@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   convertToTera,
   convertToYocto,
@@ -12,6 +12,7 @@ import { ImageUploader } from "../ImageUploader";
 import { Button } from "../Button";
 import { SelectorIcon } from "@heroicons/react/outline";
 import { CheckIcon } from "@heroicons/react/solid";
+import { NearContext } from "../../context/near";
 
 export const JoinContestModal = ({
   showModal,
@@ -19,6 +20,8 @@ export const JoinContestModal = ({
   currentUser,
   contest,
 }) => {
+  const near = useContext(NearContext);
+
   const [loading, isLoading] = useState(false);
   const [chosen, setChosen] = useState();
   const [chosenBtn, setChosenBtn] = useState();
@@ -27,7 +30,7 @@ export const JoinContestModal = ({
   const joinContest = async () => {
     if (!chosen) return;
 
-    await window.contract.join_contest(
+    await near.mainContract.joinContest(
       {
         contest_id: contest.id,
         nft_src: chosen,
@@ -40,7 +43,7 @@ export const JoinContestModal = ({
 
   const fetchNfts = async () => {
     isLoading(true);
-    const userNfts = await window.parasContract.nft_tokens_for_owner({
+    const userNfts = await near.mainContract.nftTokensForOwner({
       account_id: currentUser.accountId,
     });
 

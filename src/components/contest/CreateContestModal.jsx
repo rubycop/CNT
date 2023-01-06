@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { NearContext } from "../../context/near";
 import { Input } from "../Form";
 import { Modal } from "../Modal";
 
 export const CreateContestModal = ({ showModal, setShowModal }) => {
+  const near = useContext(NearContext);
+
   const [loading, isLoading] = useState(false);
   const [title, setTitle] = useState();
   const [entryFee, setEntryFee] = useState();
@@ -12,7 +15,7 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
 
   const handleCreate = async () => {
     isLoading(true);
-    await window.contract.create_contest({
+    await near.mainContract.createContest({
       title: title,
       entry_fee: entryFee,
       size: size,

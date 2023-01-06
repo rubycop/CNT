@@ -1,23 +1,18 @@
 import { ArrowDownIcon, DocumentSearchIcon } from "@heroicons/react/solid";
-import React, { useState, useEffect, useRef } from "react";
-import { Container, Wrapper } from "../assets/styles/common.style";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Header } from "../components/Header";
-import { Skeleton } from "../components/Skeleton";
-import { groupBy } from "../utils/utils";
-import Carousel from "better-react-carousel";
-
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import { Button } from "../components/Button";
 import { ContestItem } from "../components/contest/ContestItem";
-import banner from "../assets/images/banner.png";
 import boost from "../assets/images/boost.png";
 import banner2 from "../assets/images/banner2.png";
 import { Footer } from "../components/Footer";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "animate.css";
 import WOW from "wow.js";
+import { NearContext } from "../context/near";
 
 const images = [
   {
@@ -58,6 +53,8 @@ const images = [
 ];
 
 export const Home = ({ currentUser }) => {
+  const near = useContext(NearContext);
+
   const [loading, isLoading] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [contests, setContests] = useState([]);
@@ -73,7 +70,7 @@ export const Home = ({ currentUser }) => {
 
   const getParticipants = async () => {
     isLoading(true);
-    const _participants = await window.contract?.get_participants({});
+    const _participants = await near.mainContract.getParticipants();
     setParticipants(_participants);
     isLoading(false);
   };
@@ -95,7 +92,8 @@ export const Home = ({ currentUser }) => {
 
   const showIncoming = async () => {
     isLoading(true);
-    const contests = await window.contract.get_contests({});
+    const contests = await near.mainContract.getContests();
+    console.log(contests);
     const incomming = contests.filter(
       (c) => new Date(parseInt(c.start_time)) > new Date()
     );

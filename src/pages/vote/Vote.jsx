@@ -1,11 +1,14 @@
 import { PlusIcon, ThumbUpIcon } from "@heroicons/react/solid";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Container, Row, Wrapper } from "../../assets/styles/common.style";
 import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
 import { Skeleton } from "../../components/Skeleton";
+import { NearContext } from "../../context/near";
 
 export const Vote = ({ currentUser }) => {
+  const near = useContext(NearContext);
+
   const [loading, isLoading] = useState(false);
   const [contest, setContest] = useState();
   const [participants, setParticipants] = useState([]);
@@ -13,7 +16,7 @@ export const Vote = ({ currentUser }) => {
 
   const vote = async (participant) => {
     isLoading(true);
-    await window.contract.vote({
+    await near.mainContract.vote({
       contest_id: contest.id,
       participant_id: participant.id,
       reward:
@@ -28,7 +31,7 @@ export const Vote = ({ currentUser }) => {
   const getContest = async () => {
     isLoading(true);
 
-    const contests = await window.contract.get_contests({});
+    const contests = await near.mainContract.getContests();
     const activeContests = contests.filter(
       (c) =>
         new Date(c.start_time) < new Date() && new Date(c.end_time) > new Date()
@@ -42,7 +45,7 @@ export const Vote = ({ currentUser }) => {
 
   const getContestParticipants = async () => {
     isLoading(true);
-    const _participants = await window.contract.get_contest_participants({
+    const _participants = await near.mainContract.getContestParticipants({
       contest_id: contest.id,
     });
 
@@ -81,51 +84,50 @@ export const Vote = ({ currentUser }) => {
     <>
       <Header currentUser={currentUser} dark />
       <div className="bg-white h-screen">
-        <div className="flex justify-center items-center w-full h-full text-3xl font-bold">
-          Coming soon
-        </div>
-      </div>
-      {/* <Wrapper>
-        <div className="flex w-full justify-center items-center">
-          <div className="flex flex-col h-screen w-1/2 justify-center items-center gap-x-3">
-            <div className="text-4xl font-semibold mb-16">{contest.title}</div>
-            <div className="flex flex-row gap-x-5">
-              {participants.map((p, i) => (
-                <div key={i}>
-                  <div
-                    className={`w-72 h-90 border-2 rounded-3xl ${
-                      i === 0 ? "-rotate-12" : "rotate-12"
-                    } hover:border-2 hover:border-green-500 hover:p-1`}
-                    key={i}
-                  >
-                    <img
-                      className={`w-72 h-90 bg-cover rounded-3xl`}
-                      src={defaultImg || `https://ipfs.io/ipfs/${p.nft_src}`}
-                      onError={() =>
-                        setDefaultImg(
-                          "https://media.tenor.com/xnZaQ3O98dMAAAAM/thinking-processing.gif"
-                        )
-                      }
-                    />
-                    {defaultImg && (
-                      <div className="absolute top-5 w-full text-center text-sm">
-                        Image is processing on IPFS
-                      </div>
-                    )}
+        <Wrapper>
+          <div className="flex w-full justify-center items-center">
+            <div className="flex flex-col h-screen w-1/2 justify-center items-center gap-x-3">
+              <div className="text-4xl font-semibold mb-16">
+                {contest.title}
+              </div>
+              <div className="flex flex-row gap-x-5">
+                {participants.map((p, i) => (
+                  <div key={i}>
+                    <div
+                      className={`w-72 h-90 border-2 rounded-3xl ${
+                        i === 0 ? "-rotate-12" : "rotate-12"
+                      } hover:border-2 hover:border-green-500 hover:p-1`}
+                      key={i}
+                    >
+                      <img
+                        className={`w-72 h-90 bg-cover rounded-3xl`}
+                        src={defaultImg || `https://ipfs.io/ipfs/${p.nft_src}`}
+                        onError={() =>
+                          setDefaultImg(
+                            "https://media.tenor.com/xnZaQ3O98dMAAAAM/thinking-processing.gif"
+                          )
+                        }
+                      />
+                      {defaultImg && (
+                        <div className="absolute top-5 w-full text-center text-sm">
+                          Image is processing on IPFS
+                        </div>
+                      )}
+                    </div>
+                    <div className="w-full px-20 mt-16">
+                      <Button
+                        title="+1"
+                        icon={<ThumbUpIcon className="ml-3 h-5 w-5" />}
+                        handleClick={() => vote(p)}
+                      />
+                    </div>
                   </div>
-                  <div className="w-full px-20 mt-16">
-                    <Button
-                      title="+1"
-                      icon={<ThumbUpIcon className="ml-3 h-5 w-5" />}
-                      handleClick={() => vote(p)}
-                    />
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </Wrapper> */}
+        </Wrapper>
+      </div>
     </>
   );
 };

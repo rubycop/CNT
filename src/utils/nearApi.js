@@ -51,12 +51,3 @@ export async function initContract() {
     }
   );
 }
-
-export function login() {
-  window.walletConnection.requestSignIn(nearConfig.contractName);
-}
-
-export function logout() {
-  window.walletConnection.signOut();
-  window.location.replace(window.location.origin + window.location.pathname);
-}

@@ -1,4 +1,4 @@
-export const CONTRACT_NAME = "dev-1672222350286-38056353863724";
+export const CONTRACT_NAME = "dev-1672867800856-63206395099793";
 
 export function getConfig(env) {
   console.log(env);

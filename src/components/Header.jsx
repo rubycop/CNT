@@ -1,12 +1,15 @@
 import { LoginIcon, LogoutIcon } from "@heroicons/react/solid";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row } from "../assets/styles/common.style";
 import { login, logout } from "../utils/nearApi";
 import { Button } from "./Button";
 import logo from "../assets/images/logo.png";
+import { NearContext } from "../context/near";
 
 export const Header = ({ currentUser, dark }) => {
+  const near = useContext(NearContext);
+
   const [reward, setReward] = useState("-");
   const [loading, isLoading] = useState(false);
   const [small, setSmall] = useState(false);
@@ -106,12 +109,12 @@ export const Header = ({ currentUser, dark }) => {
                 </a>
               </li>
             </ul>
-            {currentUser ? (
+            {near.isSigned ? (
               <Row className="items-center">
                 <div className="absolute animate-ping w-3 h-3 rounded-full bg-green-400"></div>
                 <div className="w-3 h-3 rounded-full bg-green-400"></div>
                 <div className="ml-3 mr-10 text-base tracking-widest truncate w-32">
-                  {currentUser.accountId}
+                  {near.wallet.accountId}
                 </div>
                 <div className="ml-3 mr-10 font-semibold text-green-400 text-base tracking-widest">
                   {reward} CNT
@@ -121,7 +124,7 @@ export const Header = ({ currentUser, dark }) => {
                   full={show}
                   title="Logout"
                   icon={<LogoutIcon className="ml-3 h-5 w-5" />}
-                  handleClick={logout}
+                  handleClick={() => near.wallet.signOut()}
                   outlined
                   white
                 />
@@ -131,7 +134,7 @@ export const Header = ({ currentUser, dark }) => {
                 full={show}
                 title="Connect wallet"
                 icon={<LoginIcon className="ml-3 h-5 w-5" />}
-                handleClick={login}
+                handleClick={() => near.wallet.signIn()}
                 white
               />
             )}

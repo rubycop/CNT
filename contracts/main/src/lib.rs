@@ -1,5 +1,5 @@
 use near_contract_standards::non_fungible_token::TokenId;
-use near_sdk::collections::LookupSet;
+use near_sdk::collections::{LookupSet, LookupMap};
 use near_sdk::{AccountId, Balance, BorshStorageKey, env, Gas, near_bindgen, Promise, serde_json::json, ext_contract};
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::serde::{Deserialize, Serialize};
@@ -11,6 +11,7 @@ pub const ONE_NEAR: u128 = 1_000_000_000_000_000_000_000_000 as u128;
 pub const REWARD_MIN: usize = 1;
 pub const REWARD_MAX: usize = 3;
 pub const XCC_GAS: Gas = Gas(30_000_000_000_000);
+pub const PLATFORM_FEE:f64 = 0.05;
 
 
 #[derive(BorshStorageKey, BorshSerialize)]
@@ -59,7 +60,7 @@ pub struct Contract {
     participants: Vec<Participant>,
     voters: Vec<Voter>,
     contract_ft: AccountId,
-    ft_storage_accounts: LookupSet<AccountId>,
+    accounts: LookupMap<AccountId, u32>,
 }
 
 
@@ -77,7 +78,7 @@ impl Default for Contract {
             participants: vec![],
             voters: vec![],
             contract_ft: format!("ft.{}", env::current_account_id()).try_into().unwrap(),
-            ft_storage_accounts: LookupSet::new(StorageKeys::FtStorageAccounts)
+            accounts: LookupMap::new(StorageKeys::FtStorageAccounts)
         }
     }
 }
@@ -136,22 +137,32 @@ impl Contract {
         self.voters.clone()
     }
 
-    pub fn get_contest_by_id(&self, contest_id: String) -> Option<Contest> {
+    pub fn get_account_xp(&self, account_id: AccountId) -> u32 {
+        self.accounts.get(&account_id).unwrap_or(0)
+    }
+
+    pub fn get_contest_by_id(&self, contest_id: &String) -> Option<Contest> {
         self.get_contests()
             .into_iter()
-            .find(|c| c.id == contest_id)
+            .find(|c| &c.id == contest_id)
     }
 
-    pub fn get_participant_by_id(&self, participant_id: String) -> Option<Participant> {
+    pub fn get_participant_by_id(&self, participant_id: &String) -> Option<Participant> {
         self.get_participants()
             .into_iter()
-            .find(|c| c.id == participant_id)
+            .find(|c| &c.id == participant_id)
     }
 
-    pub fn get_contest_participants(&self, contest_id: String) -> Vec<Participant> {
+    pub fn get_voter_by_contest_id(&self, voter_id: &String, contest_id: &String) -> Option<Voter> {
+        self.get_voters()
+            .into_iter()
+            .find(|c| &c.contest_id == contest_id && &c.owner_id == voter_id)
+    }
+
+    pub fn get_contest_participants(&self, contest_id: &String) -> Vec<Participant> {
         self.get_participants()
             .into_iter()
-            .filter(|p| p.contest_id == contest_id)
+            .filter(|p| &p.contest_id == contest_id)
             .collect()
     }
 
@@ -192,15 +203,26 @@ impl Contract {
 
     #[payable]
     pub fn join_contest(&mut self, contest_id: String, nft_src: String) -> () {
-        let contest = self.get_contest_by_id(contest_id.clone()).unwrap();
+        let contest = self.get_contest_by_id(&contest_id)
+                                   .expect("[JOIN]: There is no contest with such id");
         let transfer_amount: u128 = contest.entry_fee.parse::<u128>().unwrap() * u128::from(ONE_NEAR);
         let receiver_id = format!("burn.{}", env::current_account_id()).try_into().unwrap();
 
         if contest.currency_ft == true {
-            if !self.ft_storage_accounts.contains(&env::predecessor_account_id()) {
+            let sender = match self.accounts.get(&env::predecessor_account_id()) {
+                Some(_xp) => true,
+                None => false
+            };
+            
+            let receiver = match self.accounts.get(&receiver_id) {
+                Some(_xp) => true,
+                None => false
+            };
+
+            if !sender {
                 self.add_token_storage(&env::predecessor_account_id());
             }
-            if !self.ft_storage_accounts.contains(&receiver_id) {
+            if !receiver {
                 self.add_token_storage(&receiver_id);
             }
 
@@ -239,9 +261,10 @@ impl Contract {
         
     }
 
-    pub fn callback_join_contest(&mut self, contest_id: String, owner_id: AccountId, nft_src: String) -> bool {
-        let contest = self.get_contest_by_id(contest_id.clone()).unwrap();
-        let participants = self.get_contest_participants(contest_id.clone());
+    pub fn callback_join_contest(&mut self, contest_id: String, owner_id: AccountId, nft_src: String) -> String {
+        let contest = self.get_contest_by_id(&contest_id)
+                                   .expect("[CALLBACK JOIN]: There is no contest with such id");
+        let participants = self.get_contest_participants(&contest_id);
 
         if contest.size == participants.len() {
             env::panic_str("There is no free space in this contest");
@@ -255,46 +278,92 @@ impl Contract {
             votes_count: 0
         };
 
-        self.participants.push(participant);
-        true
+        self.participants.push(participant.clone());
+
+        participant.id
     }
 
-    pub fn vote(&mut self, participant_id: String, contest_id: String, reward: String) -> Vec<Voter> {
-        let mut participant = self.get_participant_by_id(participant_id.clone()).unwrap();
-        let rand_val = self.random_in_range(REWARD_MIN, REWARD_MAX);
+    #[payable]
+    pub fn vote(&mut self, participant_id: String, contest_id: String) -> Vec<Voter> {
+        let voter_id: AccountId = env::predecessor_account_id();
+        self.get_voter_by_contest_id(&voter_id.to_string(), &contest_id)
+            .expect("[VOTE]: You already voted in this contest");
+
+        let mut participant = self.get_participant_by_id(&participant_id)
+                                               .expect("[VOTE]: There is no participant with such id");
+        let reward = self.random_in_range(REWARD_MIN, REWARD_MAX);
+        let transfer_amount: u128 = u128::from(reward) * u128::from(ONE_NEAR);
+
+        let mut xp = self.get_account_xp(voter_id.clone());
+        xp += 1;
+        self.accounts.insert(&voter_id, &xp);
 
         participant.votes_count += 1;
         let index = self.participants
                                .iter()
-                               .position(|x| x.id == participant_id.clone())
-                               .unwrap();
+                               .position(|x| &x.id == &participant_id)
+                               .expect("[VOTE]: There is no participant in participants list");
         self.participants.remove(index);
         self.participants.push(participant);
 
-        let voter = Voter {
+        let new_voter = Voter {
             contest_id: contest_id,
             participant_id: participant_id,
-            owner_id: env::predecessor_account_id().to_string(),
-            reward: rand_val
+            owner_id: voter_id.to_string(),
+            reward: reward
         };
 
-        self.voters.push(voter);
+        Promise::new(self.contract_ft.clone()).function_call(
+            "ft_transfer".to_string(),
+            json!({
+                "receiver_id": voter_id,
+                "amount": transfer_amount.to_string(),
+            }).to_string().as_bytes().to_vec(),
+            1,
+            Contract::convert_to_tera(20),
+        );
+
+        self.voters.push(new_voter);
         self.voters.clone()
     }
 
     pub fn set_winner(&mut self, contest_id: String) -> Contest {
-        let mut contest = self.get_contest_by_id(contest_id.clone()).unwrap();
-        let winner_participant = self.get_contest_participants(contest_id.clone())
+        let mut contest = self.get_contest_by_id(&contest_id)
+                                       .expect("[WINNER]: There is no contest with such id");
+        let winner_participant = self.get_contest_participants(&contest_id)
                                                     .iter()
                                                     .max_by_key(|p| p.votes_count)
                                                     .unwrap()
                                                     .clone();
 
-        contest.winner_id = Some(winner_participant.id);
+        let winner_account_id = winner_participant.id;
+        contest.winner_id = Some(winner_account_id.clone());
 
+        let participants_size = self.get_contest_participants(&contest_id).len() as u128;
+        let reward = (contest.entry_fee.parse::<u128>().unwrap() * participants_size) as f64;
+        let fee = reward * PLATFORM_FEE;
+        let transfer_amount: u128 = (reward - fee) as u128 * u128::from(ONE_NEAR);
+        
         let index = self.contests.iter()
                                         .position(|x| x.id == contest_id.clone())
                                         .unwrap();
+
+        if contest.currency_ft == true {
+            Promise::new(self.contract_ft.clone()).function_call(
+                "ft_transfer".to_string(),
+                json!({
+                    "receiver_id": winner_account_id,
+                    "amount": transfer_amount.to_string(),
+                }).to_string().as_bytes().to_vec(),
+                1,
+                Contract::convert_to_tera(20),
+            );
+        } else {
+            if env::attached_deposit() != (reward + fee) as u128 * u128::from(ONE_NEAR) {
+                env::panic_str("Attached amount does not match entry fee");
+            }
+            Promise::new(env::current_account_id()).transfer(transfer_amount);
+        }
         self.contests.remove(index);
         self.contests.push(contest.clone());
 

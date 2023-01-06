@@ -1,5 +1,6 @@
 import { CurrencyDollarIcon, UserIcon } from "@heroicons/react/outline";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { NearContext } from "../../context/near";
 import { currency, PLATFORM_FEE } from "../../utils/utils";
 import { Button } from "../Button";
 import { ProgressBar } from "../ProgressBar";
@@ -13,14 +14,16 @@ export const isActive = (contest) =>
   new Date(parseInt(contest.start_time)) < new Date() &&
   new Date(parseInt(contest.end_time)) > new Date();
 
-export const ContestItem = ({ contest, currentUser, handleJoin }) => {
+export const ContestItem = ({ contest, handleJoin }) => {
+  const near = useContext(NearContext);
+
   const [participants, setParticipants] = useState([]);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [loading, isLoading] = useState(false);
 
-  const getContestParticipants = async () => {
+  const fetchParticipants = async () => {
     isLoading(true);
-    const participants = await window.contract.get_contest_participants({
+    const participants = await near.mainContract.getContestParticipants({
       contest_id: contest.id,
     });
 
@@ -29,8 +32,8 @@ export const ContestItem = ({ contest, currentUser, handleJoin }) => {
   };
 
   const participated = () =>
-    currentUser &&
-    participants.filter((p) => p.owner_id === currentUser.accountId)?.length >
+    near.isSigned &&
+    participants?.filter((p) => p.owner_id === near.wallet.accountId)?.length >
       0;
 
   const contestId = (contest) => (
@@ -39,15 +42,15 @@ export const ContestItem = ({ contest, currentUser, handleJoin }) => {
     </a>
   );
 
-  const contestWinner = participants.sort(
+  const contestWinner = participants?.sort(
     (a, b) => b.votes_count - a.votes_count
   )[0];
 
   const getPrizePool =
-    participants.length * contest.entry_fee * (1 - PLATFORM_FEE);
+    participants?.length * contest.entry_fee * (1 - PLATFORM_FEE);
 
   useEffect(() => {
-    getContestParticipants();
+    fetchParticipants();
   }, []);
 
   const Participants = ({ contest }) => (
@@ -142,15 +145,15 @@ export const ContestItem = ({ contest, currentUser, handleJoin }) => {
               <>
                 <Button
                   full
-                  disabled={!currentUser}
+                  disabled={!near.isSigned}
                   title={`Join for ${contest.entry_fee} ${currency(contest)}`}
-                  handleClick={() => currentUser && setShowJoinModal(true)}
+                  handleClick={() => near.isSigned && setShowJoinModal(true)}
                 />
 
                 <JoinContestModal
                   showModal={showJoinModal}
                   setShowModal={setShowJoinModal}
-                  currentUser={currentUser}
+                  currentUser={near.isSigned}
                   contest={contest}
                 />
               </>
