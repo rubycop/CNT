@@ -22,7 +22,7 @@ export const ProgressBar = ({ time, plain }) => {
       <div
         className={`absolute h-2 ${
           plain ? "shadow-sm" : "rounded-full"
-        } w-full bg-purple-200`}
+        } w-full bg-[#2d1f58]`}
       />
       <div
         style={{

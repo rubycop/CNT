@@ -3,6 +3,7 @@ import {
   NFTStorage,
   File,
 } from "../../node_modules/nft.storage/dist/bundle.esm.min.js";
+import near_logo from "../assets/images/near-logo.png";
 
 export const formatDate = (date) => new Date(date).toLocaleDateString();
 
@@ -127,4 +128,12 @@ export const mediaURL = (ipfsHash) => {
 
 export const PLATFORM_FEE = 0.05;
 
-export const currency = (contest) => (contest.currency_ft ? "CNT" : "NEAR");
+export const Currency = ({ contest }) => (
+  <>
+    {contest.currency_ft ? (
+      <span className="ml-1">CNT</span>
+    ) : (
+      <img className="w-6 h-6" src={near_logo} />
+    )}
+  </>
+);
