@@ -9,7 +9,7 @@ import { Header } from "../../components/Header";
 import { Skeleton } from "../../components/Skeleton";
 import { NearContext } from "../../context/near";
 
-export const Contest = ({ currentUser }) => {
+export const Contest = () => {
   const near = useContext(NearContext);
 
   const [loading, isLoading] = useState(false);
@@ -20,8 +20,6 @@ export const Contest = ({ currentUser }) => {
 
   const showActive = async () => {
     isLoading(true);
-    if (!near.isSigned) return;
-
     const contests = await near.mainContract.getContests();
     const active = contests.filter(
       (c) =>
@@ -64,24 +62,42 @@ export const Contest = ({ currentUser }) => {
   }, [mode]);
 
   const FilterTab = ({ tab, title }) => (
-    <button
+    <div
       onClick={() => setMode(tab)}
-      className={`py-2 px-8 ${
-        mode === tab ? "bg-indigo-100 text-indigo-700" : "text-gray-600"
-      } rounded-full`}
+      className={`hover:cursor-pointer text-base px-3 hover:text-white font-semibold tracking-wide ${
+        mode === tab ? "text-white" : "text-white/30"
+      }`}
     >
-      <p>{title}</p>
-    </button>
+      {title}
+      <div
+        className={`h-[2px] mt-3 hover:bg-white ${
+          mode === tab ? "bg-white" : "bg-white/30"
+        }`}
+      ></div>
+    </div>
   );
 
   return (
     <>
-      <Header currentUser={currentUser} dark />
-      <div className="bg-white h-screen">
+      <Header />
+
+      <div className="relative">
+        <img
+          src="https://assets.website-files.com/605a8ad8853d7fc62334c73e/60d54316de3f53dd3d119282_bubble-1-nft-webflow-template.png"
+          width="368.5"
+          className="absolute -left-16 w-40"
+        />
+        <img
+          src="https://assets.website-files.com/605a8ad8853d7fc62334c73e/605a9f1433e846624e81f793_donut-nft-webflow-template.png"
+          className="absolute -right-16 top-72 w-32"
+        />
+      </div>
+
+      <div className="flex flex-col lg:flex-row mx-5 lg:mx-32 mt-32">
         <div className="w-full">
           <>
-            <Container className="pt-20 flex">
-              <div className="sm:flex items-center justify-between">
+            <Container className="mt-10">
+              <div className="w-full sm:flex items-center justify-between">
                 <div className="flex items-center">
                   <FilterTab title="Active" tab={0} />
                   <FilterTab title="Incomming" tab={1} />
@@ -89,7 +105,6 @@ export const Contest = ({ currentUser }) => {
                 </div>
 
                 <Button
-                  disabled
                   title="Create Contest"
                   icon={<PlusIcon className="ml-3 h-5 w-5" />}
                   handleClick={() => setShowModal(true)}
@@ -100,23 +115,22 @@ export const Contest = ({ currentUser }) => {
                   setShowModal={setShowModal}
                 />
               </div>
-            </Container>
-            {loading ? (
-              <Skeleton />
-            ) : (
-              <div className="infos px-20">
-                <div className="w-full flex gap-x-10 gap-y-16 flex-wrap justify-center">
-                  {contests?.map((contest, index) => (
-                    <ContestItem
-                      contest={contest}
-                      currentUser={currentUser}
-                      index={index}
-                      handleJoin={() => setShowJoinModal(true)}
-                    />
-                  ))}
-                </div>
+              <div className="mt-10">
+                {loading ? (
+                  <Skeleton />
+                ) : (
+                  <div className="w-full flex gap-x-10 gap-y-16 flex-wrap justify-center">
+                    {contests?.map((contest, index) => (
+                      <ContestItem
+                        contest={contest}
+                        index={index}
+                        handleJoin={() => setShowJoinModal(true)}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
+            </Container>
           </>
         </div>
       </div>

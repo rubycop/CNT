@@ -13,13 +13,9 @@ import { Button } from "../Button";
 import { SelectorIcon } from "@heroicons/react/outline";
 import { CheckIcon } from "@heroicons/react/solid";
 import { NearContext } from "../../context/near";
+import { functionCall } from "near-api-js/lib/transaction";
 
-export const JoinContestModal = ({
-  showModal,
-  setShowModal,
-  currentUser,
-  contest,
-}) => {
+export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
   const near = useContext(NearContext);
 
   const [loading, isLoading] = useState(false);
@@ -30,21 +26,63 @@ export const JoinContestModal = ({
   const joinContest = async () => {
     if (!chosen) return;
 
-    await near.mainContract.joinContest(
-      {
-        contest_id: contest.id,
-        nft_src: chosen,
-        accountId: currentUser.accountId,
-      },
-      convertToTera("50"),
-      contest.currency_ft ? 1 : convertToYocto(contest.entry_fee)
-    );
+    if (contest.currency_ft) {
+      const txns = [
+        {
+          signerId: near.wallet.accountId,
+          receiverId: near.mainContract.ftContractId,
+          actions: [
+            {
+              type: "FunctionCall",
+              params: {
+                methodName: "ft_transfer",
+                args: {
+                  receiver_id: `burn.${near.mainContract.contractId}`,
+                  amount: convertToYocto(contest.entry_fee),
+                },
+                gas: convertToTera("90"),
+                deposit: 1,
+              },
+            },
+          ],
+        },
+      ];
+
+      txns.push({
+        signerId: near.wallet.accountId,
+        receiverId: near.mainContract.contractId,
+        actions: [
+          {
+            type: "FunctionCall",
+            params: {
+              methodName: "callback_join_contest",
+              args: {
+                contest_id: contest.id,
+                nft_src: chosen,
+                owner_id: near.wallet.accountId,
+              },
+              gas: convertToTera("30"),
+            },
+          },
+        ],
+      });
+
+      await near.wallet.callMethods(txns);
+    } else
+      near.mainContract.joinContest(
+        {
+          contest_id: contest.id,
+          nft_src: chosen,
+        },
+        convertToTera("90"),
+        convertToYocto(contest.entry_fee)
+      );
   };
 
   const fetchNfts = async () => {
     isLoading(true);
     const userNfts = await near.mainContract.nftTokensForOwner({
-      account_id: currentUser.accountId,
+      account_id: near.wallet.accountId,
     });
 
     if (userNfts) setNFTs(userNfts.map((nft) => nft.metadata.media));

@@ -90,7 +90,7 @@ export const ContestItem = ({ contest, handleJoin }) => {
   );
 
   return (
-    <div className="flex flex-col w-96 p-7 rounded-2xl bg-gray-900">
+    <div className="flex flex-col w-96 p-7 rounded-2xl bg-gray-900 border border-solid border-violet-300/20">
       <div className="relative w-full h-64">
         <img
           className="w-full h-full object-center object-cover rounded-xl"
@@ -164,7 +164,6 @@ export const ContestItem = ({ contest, handleJoin }) => {
               <JoinContestModal
                 showModal={showJoinModal}
                 setShowModal={setShowJoinModal}
-                currentUser={near.isSigned}
                 contest={contest}
               />
             </>

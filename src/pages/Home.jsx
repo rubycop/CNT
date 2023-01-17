@@ -73,7 +73,7 @@ const images = [
   },
 ];
 
-export const Home = ({ currentUser }) => {
+export const Home = () => {
   const near = useContext(NearContext);
 
   const [loading, isLoading] = useState(false);
@@ -98,13 +98,13 @@ export const Home = ({ currentUser }) => {
 
   useEffect(() => {
     new WOW().init();
-    if (currentUser) getParticipants();
-  }, [currentUser]);
+    if (near?.wallet) getParticipants();
+  }, [near?.wallet]);
 
   // if (loading)
   //   return (
   //     <>
-  //       <Header currentUser={currentUser} />
+  //       <Header />
   //       <Wrapper>
   //         <Skeleton />
   //       </Wrapper>
@@ -114,7 +114,6 @@ export const Home = ({ currentUser }) => {
   const showIncoming = async () => {
     isLoading(true);
     const contests = await near.mainContract.getContests();
-    console.log(contests);
     const incomming = contests.filter(
       (c) => new Date(parseInt(c.start_time)) > new Date()
     );
@@ -127,7 +126,7 @@ export const Home = ({ currentUser }) => {
   }, []);
 
   const CarouselItem = ({ image }) => (
-    <div className="item mx-3 p-5 bg-gray-900 rounded-2xl">
+    <div className="item mx-3 p-5 bg-gray-900 border border-solid border-violet-300/20 rounded-2xl">
       <img className="w-full h-64 object-cover rounded-xl" src={image.src} />
       <div className="mt-5 mb-3 flex justify-between">
         <div className="">
@@ -147,8 +146,11 @@ export const Home = ({ currentUser }) => {
   );
 
   const ServiceItem = ({ image, text, delay }) => (
-    <div className="wow fadeInUp w-full lg:w-72" data-wow-delay={delay}>
-      <div className="p-10 rounded-2xl flex flex-row lg:flex-col bg-gray-900">
+    <div
+      className="wow fadeInUp w-full lg:w-72 bg-gray-900 rounded-2xl border border-solid border-violet-300/20"
+      data-wow-delay={delay}
+    >
+      <div className="p-10 flex flex-row lg:flex-col">
         <div className="icon">
           <img src={image} alt="precise data" className="rounded-full w-16" />
         </div>
@@ -160,7 +162,7 @@ export const Home = ({ currentUser }) => {
   );
 
   const Section = ({ title, children }) => (
-    <div className="infos shadow-md mx-10 py-16" id="infos">
+    <div className="infos shadow-md mx-10 pt-16" id="infos">
       <h1 className="wow fadeIn text-white text-4xl font-semibold">{title}</h1>
       <div className="w-ful bg-gray-800 mt-8 mb-12 h-[1px]"></div>
       {children}
@@ -169,7 +171,8 @@ export const Home = ({ currentUser }) => {
 
   return (
     <>
-      <Header currentUser={currentUser} />
+      <Header />
+
       <div className="relative">
         <img
           src="https://assets.website-files.com/605a8ad8853d7fc62334c73e/605a9c8e59d1b810c572a570_blur-blob-nft-webflow-template.svg"
@@ -185,6 +188,7 @@ export const Home = ({ currentUser }) => {
           className="absolute -right-16 top-72 w-32"
         />
       </div>
+
       <div className="flex flex-col lg:flex-row mx-5 lg:mx-32 mt-32">
         <div className="w-full lg:w-3/4 z-0 h-full lg:mt-20">
           <div className="container px-3 mx-auto flex flex-wrap flex-col lg:flex-row items-center">
@@ -241,7 +245,7 @@ export const Home = ({ currentUser }) => {
       </div>
 
       <div
-        className="services flex px-10 lg:flex-row flex-col py-16 mt-10"
+        className="services flex px-10 lg:flex-row flex-col py-16 mt-16"
         ref={serviceRef}
       >
         <img
@@ -301,11 +305,7 @@ export const Home = ({ currentUser }) => {
       <Section title="Incoming Contests">
         <div className="wow fadeInUp w-full px-10 lg:px-24 flex gap-16 flex-col lg:flex-row justify-center">
           {contests.map((contest, index) => (
-            <ContestItem
-              contest={contest}
-              currentUser={currentUser}
-              index={index}
-            />
+            <ContestItem contest={contest} index={index} />
           ))}
         </div>
       </Section>
@@ -368,7 +368,7 @@ export const Home = ({ currentUser }) => {
           </div>
         </div>
       </Section>
-      
+
       <Footer />
     </>
   );

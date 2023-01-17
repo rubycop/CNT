@@ -6,7 +6,7 @@ import { Skeleton } from "../components/Skeleton";
 import { NearContext } from "../context/near";
 import { groupBy } from "../utils/utils";
 
-export const Leaderboard = ({ currentUser }) => {
+export const Leaderboard = () => {
   const near = useContext(NearContext);
 
   const [loading, isLoading] = useState(false);
@@ -38,14 +38,14 @@ export const Leaderboard = ({ currentUser }) => {
   // if (loading)
   //   return (
   //     <>
-  //       <Header currentUser={currentUser} />
+  //       <Header />
   //       <Skeleton />
   //     </>
   //   );
 
   return (
     <>
-      <Header currentUser={currentUser} dark />
+      <Header dark />
       <div className="bg-white h-screen">
         <div className="flex justify-center items-center w-full h-full text-3xl font-bold">
           Coming soon

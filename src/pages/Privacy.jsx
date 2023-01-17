@@ -2,9 +2,9 @@ import React from "react";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 
-export const Privacy = ({ currentUser }) => (
+export const Privacy = () => (
   <>
-    <Header currentUser={currentUser} dark />
+    <Header dark />
     <div className="relative p-32 z-10 bg-white shadow-lg">
       <h1 className="text-black font-bold text-3xl sm:text-4xl md:text-[45px] mb-4 text-center">
         Privacy Policy

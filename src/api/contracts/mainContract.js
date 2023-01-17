@@ -4,15 +4,44 @@ import { convertToTera } from "../../utils/utils";
 export class MainContract {
   constructor({ contractId, wallet, parasContractId }) {
     this.contractId = contractId;
+    this.ftContractId = `ft.${contractId}`;
     this.parasContractId = parasContractId;
     this.wallet = wallet;
+  }
+
+  async ftBalanceOf(args) {
+    try {
+      return await this.wallet.viewMethod({
+        contractId: this.ftContractId,
+        method: "ft_balance_of",
+        args: {
+          account_id: this.wallet.accountId,
+        },
+      });
+    } catch (e) {
+      console.log(`blockchain error`, e);
+    }
+  }
+
+  async getAccountXP() {
+    try {
+      return await this.wallet.viewMethod({
+        contractId: this.contractId,
+        method: "get_account_xp",
+        args: {
+          account_id: this.wallet.accountId,
+        },
+      });
+    } catch (e) {
+      console.log(`blockchain error`, e);
+    }
   }
 
   async getContests() {
     try {
       return await this.wallet.viewMethod({
         contractId: this.contractId,
-        method: "get_contests",
+        method: "get_participants",
       });
     } catch (e) {
       console.log(`blockchain error`, e);
@@ -35,7 +64,7 @@ export class MainContract {
       return await this.wallet.viewMethod({
         contractId: this.contractId,
         method: "get_contest_participants",
-        args: args,
+        args,
       });
     } catch (e) {
       console.log(`blockchain error`, e);
@@ -47,7 +76,7 @@ export class MainContract {
       return await this.wallet.viewMethod({
         contractId: this.parasContractId,
         method: "nft_tokens_for_owner",
-        args: args,
+        args,
       });
     } catch (e) {
       console.log(`blockchain error`, e);
@@ -60,7 +89,7 @@ export class MainContract {
       return await this.wallet.callMethod({
         contractId: this.contractId,
         method: "create_contest",
-        args: args,
+        args,
         gas,
       });
     } catch (e) {
@@ -68,14 +97,14 @@ export class MainContract {
     }
   }
 
-  async joinContest(args) {
-    const gas = convertToTera(30);
+  async joinContest(args, gas, deposit) {
     try {
       return await this.wallet.callMethod({
         contractId: this.contractId,
         method: "join_contest",
-        args: args,
+        args,
         gas,
+        deposit,
       });
     } catch (e) {
       console.log(`blockchain error`, e);
@@ -88,7 +117,7 @@ export class MainContract {
       return await this.wallet.callMethod({
         contractId: this.contractId,
         method: "vote",
-        args: args,
+        args,
         gas,
       });
     } catch (e) {

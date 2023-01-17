@@ -1,18 +1,22 @@
 use near_contract_standards::non_fungible_token::TokenId;
-use near_sdk::collections::{LookupSet, LookupMap};
+// use near_sdk::assert_one_yocto;
+use near_sdk::collections::{LookupMap};
 use near_sdk::{AccountId, Balance, BorshStorageKey, env, Gas, near_bindgen, Promise, serde_json::json, ext_contract};
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::serde::{Deserialize, Serialize};
 
-mod ft;
 mod utils;
 
 pub const ONE_NEAR: u128 = 1_000_000_000_000_000_000_000_000 as u128;
+pub const XCC_GAS: Gas = Gas(30_000_000_000_000);
+
+pub const PLATFORM_FEE: f64 = 0.05;
+
 pub const REWARD_MIN: usize = 1;
 pub const REWARD_MAX: usize = 3;
-pub const XCC_GAS: Gas = Gas(30_000_000_000_000);
-pub const PLATFORM_FEE:f64 = 0.05;
-
+pub const XP_JOIN_CNT: u32 = 10;
+pub const XP_JOIN_NEAR: u32 = 20;
+pub const XP_REWARD_MAP: [u32; 6] = [3,5,7,10,15,20];
 
 #[derive(BorshStorageKey, BorshSerialize)]
 pub enum StorageKeys {
@@ -174,6 +178,46 @@ impl Contract {
             .sum()
     }
 
+    pub fn add_token_storage(&mut self, account_id: &AccountId) {
+        let ft_mint_deposit: Balance = Contract::convert_to_yocto("0.00125");
+        let ft_mint_gas: Gas = Contract::convert_to_tera(10);
+
+        Promise::new(self.contract_ft.clone()).function_call(
+            "ft_mint".to_string(),
+            json!({
+            "receiver_id": account_id,
+            "amount": "0"
+        }).to_string().as_bytes().to_vec(),
+            ft_mint_deposit,
+            ft_mint_gas,
+        );
+
+        self.accounts.insert(account_id, &0);
+    }
+
+    pub fn add_join_xp(&mut self, account_id: AccountId, ft: bool) -> () {
+        let mut xp = self.get_account_xp(account_id.clone());
+        if ft { xp += XP_JOIN_CNT; }
+        else { xp += XP_JOIN_NEAR; }
+
+        self.accounts.insert(&account_id, &xp);
+    }
+
+    pub fn add_voting_xp(&mut self, account_id: AccountId) -> () {
+        let mut xp = self.get_account_xp(account_id.clone());
+        xp += match xp {
+            0..=29 => XP_REWARD_MAP[0],
+            30..=59 => XP_REWARD_MAP[1],
+            60..=149 => XP_REWARD_MAP[2],
+            150..=449 => XP_REWARD_MAP[3],
+            450..=1574 => XP_REWARD_MAP[4],
+            1575..=6299 => XP_REWARD_MAP[5],
+            _ => XP_REWARD_MAP[5],
+        };
+
+        self.accounts.insert(&account_id, &xp);
+    }
+
     pub fn create_contest(&mut self,
             title: String,
             size: String,
@@ -206,44 +250,9 @@ impl Contract {
         let contest = self.get_contest_by_id(&contest_id)
                                    .expect("[JOIN]: There is no contest with such id");
         let transfer_amount: u128 = contest.entry_fee.parse::<u128>().unwrap() * u128::from(ONE_NEAR);
-        let receiver_id = format!("burn.{}", env::current_account_id()).try_into().unwrap();
+        let sender_id = env::predecessor_account_id();
 
-        if contest.currency_ft == true {
-            let sender = match self.accounts.get(&env::predecessor_account_id()) {
-                Some(_xp) => true,
-                None => false
-            };
-            
-            let receiver = match self.accounts.get(&receiver_id) {
-                Some(_xp) => true,
-                None => false
-            };
-
-            if !sender {
-                self.add_token_storage(&env::predecessor_account_id());
-            }
-            if !receiver {
-                self.add_token_storage(&receiver_id);
-            }
-
-            Promise::new(self.contract_ft.clone()).function_call(
-                "ft_transfer".to_string(),
-                json!({
-                    "receiver_id": receiver_id,
-                    "amount": transfer_amount.to_string(),
-                }).to_string().as_bytes().to_vec(),
-                1,
-                Contract::convert_to_tera(20),
-            ).then(
-                Self::ext(env::current_account_id())
-                    .with_static_gas(Contract::convert_to_tera(30))
-                    .callback_join_contest(
-                        contest_id.clone(),
-                        env::predecessor_account_id(),
-                        nft_src.to_string(),
-                    )
-            );
-        } else {
+        if !contest.currency_ft {
             if env::attached_deposit() != transfer_amount {
                 env::panic_str("Attached amount does not match entry fee");
             }
@@ -253,17 +262,30 @@ impl Contract {
                     .with_static_gas(Contract::convert_to_tera(30))
                     .callback_join_contest(
                         contest_id.clone(),
-                        env::predecessor_account_id(),
+                        sender_id,
                         nft_src.to_string(),
                     )
             );
         }
-        
     }
 
-    pub fn callback_join_contest(&mut self, contest_id: String, owner_id: AccountId, nft_src: String) -> String {
+    pub fn callback_join_contest(&mut self, contest_id: String, owner_id: AccountId, nft_src: String) -> () {
+        let mut sender_id = env::predecessor_account_id();
         let contest = self.get_contest_by_id(&contest_id)
                                    .expect("[CALLBACK JOIN]: There is no contest with such id");
+        if contest.currency_ft {
+            let sender = match self.accounts.get(&sender_id) {
+                Some(_xp) => true,
+                None => false
+            };
+
+            if !sender {
+                self.add_token_storage(&sender_id);
+            }
+        } else {
+            sender_id = owner_id;
+        }
+
         let participants = self.get_contest_participants(&contest_id);
 
         if contest.size == participants.len() {
@@ -273,14 +295,13 @@ impl Contract {
         let participant = Participant {
             id: env::block_timestamp().to_string(),
             contest_id: contest_id,
-            owner_id: owner_id,
+            owner_id: sender_id,
             nft_src: nft_src.to_string(),
             votes_count: 0
         };
 
         self.participants.push(participant.clone());
-
-        participant.id
+        self.add_join_xp(participant.id.try_into().unwrap(), contest.currency_ft);
     }
 
     #[payable]
@@ -294,9 +315,7 @@ impl Contract {
         let reward = self.random_in_range(REWARD_MIN, REWARD_MAX);
         let transfer_amount: u128 = u128::from(reward) * u128::from(ONE_NEAR);
 
-        let mut xp = self.get_account_xp(voter_id.clone());
-        xp += 1;
-        self.accounts.insert(&voter_id, &xp);
+        self.add_voting_xp(voter_id.clone());
 
         participant.votes_count += 1;
         let index = self.participants

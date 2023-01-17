@@ -2,9 +2,9 @@ import React from "react";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 
-export const Terms = ({ currentUser }) => (
+export const Terms = () => (
   <>
-    <Header currentUser={currentUser} dark />
+    <Header dark />
     <div className="relative p-32 z-10 bg-white shadow-lg">
       <h1 class="text-black font-bold text-3xl sm:text-4xl md:text-[45px] mb-4 text-center">
         Terms &amp; Conditions

@@ -48,6 +48,14 @@ export const convertToYocto = (amount) => {
     .toFixed();
 };
 
+export const convertFromYocto = (amount) => {
+  return Big(amount) / (10 ** 24).toFixed();
+};
+
+export const formatNumber = (n) => {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
 export const convertToTera = (amount) => {
   return Big(amount)
     .times(10 ** 12)

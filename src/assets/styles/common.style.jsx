@@ -21,7 +21,7 @@ export const Wrapper = styled.section.attrs({
 
 export const Container = styled.div.attrs({
   className: `
-    px-20
+    px-10
     bg-cover
     bg-center`,
 })``;

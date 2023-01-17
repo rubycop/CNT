@@ -20,10 +20,9 @@ use near_contract_standards::fungible_token::metadata::{
     FT_METADATA_SPEC, FungibleTokenMetadata, FungibleTokenMetadataProvider,
 };
 use near_contract_standards::fungible_token::FungibleToken;
-use near_sdk::serde_json::json;
 use near_sdk::{AccountId, Balance, env, log, near_bindgen, PanicOnDefault, Promise, PromiseOrValue, BorshStorageKey, Gas};
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::collections::{LazyOption, LookupMap};
+use near_sdk::collections::{LazyOption};
 use near_sdk::json_types::{U128};
 
 mod helpers;
@@ -33,11 +32,6 @@ const FT_IMAGE_ICON: &str = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF4AA
 pub enum StorageKeys {
     Token,
     TokeBalance
-}
-#[derive(BorshDeserialize, BorshSerialize)]
-pub struct OldContract {
-    token: FungibleToken,
-    metadata: LazyOption<FungibleTokenMetadata>,
 }
 
 #[near_bindgen]

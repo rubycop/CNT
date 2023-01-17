@@ -6,7 +6,7 @@ import { Header } from "../../components/Header";
 import { Skeleton } from "../../components/Skeleton";
 import { NearContext } from "../../context/near";
 
-export const Vote = ({ currentUser }) => {
+export const Vote = () => {
   const near = useContext(NearContext);
 
   const [loading, isLoading] = useState(false);
@@ -64,14 +64,14 @@ export const Vote = ({ currentUser }) => {
   if (loading)
     return (
       <>
-        <Header currentUser={currentUser} />
+        <Header />
         <Skeleton />
       </>
     );
   // if (!contest || participants.length < 2)
   //   return (
   //     <>
-  //       <Header currentUser={currentUser} />
+  //       <Header />
   //       <div className="justify-center items-center flex h-screen">
   //         <div className="text-4xl font-bold text-center w-64">
   //           There is no contest to vote
@@ -82,7 +82,7 @@ export const Vote = ({ currentUser }) => {
 
   return (
     <>
-      <Header currentUser={currentUser} dark />
+      <Header dark />
       <div className="bg-white h-screen">
         <Wrapper>
           <div className="flex w-full justify-center items-center">

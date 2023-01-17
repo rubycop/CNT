@@ -8,7 +8,7 @@ export const Footer = () => {
 
   return (
     <footer
-      className="flex flex-col justify-center relative pt-16  md:pt-24 wow fadeIn bg-gray-900 w-full"
+      className="flex flex-col justify-center relative mt-20 pt-16  md:pt-24 wow fadeIn bg-gray-900 w-full"
       data-wow-delay=".1s"
     >
       <img
@@ -29,7 +29,7 @@ export const Footer = () => {
           <div className="flex items-center justify-center md:justify-start">
             <a
               aria-label="social-link"
-              href="https://twitter.com/ContestyNFT"
+              href="https://twitter.com/contesty_nft"
               target="_blank"
               className="text-white hover:text-violet-300 cursor-pointer mr-6"
             >

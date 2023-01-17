@@ -108,6 +108,7 @@ export class Wallet {
     args = {},
     gas = THIRTY_TGAS,
     deposit = NO_DEPOSIT,
+    callback,
   }) {
     // Sign a transaction with the "FunctionCall" action
     return await this.wallet.signAndSendTransaction({
@@ -125,6 +126,11 @@ export class Wallet {
         },
       ],
     });
+  }
+
+  async callMethods(txns) {
+    // Sign a transaction with the "FunctionCall" action
+    return await this.wallet.signAndSendTransactions({ transactions: txns });
   }
 
   // Get transaction result from the network
