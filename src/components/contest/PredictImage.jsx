@@ -48,6 +48,9 @@ export const PredictImage = ({ participant, totalStake, predictions }) => {
       <img
         className="w-72 h-64 object-cover rounded-xl"
         src={participant.nft_src}
+        onError={(error) =>
+          (error.target.src = require("../../assets/images/no-image.png"))
+        }
       />
       <div className="mt-5 flex justify-between">
         <h6 className="">Total liked</h6>

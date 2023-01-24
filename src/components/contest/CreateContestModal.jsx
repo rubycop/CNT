@@ -24,7 +24,7 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
   const [title, setTitle] = useState();
   const [entryFee, setEntryFee] = useState(0);
   const [size, setSize] = useState(2);
-  const [currencyFt, setCurrencyFt] = useState(true);
+  const [currencyFt, setCurrencyFt] = useState("true");
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [image, setImage] = useState({ preview: null, raw: null });
@@ -138,8 +138,8 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
                 handleChange={(e) => setCurrencyFt(e.target.value)}
                 value={currencyFt}
                 options={[
-                  { label: "CNT", value: true },
-                  { label: "NEAR", value: false },
+                  { label: "CNT", value: "true" },
+                  { label: "NEAR", value: "false" },
                 ]}
               />
             </div>
