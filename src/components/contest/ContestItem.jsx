@@ -1,21 +1,22 @@
 import { CurrencyDollarIcon, UserIcon } from "@heroicons/react/outline";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { NearContext } from "../../context/near";
-import { Currency, PLATFORM_FEE } from "../../utils/utils";
+import {
+  Currency,
+  isActive,
+  isIncomming,
+  PLATFORM_FEE,
+  TrophyIcon,
+} from "../../utils/utils";
 import { Button } from "../Button";
 import { ProgressBar } from "../ProgressBar";
 import { Timer } from "../Timer";
 import { JoinContestModal } from "./JoinContestModal";
 
-export const isIncomming = (contest) =>
-  new Date(parseInt(contest.start_time)) > new Date();
-
-export const isActive = (contest) =>
-  new Date(parseInt(contest.start_time)) < new Date() &&
-  new Date(parseInt(contest.end_time)) > new Date();
-
-export const ContestItem = ({ contest, handleJoin }) => {
+export const ContestItem = ({ contest, small }) => {
   const near = useContext(NearContext);
+  const navigate = useNavigate();
 
   const [participants, setParticipants] = useState([]);
   const [showJoinModal, setShowJoinModal] = useState(false);
@@ -36,15 +37,13 @@ export const ContestItem = ({ contest, handleJoin }) => {
     participants?.filter((p) => p.owner_id === near.wallet.accountId)?.length >
       0;
 
+  const winners = participants.filter((p) => contest.winner_ids.includes(p.id));
+
   const contestId = (contest) => (
     <a href={`https://explorer.testnet.near.org/transactions/${contest.id}`}>
       ID-{contest.id.slice(contest.id.length - 5, contest.id.length)}
     </a>
   );
-
-  const contestWinner = participants?.sort(
-    (a, b) => b.votes_count - a.votes_count
-  )[0];
 
   const getPrizePool =
     participants?.length * contest.entry_fee * (1 - PLATFORM_FEE);
@@ -56,7 +55,7 @@ export const ContestItem = ({ contest, handleJoin }) => {
   const Participants = ({ contest }) => (
     <div className="mb-2 text-sm font-semibold uppercase tracking-wider">
       {!loading && isIncomming(contest) && (
-        <div className="flex flex-row justify-between">
+        <div className="flex mb-1 flex-row justify-between">
           <div>Participants</div>
           <div>
             {participants?.length} / {contest.size}
@@ -64,25 +63,20 @@ export const ContestItem = ({ contest, handleJoin }) => {
         </div>
       )}
       {isActive(contest) && (
-        <div className="flex flex-row justify-between">
-          <div>Total votes</div>
-          <div>
-            {participants
-              .map((p) => p.votes_count)
-              .reduce((prev, next) => prev + next, 0)}
-          </div>
-        </div>
-      )}
-
-      {!isIncomming(contest) && !isActive(contest) && contestWinner && (
         <>
+          <div className="flex mb-1 flex-row justify-between">
+            <div>Participants</div>
+            <div>
+              {participants?.length} / {contest.size}
+            </div>
+          </div>
           <div className="flex flex-row justify-between">
             <div>Total votes</div>
-            <div>{contestWinner.votes_count}</div>
-          </div>
-          <div className="flex flex-row justify-between">
-            <div>Winner</div>
-            <div>{contest.winner_id}</div>
+            <div>
+              {participants
+                .map((p) => p.votes_count)
+                .reduce((prev, next) => prev + next, 0)}
+            </div>
           </div>
         </>
       )}
@@ -90,28 +84,36 @@ export const ContestItem = ({ contest, handleJoin }) => {
   );
 
   return (
-    <div className="flex flex-col w-96 p-7 rounded-2xl bg-gray-900 border border-solid border-violet-300/20">
-      <div className="relative w-full h-64">
+    <div
+      className={`hover:border-violet-700 hover:shadow-lg hover:shadow-violet-500/50 flex flex-col ${
+        small ? "w-[22rem]" : "w-[30rem]"
+      } p-7 rounded-2xl bg-gray-900 border border-solid border-violet-300/20`}
+    >
+      {winners.length > 0 && (
+        <div className="absolute z-30 m-3">
+          <TrophyIcon styles="w-7 h-7" />
+        </div>
+      )}
+      <div className={`relative w-full ${small ? "h-48" : "h-60"}`}>
         <img
           className="w-full h-full object-center object-cover rounded-xl"
           src={contest.image}
           alt=""
           onError={(error) =>
-            (error.target.src = require("../../assets/template/images/left-infos.jpg"))
+            (error.target.src = require("../../assets/images/public_contest.jpeg"))
           }
         />
         <div className="z-10 bottom-5 right-5 lg:hidden absolute tracking-wider  px-3 py-1 text-xs font-semibold text-white">
           {isIncomming ? "Incoming" : isActive ? "Active" : ""}
         </div>
       </div>
-      <div className="justify-between flex flex-col w-full">
+      <div className="justify-between flex flex-col w-full flex-1">
         <div className="relative">
-          <div className="mt-6 mb-5 w-full ">
-            <h2 className="text-2xl mb-5 font-semibold line-clamp-2">
+          <div className="mt-6 mb-5 w-full">
+            <h2 className="text-2xl mb-5 font-semibold line-clamp-1">
               {contest.title}
             </h2>
 
-            <p>{contest.description}</p>
             <div className="mb-1 text-sm flex flex-row font-semibold uppercase tracking-wider  justify-between">
               <div>Prize pool</div>
               <div
@@ -133,7 +135,7 @@ export const ContestItem = ({ contest, handleJoin }) => {
           </div>
 
           {(isIncomming(contest) || isActive(contest)) && (
-            <div className="hidden lg:block mb-12">
+            <div className="hidden text-sm lg:block mb-12">
               <Timer contest={contest} />
               <ProgressBar
                 time={
@@ -146,7 +148,7 @@ export const ContestItem = ({ contest, handleJoin }) => {
           )}
         </div>
 
-        <div className="flex iteems-end justify-center w-full">
+        <div className="flex-col items-end justify-center w-full">
           {isIncomming(contest) && !participated() ? (
             <>
               <Button
@@ -167,9 +169,19 @@ export const ContestItem = ({ contest, handleJoin }) => {
                 contest={contest}
               />
             </>
-          ) : (
+          ) : isIncomming(contest) && participated() ? (
             <Button full disabled title="Joined" handleClick={() => {}} />
+          ) : (
+            <></>
           )}
+          <div
+            className="text-center w-full pt-5 text-violet-300/40 hover:text-violet-300 cursor-pointer"
+            onClick={(e) => {
+              navigate(`/contest/${contest.id}`);
+            }}
+          >
+            View Contest
+          </div>
         </div>
       </div>
     </div>

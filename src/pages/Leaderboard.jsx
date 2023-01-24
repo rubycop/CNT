@@ -1,6 +1,7 @@
 import { ThumbUpIcon } from "@heroicons/react/solid";
 import React, { useState, useEffect, useContext } from "react";
 import { Container, Wrapper } from "../assets/styles/common.style";
+import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { Skeleton } from "../components/Skeleton";
 import { NearContext } from "../context/near";
@@ -105,6 +106,7 @@ export const Leaderboard = () => {
           </div>
         </Container>
       </Wrapper> */}
+      <Footer />
     </>
   );
 };

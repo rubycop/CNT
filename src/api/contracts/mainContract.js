@@ -19,7 +19,7 @@ export class MainContract {
         },
       });
     } catch (e) {
-      console.log(`blockchain error`, e);
+      return { error: e };
     }
   }
 
@@ -33,7 +33,7 @@ export class MainContract {
         },
       });
     } catch (e) {
-      console.log(`blockchain error`, e);
+      return { error: e };
     }
   }
 
@@ -41,10 +41,33 @@ export class MainContract {
     try {
       return await this.wallet.viewMethod({
         contractId: this.contractId,
-        method: "get_participants",
+        method: "get_contests",
       });
     } catch (e) {
-      console.log(`blockchain error`, e);
+      return { error: e };
+    }
+  }
+
+  async getFullContests() {
+    try {
+      return await this.wallet.viewMethod({
+        contractId: this.contractId,
+        method: "get_full_contests",
+      });
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  async getContestById(args) {
+    try {
+      return await this.wallet.viewMethod({
+        contractId: this.contractId,
+        method: "get_contest_by_id",
+        args,
+      });
+    } catch (e) {
+      return { error: e };
     }
   }
 
@@ -55,7 +78,7 @@ export class MainContract {
         method: "get_participants",
       });
     } catch (e) {
-      console.log(`blockchain error`, e);
+      return { error: e };
     }
   }
 
@@ -67,7 +90,19 @@ export class MainContract {
         args,
       });
     } catch (e) {
-      console.log(`blockchain error`, e);
+      return { error: e };
+    }
+  }
+
+  async getContestVotes(args) {
+    try {
+      return await this.wallet.viewMethod({
+        contractId: this.contractId,
+        method: "get_contest_voters",
+        args,
+      });
+    } catch (e) {
+      return { error: e };
     }
   }
 
@@ -79,7 +114,7 @@ export class MainContract {
         args,
       });
     } catch (e) {
-      console.log(`blockchain error`, e);
+      return { error: e };
     }
   }
 
@@ -93,7 +128,7 @@ export class MainContract {
         gas,
       });
     } catch (e) {
-      console.log(`blockchain error`, e);
+      return { error: e };
     }
   }
 
@@ -107,12 +142,24 @@ export class MainContract {
         deposit,
       });
     } catch (e) {
-      console.log(`blockchain error`, e);
+      return { error: e };
+    }
+  }
+
+  async getPredictionsByParticipantId(args) {
+    try {
+      return await this.wallet.viewMethod({
+        contractId: this.contractId,
+        method: "get_predictions_by_participant_id",
+        args,
+      });
+    } catch (e) {
+      return { error: e };
     }
   }
 
   async vote(args) {
-    const gas = convertToTera(30);
+    const gas = convertToTera(50);
     try {
       return await this.wallet.callMethod({
         contractId: this.contractId,
@@ -121,7 +168,7 @@ export class MainContract {
         gas,
       });
     } catch (e) {
-      console.log(`blockchain error`, e);
+      return { error: e };
     }
   }
   // const deposit = utils.format.parseNearAmount(depositNEAR.toString());

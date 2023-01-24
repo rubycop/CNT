@@ -16,7 +16,7 @@ const baseStyles = {
 };
 
 export const Wrapper = styled.section.attrs({
-  className: `relative`,
+  className: `relative w-full`,
 })``;
 
 export const Container = styled.div.attrs({

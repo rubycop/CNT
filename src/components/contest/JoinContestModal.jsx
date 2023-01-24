@@ -1,19 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  convertToTera,
-  convertToYocto,
-  mediaURL,
-  resizeFileImage,
-  uploadMediaToIPFS,
-} from "../../utils/utils";
+import { convertToTera, convertToYocto, mediaURL } from "../../utils/utils";
 import { Modal } from "../Modal";
 import { Skeleton } from "../Skeleton";
-import { ImageUploader } from "../ImageUploader";
 import { Button } from "../Button";
-import { SelectorIcon } from "@heroicons/react/outline";
 import { CheckIcon } from "@heroicons/react/solid";
 import { NearContext } from "../../context/near";
-import { functionCall } from "near-api-js/lib/transaction";
 
 export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
   const near = useContext(NearContext);

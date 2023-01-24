@@ -20,63 +20,65 @@ import "animate.css";
 import WOW from "wow.js";
 import { NearContext } from "../context/near";
 import { HeartIcon } from "@heroicons/react/outline";
+import { isIncoming, isIncomming } from "../utils/utils";
+import { ContestImage } from "../components/contest/ContestImage";
+import { __esModule } from "css-loader/dist/utils";
 
 const images = [
   {
-    src: "https://apollo42.world/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2FxIaXPYWmFX0Hqo8zQuuo-FW4tLwJ2p7HZ8G_G0bFFUEU_iGtmHVt9yg_vxfId8pE7Zi4qX2PDnIbC-Dq016AGAB7uuqcDaBYKQCkdmtKbzDa9Q&w=3840&q=75",
-    title: "Freaky Felines",
-    creator: "ff.nekotoken.near",
-    likes: 123,
-    contest: { title: "NFT monthly contest" },
+    id: "1673611712021205562",
+    owner_id: "rubycoptest3.testnet",
+    contest_id: "1673611670676859631",
+    nft_src:
+      "https://ipfs.fleek.co/ipfs/bafybeiet3hpsmufamhtxvfh5uqtnxpshgbrpbhra6wyrykf2ae5kdejami",
+    votes_count: 0,
   },
   {
-    src: "https://apollo42.world/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2FUXYgy60xqtkb_o-X6bN-lQMl0R_S4zNC_-mnp3LJ4QOAq3sECJjtObSaU9yMNFcu6toeqWixutuqxSenlvy1r4ff98uncVI4IW3hRuB_7Snkyw&w=3840&q=75",
-    title: "BEE NFT",
-    creator: "ff.nekotoken.near",
-    likes: 123,
-    contest: { title: "NFT monthly contest" },
+    id: "1673611719186764001",
+    owner_id: "rubycoptest.testnet",
+    contest_id: "1673611685892549147",
+    nft_src:
+      "https://ipfs.fleek.co/ipfs/bafybeiet3hpsmufamhtxvfh5uqtnxpshgbrpbhra6wyrykf2ae5kdejami",
+    votes_count: 0,
   },
   {
-    src: "https://apollo42.world/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2FAbv2bxnsSJ9FYdxO6VUsmXa9M2a-6DFp4-MS_WdSxyV6XWYtfXjvEpRgIbD1hJD8sA9-J_xcE72_6FP2UgjDjBz62Qo7l6WC0k_zUYLGRc6q7Q&w=3840&q=75",
-    title: "Kaizo Fighters",
-    creator: "kaizo....near",
-    likes: 123,
-    contest: { title: "NFT monthly contest" },
+    id: "1673620560157204849",
+    owner_id: "rubycoptest.testnet",
+    contest_id: "1673611685892549147",
+    nft_src:
+      "https://ipfs.io/ipfs/bafkreigezufih7gmv6d6xfbm3ackbvsxxbw5mprlt3hx5kvte7kjkbaxju",
+    votes_count: 0,
   },
   {
-    src: "https://apollo42.world/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2F_4-WjJN3129_UCymSCdqZoxgAkcDGNBCZQXvMHjIbZQxJIWypJDzgcuJuwNAXqap6rJbkKGcBI2ugfRh6hu3EVCT6Xm90n-9ohJuYIz19LprQSw&w=3840&q=75",
-    title: "Test",
-    creator: "test.near",
-    likes: 123,
-    contest: { title: "NFT monthly contest" },
+    id: "1673637177535949536",
+    owner_id: "ft.beat_my_nft.testnet",
+    contest_id: "1673611670676859631",
+    nft_src:
+      "https://ipfs.io/ipfs/bafkreihvcoraixdyx6jbrlmlfw45psrjlkwemp7ie3wckye7frnyhbdnoi",
+    votes_count: 0,
   },
   {
-    src: "https://apollo42.world/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2FAjttataWiFGIjVijhwpN0xi0edJZfYZCwQVxVSYR-bcVOsCJcLAiZZrHnIxclMUQ7FeX_G0GXOVDOJCsGmiaPb73qmNkDdeBKSmouobdHVE6QQ&w=3840&q=75",
-    title: "El Café Cartel - Gen 1",
-    creator: "test.near",
-    likes: 123,
-    contest: { title: "NFT monthly contest" },
+    id: "1673990751162997621",
+    owner_id: "rubycoptest3.testnet",
+    contest_id: "1673990449637348426",
+    nft_src:
+      "https://ipfs.io/ipfs/bafkreihvcoraixdyx6jbrlmlfw45psrjlkwemp7ie3wckye7frnyhbdnoi",
+    votes_count: 0,
   },
   {
-    src: "https://apollo42.world/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2FwmAHmLRnjpUy9SunRAXRdMH33MWv_EvxDMWjkF5vBaOzoHU_k3FOgYQABTt9drmZUiIQdxHLn3w25ny5G0iFrcTfrpcHzzBHvZ5opsUttmIfqg&w=3840&q=75",
-    title: "Test",
-    creator: "test.near",
-    likes: 123,
-    contest: { title: "NFT monthly contest" },
-  },
-  {
-    src: "https://apollo42.world/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2Fc19SQf8fRSDfu9oXE06QkYyDIDl0H2yHDlaxJZ6fzr5g9m177eefpAzPjhynEozFGCpaSYK54JKvhxWD5sfsjalqYKCH_Hd9mvizTzGRtov9Rwc&w=3840&q=75",
-    title: "Test",
-    creator: "test.near",
-    likes: 123,
-    contest: { title: "NFT monthly contest" },
+    id: "1674051709624518425",
+    owner_id: "rubycoptest.testnet",
+    contest_id: "1673990449637348426",
+    nft_src:
+      "https://ipfs.fleek.co/ipfs/bafybeiet3hpsmufamhtxvfh5uqtnxpshgbrpbhra6wyrykf2ae5kdejami",
+    votes_count: 0,
   },
 ];
 
 export const Home = () => {
   const near = useContext(NearContext);
 
-  const [loading, isLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [contests, setContests] = useState([]);
   const serviceRef = useRef(null);
@@ -90,10 +92,18 @@ export const Home = () => {
   };
 
   const getParticipants = async () => {
-    isLoading(true);
-    const _participants = await near.mainContract.getParticipants();
+    setLoading(true);
+    const contests = await near.mainContract.getContests();
+    let _participants = await near.mainContract.getParticipants();
+
+    const winner_ids = contests.map((c) => c.winner_ids).flat(1);
+    _participants = _participants.filter((p) => winner_ids.includes(p.id));
+    _participants = _participants.map((p) => {
+      p.contest = contests.find((c) => c.id === p.contest_id);
+      return p;
+    });
     setParticipants(_participants);
-    isLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -112,38 +122,16 @@ export const Home = () => {
   //   );
 
   const showIncoming = async () => {
-    isLoading(true);
+    setLoading(true);
     const contests = await near.mainContract.getContests();
-    const incomming = contests.filter(
-      (c) => new Date(parseInt(c.start_time)) > new Date()
-    );
+    const incomming = contests.filter((c) => isIncomming(c));
     setContests(incomming.reverse().slice(0, 3));
-    isLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
     showIncoming();
   }, []);
-
-  const CarouselItem = ({ image }) => (
-    <div className="item mx-3 p-5 bg-gray-900 border border-solid border-violet-300/20 rounded-2xl">
-      <img className="w-full h-64 object-cover rounded-xl" src={image.src} />
-      <div className="mt-5 mb-3 flex justify-between">
-        <div className="">
-          <h5 className="text-xl">{image.title}</h5>
-          <h6 className="text-sm">{image.creator}</h6>
-        </div>
-        <div className="">
-          <HeartIcon className="w-7 h-7" />
-          {image.likes}
-        </div>
-      </div>
-
-      <a href="" className="text-sm">
-        {image.contest.title} <i className="fa fa-link"></i>
-      </a>
-    </div>
-  );
 
   const ServiceItem = ({ image, text, delay }) => (
     <div
@@ -303,7 +291,7 @@ export const Home = () => {
       </div>
 
       <Section title="Incoming Contests">
-        <div className="wow fadeInUp w-full px-10 lg:px-24 flex gap-16 flex-col lg:flex-row justify-center">
+        <div className="wow fadeInUp w-full px-10 flex gap-10 flex-col lg:flex-row justify-center">
           {contests.map((contest, index) => (
             <ContestItem contest={contest} index={index} />
           ))}
@@ -313,58 +301,41 @@ export const Home = () => {
       <Section title="Latest Winners">
         <div className="wow fadeIn container-fluid">
           <div className="flex-row">
-            <div className="w-full justify-center">
-              <AliceCarousel
-                mouseTracking
-                autoPlay
-                autoPlayInterval={2000}
-                disableButtonsControls
-                disableDotsControls
-                infinite
-                responsive={{
-                  2000: {
-                    items: 11,
-                  },
-                  1200: {
-                    items: 4,
-                  },
-                  800: {
-                    items: 3,
-                  },
-                  0: {
-                    items: 1,
-                  },
-                }}
-                items={images.map((img) => (
-                  <CarouselItem image={img} />
+            {participants.length > 3 ? (
+              <div className="w-full justify-center">
+                <AliceCarousel
+                  mouseTracking
+                  autoPlay
+                  autoPlayInterval={2000}
+                  disableButtonsControls
+                  disableDotsControls
+                  infinite
+                  responsive={{
+                    2000: {
+                      items: 11,
+                    },
+                    1200: {
+                      items: 4,
+                    },
+                    800: {
+                      items: 3,
+                    },
+                    0: {
+                      items: 1,
+                    },
+                  }}
+                  items={participants.map((p, i) => (
+                    <ContestImage contest={p.contest} participant={p} />
+                  ))}
+                />
+              </div>
+            ) : (
+              <div className="flex gap-x-5 justify-center">
+                {participants.map((p, i) => (
+                  <ContestImage contest={p.contest} participant={p} />
                 ))}
-              />
-              {/* {participants
-                    .sort((a, b) => b.votes_count - a.votes_count)
-                    .map((p, i) => (
-                      <Carousel.Item>
-                        <div className="item">
-                          <img
-                            className="w-72 h-90 bg-cover rounded-3xl"
-                            src={
-                              defaultImg || `https://ipfs.io/ipfs/{p.nft_src}`
-                            }
-                            onError={() =>
-                              setDefaultImg(
-                                "https://apollo42.world/_next/image?url=https%3A%2F%2Flh3.googleusercontent.com%2FAbv2bxnsSJ9FYdxO6VUsmXa9M2a-6DFp4-MS_WdSxyV6XWYtfXjvEpRgIbD1hJD8sA9-J_xcE72_6FP2UgjDjBz62Qo7l6WC0k_zUYLGRc6q7Q&w=3840&q=75"
-                              )
-                            }
-                          />
-                          <div className="down-content">
-                            <h4>Digital Agency HTML Templates</h4>
-                            <a href="#">
-                              <i className="fa fa-link"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </Carousel.Item>
-                    ))} */}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </Section>

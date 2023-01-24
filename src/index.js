@@ -5,6 +5,8 @@ import { MainContract } from "./api/contracts/mainContract";
 import { Wallet } from "./utils/near-wallets";
 import { NearProvider } from "./context/near";
 import "../src/assets/styles/index.css";
+import { NotificationProvider } from "./context/notification";
+import { AccountProvider } from "./context/account";
 
 window.onload = async () => {
   console.log(process.env.CONTRACT_NAME);
@@ -23,12 +25,16 @@ window.onload = async () => {
   const isSigned = await wallet.startUp();
 
   ReactDOM.createRoot(document.getElementById("root")).render(
-    <NearProvider
-      wallet={wallet}
-      isSignedInit={isSigned}
-      mainContract={mainContract}
-    >
-      <App />
-    </NearProvider>
+    <NotificationProvider>
+      <NearProvider
+        wallet={wallet}
+        isSignedInit={isSigned}
+        mainContract={mainContract}
+      >
+        <AccountProvider>
+          <App />
+        </AccountProvider>
+      </NearProvider>
+    </NotificationProvider>
   );
 };

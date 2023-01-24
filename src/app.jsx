@@ -7,7 +7,7 @@ import {
   Routes,
 } from "react-router-dom";
 import { NearContext } from "./context/near";
-import { Contest, Home, Leaderboard, Vote } from "./pages";
+import { Contest, ContestList, Home, Leaderboard, Vote } from "./pages";
 import { Privacy } from "./pages/Privacy";
 import { Terms } from "./pages/Terms";
 
@@ -28,7 +28,8 @@ export const App = () => {
         <Route exact path="/terms" element={<Terms />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route exact path="/contests" element={<Contest />} />
+          <Route exact path="/contests" element={<ContestList />} />
+          <Route exact path="/contest/:id" element={<Contest />} />
           <Route exact path="/vote" element={<Vote />} />
           <Route exact path="/leaderboard" element={<Leaderboard />} />
         </Route>

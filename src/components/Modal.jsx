@@ -18,20 +18,20 @@ export const Modal = ({
     {showModal && (
       <>
         <div className="flex border-2 justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-          <div className=" mx-auto w-full md:w-1/2 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-gray-900 outline-none focus:outline-none">
-            <div className="flex items-start justify-between p-5">
-              <h3 className="text-3xl font-semibold">{title}</h3>
+          <div className="mx-auto md:w-1/2 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-gray-900 outline-none focus:outline-none">
+            <div className="p-10 pb-0 flex items-start justify-between">
+              <h3 className=" text-3xl font-semibold">{title}</h3>
               <button
                 className="p-1 ml-auto bg-transparent border-0 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                 onClick={() => setShowModal(false)}
               >
-                <span className="text-black h-6 w-6 text-2xl block">×</span>
+                <span className="text-white h-6 w-6 text-2xl block">×</span>
               </button>
             </div>
 
-            <div className="p-6">{children}</div>
+            <div className="p-10">{children}</div>
 
-            <div className="flex items-center justify-end p-6 gap-x-5">
+            <div className="flex items-center justify-end p-10 pt-0 gap-x-5">
               <Button
                 handleClick={() => setShowModal(false)}
                 outlined
@@ -41,7 +41,7 @@ export const Modal = ({
               />
               <Button
                 handleClick={onSubmit}
-                title="Join"
+                title={loading ? "Submiting ..." : "Submit"}
                 icon={<CheckIcon className="ml-3 h-5 w-5" />}
                 disabled={loading || (collection && collection.length === 0)}
               />

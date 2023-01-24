@@ -1,11 +1,24 @@
 import { PlusIcon } from "@heroicons/react/solid";
 import React, { useContext, useState } from "react";
 import { NearContext } from "../../context/near";
-import { DatePicker, Input, Select } from "../Form";
+import { NotificationContext } from "../../context/notification";
+import {
+  dateInSeconds,
+  mediaURL,
+  resizeFileImage,
+  uploadMediaToIPFS,
+} from "../../utils/utils";
+import { DatePicker } from "../Datepicker";
+import { Input, Select } from "../Form";
 import { Modal } from "../Modal";
 
 export const CreateContestModal = ({ showModal, setShowModal }) => {
   const near = useContext(NearContext);
+  const {
+    setShowNotification,
+    setNotificationText,
+    setNotificationDescription,
+  } = useContext(NotificationContext);
 
   const [loading, isLoading] = useState(false);
   const [title, setTitle] = useState();
@@ -14,22 +27,40 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
   const [currencyFt, setCurrencyFt] = useState(true);
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
+  const [image, setImage] = useState({ preview: null, raw: null });
 
-  const uploadPhoto = () => {
-    console.log(image);
+  const uploadPhoto = (e) => {
+    setImage({
+      preview: URL.createObjectURL(e.target.files[0]),
+      raw: e.target.files[0],
+    });
   };
 
   const handleCreate = async () => {
     isLoading(true);
-    await near.mainContract.createContest({
+    let ipfsResp = null;
+
+    if (image.raw) ipfsResp = await uploadMediaToIPFS(image.raw);
+
+    const resp = await near.mainContract.createContest({
       title: title,
-      entry_fee: entryFee,
-      size: size,
-      currency_ft: currencyFt,
-      start_time: startTime,
-      end_time: endTime,
-      image: "", // temp  solution
+      entry_fee: entryFee.toString(),
+      size: size.toString(),
+      currency_ft: currencyFt === "true",
+      start_time: dateInSeconds(startTime).toString(),
+      end_time: dateInSeconds(endTime).toString(),
+      image: ipfsResp ? mediaURL(ipfsResp) : "",
     });
+
+    if (resp.error) {
+      setShowNotification(true);
+      setNotificationText("Blockchain Error");
+      setNotificationDescription(resp.error.toString());
+    } else {
+      setShowNotification(true);
+      setNotificationText("Contest was created!");
+    }
+
     setShowModal(false);
     isLoading(false);
   };
@@ -42,22 +73,38 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
       onSubmit={handleCreate}
       loading={loading}
     >
-      <div className="flex flex-col lg:flex-row gap-3 p-6">
-        <div
-          onClick={uploadPhoto}
-          className="flex justify-center items-center w-48 h-48 rounded-xl bg-violet-200/20 hover:bg-violet-300/10 cursor-pointer
-           border border-dashed border-violet-300/50"
-        >
-          <div className="flex flex-col justify-center items-center text-center">
-            <PlusIcon className="w-20 h-20" />
-            <div className="mt-2 text-xs">
-              Click to
-              <br /> upload photo
-            </div>
-          </div>
+      <div className="flex flex-col lg:flex-row gap-x-10">
+        <div>
+          <label
+            htmlFor="upload-button"
+            className="flex justify-center items-center w-52 h-52 rounded-xl
+            bg-violet-200/20 hover:bg-violet-300/10 cursor-pointer border
+            border-dashed border-violet-300/50"
+          >
+            {image.preview ? (
+              <img
+                className="p-[2px] object-cover w-52 h-52 rounded-xl"
+                src={image.preview}
+              />
+            ) : (
+              <div className="flex w-full flex-col justify-center items-center text-center">
+                <PlusIcon className="w-20 h-20" />
+                <div className="mt-2 text-xs">
+                  Click to
+                  <br /> upload photo
+                </div>
+              </div>
+            )}
+          </label>
+          <input
+            className="hidden"
+            id="upload-button"
+            type="file"
+            onChange={uploadPhoto}
+          />
         </div>
-        <div className="flex flex-col w-full">
-          <div className="mb-3">
+        <div className="flex flex-col w-2/3">
+          <div className="mb-5">
             <Input
               id="contest_title"
               placeholder="Contest Title"
@@ -65,7 +112,7 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
               handleChange={setTitle}
             />
           </div>
-          <div className="mb-3">
+          <div className="mb-5">
             <Input
               placeholder="Number of participants"
               type="number"
@@ -74,27 +121,46 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
               handleChange={setSize}
             />
           </div>
-          <div className="flex gap-4">
-            <Input
-              type="number"
-              min={0}
-              placeholder="Entry Fee"
-              val={entryFee}
-              handleChange={setEntryFee}
-            />
-            <Select
-              id="currency"
-              placeholder="Select currency"
-              handleChange={setCurrencyFt}
-              options={[
-                { label: "CNT", value: true },
-                { label: "NEAR", value: false },
-              ]}
-            />
+          <div className="flex gap-x-5 mb-5">
+            <div className="w-2/3">
+              <Input
+                type="number"
+                min={0}
+                placeholder="Entry Fee"
+                val={entryFee}
+                handleChange={setEntryFee}
+              />
+            </div>
+            <div className="w-1/3">
+              <Select
+                id="currency"
+                placeholder="Currency"
+                handleChange={(e) => setCurrencyFt(e.target.value)}
+                value={currencyFt}
+                options={[
+                  { label: "CNT", value: true },
+                  { label: "NEAR", value: false },
+                ]}
+              />
+            </div>
           </div>
-          <div className="flex gap-4 w-full mb-3">
-            {/* <DatePicker placeholder="Start Date" />
-            <DatePicker placeholder="End Date" /> */}
+          <div className="flex w-full gap-x-5 justify-between bg-gray-900">
+            <div className="w-full">
+              <Input
+                dateTime={startTime}
+                setDateTime={setStartTime}
+                type="date"
+                placeholder="Start Date"
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                dateTime={endTime}
+                setDateTime={setEndTime}
+                type="date"
+                placeholder="End Date"
+              />
+            </div>
           </div>
         </div>
       </div>

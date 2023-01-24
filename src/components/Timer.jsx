@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { formatDate, secondsToString, timeDiffSeconds } from "../utils/utils";
-import { isActive, isIncomming } from "./contest/ContestItem";
+import {
+  formatDate,
+  isActive,
+  isIncomming,
+  secondsToString,
+  timeDiffSeconds,
+} from "../utils/utils";
 
 export const Timer = ({ contest }) => {
   const funRef = useRef(null);
@@ -19,7 +24,8 @@ export const Timer = ({ contest }) => {
 
   return (
     <div
-      className={`flex tracking-wide font-medium text-sm text-center rounded-full`}
+      className={`flex tracking-wide font-medium
+       text-center rounded-full`}
     >
       {isIncomming(contest) ? (
         <>
@@ -30,7 +36,7 @@ export const Timer = ({ contest }) => {
         </>
       ) : isActive(contest) ? (
         <>
-          Ended at:{" "}
+          Ends at:{" "}
           {secondsToString(timeDiffSeconds(parseInt(contest.end_time)))}
         </>
       ) : (

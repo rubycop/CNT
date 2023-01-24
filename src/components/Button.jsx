@@ -4,7 +4,6 @@ import { Row } from "../assets/styles/common.style";
 export const Button = ({
   disabled,
   icon,
-
   title,
   handleClick,
   outlined,
@@ -16,8 +15,11 @@ export const Button = ({
     disabled={disabled}
     className={`${
       full && "w-full"
-    } flex flex-row items-center text-white p-4 px-6 rounded-full ${
-      outlined
+    } flex flex-row items-center text-white p-4 px-6 rounded-full
+    ${
+      disabled
+        ? "text-violet-200/50 bg-violet-300/20 hover:bg-violet-300/20 cursor-not-allowed"
+        : outlined
         ? `border-2 ${
             white
               ? "border-violet-200 text-violet-200 hover:border-white hover:text-white"
@@ -26,12 +28,12 @@ export const Button = ({
         : `${
             white
               ? "text-black bg-violet-200 hover:bg-white"
-              : "bg-violet-500 hover:bg-violet-700"
+              : "bg-violet-700 hover:bg-violet-800"
           }`
     } ${
       secondary &&
       "text-violet-500 hover:text-violet-700 border-2 hover:border-violet-700 border-violet-500"
-    } ${disabled && "bg-violet-300 hover:bg-violet-300 cursor-not-allowed"}
+    } 
     `}
     onClick={handleClick}
   >

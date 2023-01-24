@@ -16,11 +16,12 @@ import {
   DatabaseIcon,
   ViewListIcon,
 } from "@heroicons/react/outline";
+import { AccountContext } from "../context/account";
 
 export const Header = ({ dark }) => {
   const near = useContext(NearContext);
+  const { reward, setReward, xp, setXP } = useContext(AccountContext);
 
-  const [reward, setReward] = useState(["-", "-"]);
   const [loading, isLoading] = useState(false);
   const [small, setSmall] = useState(false);
   const [show, setShow] = useState(false);
@@ -32,7 +33,8 @@ export const Header = ({ dark }) => {
     const resp = await near.mainContract.ftBalanceOf();
     const respXP = await near.mainContract.getAccountXP();
 
-    setReward([convertFromYocto(resp), respXP]);
+    setReward(convertFromYocto(resp));
+    setXP(respXP);
     isLoading(false);
   };
 
@@ -171,12 +173,12 @@ export const Header = ({ dark }) => {
                     <div className="flex justify-between text-sm">
                       <div>Earned</div>
                       <div className="text-green-500">
-                        {formatNumber(reward[0])} CNT
+                        {formatNumber(reward)} CNT
                       </div>
                     </div>
                     <div className="flex justify-between text-sm">
                       <div>Level 1</div>
-                      <div>{formatNumber(reward[1])} XP</div>
+                      <div>{formatNumber(xp)} XP</div>
                     </div>
                   </div>
                   <a
