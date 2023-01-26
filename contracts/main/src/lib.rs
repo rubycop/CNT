@@ -452,8 +452,9 @@ impl Contract {
                                         .unwrap();
 
         for p in winners {
+            let acc_id: AccountId = p.owner_id.try_into().unwrap();
+
             if contest.currency_ft == true {
-                let acc_id: AccountId = p.owner_id.try_into().unwrap();
                 self.add_xp(acc_id.clone(), XP_WIN);
                 self.add_token_storage(&acc_id);
 
@@ -470,7 +471,7 @@ impl Contract {
                 if env::attached_deposit() != (reward + fee) as u128 * u128::from(ONE_NEAR) {
                     env::panic_str("Attached amount does not match entry fee");
                 }
-                Promise::new(env::current_account_id()).transfer(transfer_amount);
+                Promise::new(acc_id).transfer(transfer_amount);
             }
         }
         self.contests.remove(index);
