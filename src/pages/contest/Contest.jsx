@@ -1,4 +1,3 @@
-import { ClockIcon } from "@heroicons/react/outline";
 import { PlusIcon, ThumbUpIcon, UserCircleIcon } from "@heroicons/react/solid";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -176,8 +175,6 @@ export const Contest = () => {
 
       <div className="flex relative flex-col w-full justify-center items-center">
         <div className="flex flex-row justify-center items-center text-lg my-10  text-violet-200/40 rounded-lg w-full lg:w-1/2">
-          <ClockIcon className="w-5 h-5 mr-3" />
-          <div className="mr-2">Contest</div>
           <Timer contest={contest} />
         </div>
 
@@ -196,27 +193,29 @@ export const Contest = () => {
                   ))}
               </div>
             ) : (
-              <>
-                <div className="flex justify-between mb-10 w-1/2 gap-x-5">
-                  <Tab mode={mode} setMode={setMode} title="Voting" tab={0} />
-                  <Tab
-                    mode={mode}
-                    setMode={setMode}
-                    title="Prediction"
-                    tab={1}
-                  />
-                </div>
+              isActive(contest) && (
+                <>
+                  <div className="flex justify-between mb-10 w-1/2 gap-x-5">
+                    <Tab mode={mode} setMode={setMode} title="Voting" tab={0} />
+                    <Tab
+                      mode={mode}
+                      setMode={setMode}
+                      title="Prediction"
+                      tab={1}
+                    />
+                  </div>
 
-                {mode === 0 && (
-                  <Voting
-                    participants={participants}
-                    loading={loading}
-                    respReward={respReward}
-                    vote={vote}
-                  />
-                )}
-                {mode === 1 && <Prediction />}
-              </>
+                  {mode === 0 && (
+                    <Voting
+                      participants={participants}
+                      loading={loading}
+                      respReward={respReward}
+                      vote={vote}
+                    />
+                  )}
+                  {mode === 1 && <Prediction />}
+                </>
+              )
             )}
           </>
         ) : (

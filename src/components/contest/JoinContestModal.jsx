@@ -76,7 +76,12 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
       account_id: near.wallet.accountId,
     });
 
-    if (userNfts) setNFTs(userNfts.map((nft) => nft.metadata.media));
+    if (userNfts)
+      setNFTs(
+        userNfts.map((nft) => {
+          return { token: nft.token_id, src: nft.metadata.media };
+        })
+      );
     isLoading(false);
   };
 
@@ -99,7 +104,7 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
         ) : (
           <>
             {nfts.length > 0 ? (
-              nfts.map((imgUrl, index) => (
+              nfts.map(({ token, src }, index) => (
                 <div
                   key={index}
                   className="w-48 h-48 rounded-2xl item mx-2 relative"
@@ -110,7 +115,7 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
                     className={`w-48 h-48 bg-cover rounded-2xl object-cover ${
                       chosenBtn === index && "blur-xs opacity-70"
                     }`}
-                    src={mediaURL(imgUrl)}
+                    src={mediaURL(src)}
                   />
                   <div
                     className={`absolute flex w-full h-full top-0 justify-center items-center z-10 down-content ${
@@ -119,7 +124,7 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
                   >
                     <Button
                       title="choose"
-                      outlined={chosen != mediaURL(imgUrl)}
+                      outlined={chosen != token}
                       icon={<CheckIcon className="w-5 h-5 ml-3" />}
                       handleClick={() => {
                         if (chosen) {
@@ -127,7 +132,7 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
                           setChosenBtn();
                         } else {
                           setChosenBtn(index);
-                          setChosen(mediaURL(imgUrl));
+                          setChosen(token);
                         }
                       }}
                     />

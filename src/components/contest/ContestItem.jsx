@@ -45,8 +45,11 @@ export const ContestItem = ({ contest, small }) => {
     </a>
   );
 
-  const getPrizePool =
-    participants?.length * contest.entry_fee * (1 - PLATFORM_FEE);
+  const getPrizePool = (
+    participants?.length *
+    contest.entry_fee *
+    (1 - PLATFORM_FEE)
+  ).toFixed(2);
 
   useEffect(() => {
     fetchParticipants();
@@ -136,7 +139,9 @@ export const ContestItem = ({ contest, small }) => {
 
           {(isIncomming(contest) || isActive(contest)) && (
             <div className="hidden text-sm lg:block mb-12">
-              <Timer contest={contest} />
+              <div className="mb-2">
+                <Timer contest={contest} />
+              </div>
               <ProgressBar
                 time={
                   isActive

@@ -24,57 +24,6 @@ import { isIncoming, isIncomming } from "../utils/utils";
 import { ContestImage } from "../components/contest/ContestImage";
 import { __esModule } from "css-loader/dist/utils";
 
-const images = [
-  {
-    id: "1673611712021205562",
-    owner_id: "rubycoptest3.testnet",
-    contest_id: "1673611670676859631",
-    nft_src:
-      "https://ipfs.fleek.co/ipfs/bafybeiet3hpsmufamhtxvfh5uqtnxpshgbrpbhra6wyrykf2ae5kdejami",
-    votes_count: 0,
-  },
-  {
-    id: "1673611719186764001",
-    owner_id: "rubycoptest.testnet",
-    contest_id: "1673611685892549147",
-    nft_src:
-      "https://ipfs.fleek.co/ipfs/bafybeiet3hpsmufamhtxvfh5uqtnxpshgbrpbhra6wyrykf2ae5kdejami",
-    votes_count: 0,
-  },
-  {
-    id: "1673620560157204849",
-    owner_id: "rubycoptest.testnet",
-    contest_id: "1673611685892549147",
-    nft_src:
-      "https://ipfs.io/ipfs/bafkreigezufih7gmv6d6xfbm3ackbvsxxbw5mprlt3hx5kvte7kjkbaxju",
-    votes_count: 0,
-  },
-  {
-    id: "1673637177535949536",
-    owner_id: "ft.beat_my_nft.testnet",
-    contest_id: "1673611670676859631",
-    nft_src:
-      "https://ipfs.io/ipfs/bafkreihvcoraixdyx6jbrlmlfw45psrjlkwemp7ie3wckye7frnyhbdnoi",
-    votes_count: 0,
-  },
-  {
-    id: "1673990751162997621",
-    owner_id: "rubycoptest3.testnet",
-    contest_id: "1673990449637348426",
-    nft_src:
-      "https://ipfs.io/ipfs/bafkreihvcoraixdyx6jbrlmlfw45psrjlkwemp7ie3wckye7frnyhbdnoi",
-    votes_count: 0,
-  },
-  {
-    id: "1674051709624518425",
-    owner_id: "rubycoptest.testnet",
-    contest_id: "1673990449637348426",
-    nft_src:
-      "https://ipfs.fleek.co/ipfs/bafybeiet3hpsmufamhtxvfh5uqtnxpshgbrpbhra6wyrykf2ae5kdejami",
-    votes_count: 0,
-  },
-];
-
 export const Home = () => {
   const near = useContext(NearContext);
 

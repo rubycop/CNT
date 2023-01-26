@@ -1,3 +1,4 @@
+import { ClockIcon } from "@heroicons/react/outline";
 import React, { useEffect, useRef, useState } from "react";
 import {
   formatDate,
@@ -25,14 +26,13 @@ export const Timer = ({ contest }) => {
   return (
     <div
       className={`flex tracking-wide font-medium
-       text-center rounded-full`}
+       text-center rounded-full items-center`}
     >
+      <ClockIcon className="w-5 h-5 mr-3" />
       {isIncomming(contest) ? (
         <>
-          <span>
-            {secondsToString(timeDiffSeconds(parseInt(contest.start_time)))}
-          </span>
-          <span className="ml-1">left</span>
+          Starts at:{" "}
+          {secondsToString(timeDiffSeconds(parseInt(contest.start_time)))}
         </>
       ) : isActive(contest) ? (
         <>
@@ -41,8 +41,11 @@ export const Timer = ({ contest }) => {
         </>
       ) : (
         <>
-          {formatDate(contest.start_time)} -{" "}
-          {formatDate(parseInt(contest.end_time))}
+          Contest is ended:{" "}
+          <>
+            {formatDate(contest.start_time)} -{" "}
+            {formatDate(parseInt(contest.end_time))}
+          </>
         </>
       )}
     </div>
