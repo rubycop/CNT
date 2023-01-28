@@ -9,19 +9,19 @@ import {
 } from "../utils/utils";
 
 export const Timer = ({ contest }) => {
-  const funRef = useRef(null);
-  const [currentDate, setCurrentDate] = useState(Date.now());
+  // const funRef = useRef(null);
+  // const [currentDate, setCurrentDate] = useState(Date.now());
 
-  useEffect(() => {
-    funRef.current = setInterval(() => {
-      setCurrentDate(Date.now());
-    }, 1000);
-    return () => {
-      clearInterval(funRef.current);
-    };
-  }, []);
+  // useEffect(() => {
+  //   funRef.current = setInterval(() => {
+  //     setCurrentDate(Date.now());
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(funRef.current);
+  //   };
+  // }, []);
 
-  useEffect(() => {}, [currentDate]);
+  // useEffect(() => {}, [currentDate]);
 
   return (
     <div

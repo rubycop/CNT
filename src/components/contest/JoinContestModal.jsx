@@ -21,18 +21,19 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
       const txns = [
         {
           signerId: near.wallet.accountId,
-          receiverId: near.mainContract.ftContractId,
+          receiverId: near.mainContract.contractId,
           actions: [
             {
               type: "FunctionCall",
               params: {
-                methodName: "ft_transfer",
+                methodName: "callback_join_contest",
                 args: {
-                  receiver_id: `burn.${near.mainContract.contractId}`,
-                  amount: convertToYocto(contest.entry_fee),
+                  contest_id: contest.id,
+                  token_id: chosen[0],
+                  nft_src: chosen[1],
+                  owner_id: near.wallet.accountId,
                 },
-                gas: convertToTera("90"),
-                deposit: 1,
+                gas: convertToTera("30"),
               },
             },
           ],
@@ -41,19 +42,18 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
 
       txns.push({
         signerId: near.wallet.accountId,
-        receiverId: near.mainContract.contractId,
+        receiverId: near.mainContract.ftContractId,
         actions: [
           {
             type: "FunctionCall",
             params: {
-              methodName: "callback_join_contest",
+              methodName: "ft_transfer",
               args: {
-                contest_id: contest.id,
-                token_id: chosen[0],
-                nft_src: chosen[1],
-                owner_id: near.wallet.accountId,
+                receiver_id: `burn.${near.mainContract.contractId}`,
+                amount: convertToYocto(contest.entry_fee),
               },
-              gas: convertToTera("30"),
+              gas: convertToTera("90"),
+              deposit: 1,
             },
           },
         ],

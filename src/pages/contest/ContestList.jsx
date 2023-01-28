@@ -66,7 +66,7 @@ export const ContestList = () => {
   }, [mode]);
 
   const Section = ({ title, children }) => (
-    <div className="infos shadow-md mx-10 py-16" id="infos">
+    <div className="shadow-md mx-10 py-16" id="infos">
       <h1 className="wow fadeIn text-white text-4xl font-semibold">{title}</h1>
       <div className="w-full bg-gray-800 mt-8 mb-12 h-[1px]"></div>
       {children}
@@ -76,7 +76,7 @@ export const ContestList = () => {
   const CreateContestItem = ({ handleClick, title, description, src }) => (
     <div
       onClick={handleClick}
-      className="cursor-pointer hover:border-violet-700 hover:shadow-lg hover:shadow-violet-500/50 flex flex-col w-96 p-7 rounded-2xl bg-gray-900 border border-solid border-violet-300/20"
+      className="cursor-pointer hover:border-violet-700 hover:shadow-lg hover:shadow-violet-500/50 flex flex-col lg:w-96 p-7 rounded-2xl bg-gray-900 border border-solid border-violet-300/20"
     >
       <div className="relative w-full h-60">
         <img
@@ -99,7 +99,7 @@ export const ContestList = () => {
     <>
       <Header />
 
-      <div className="relative">
+      <div className="relative lg:block hidden">
         <img
           src="https://assets.website-files.com/605a8ad8853d7fc62334c73e/60d54316de3f53dd3d119282_bubble-1-nft-webflow-template.png"
           width="368.5"
@@ -111,76 +111,65 @@ export const ContestList = () => {
         />
       </div>
 
-      <div className="flex flex-col lg:flex-row mx-5 lg:mx-20 mt-16">
+      <div className="flex flex-col lg:flex-row mx-0 lg:mx-20 mt-16">
         <div className="w-full">
-          <>
-            <Container>
-              <Section title="Create Contest">
-                <div className="flex justify-center">
-                  <div className="flex justify-between gap-x-10">
-                    <CreateContestItem
-                      src={public_contest}
-                      title="Public Contest"
-                      description="Everyone can join contest"
-                      handleClick={() => setShowModal(true)}
-                    />
+          <Section title="Create Contest">
+            <div className="wow fadeInUp w-full lg:px-0 flex gap-10 flex-col lg:flex-row justify-center">
+              <CreateContestItem
+                src={public_contest}
+                title="Public Contest"
+                description="Everyone can join contest"
+                handleClick={() => setShowModal(true)}
+              />
 
-                    <CreateContestItem
-                      src={private_contest}
-                      title="1-to-1 Contest"
-                      description={
-                        <>
-                          Only requester can join contest.
-                          <br />
-                          Coming soon...
-                        </>
-                      }
-                      handleClick={() => {}}
-                    />
-                  </div>
-                </div>
+              <CreateContestItem
+                src={private_contest}
+                title="1-to-1 Contest"
+                description={
+                  <>
+                    Only requester can join contest.
+                    <br />
+                    Coming soon...
+                  </>
+                }
+                handleClick={() => {}}
+              />
+            </div>
 
-                <CreateContestModal
-                  showModal={showModal}
-                  setShowModal={setShowModal}
-                />
-              </Section>
-              <Section
-                title={`${
-                  mode === 0 ? "Active" : mode === 1 ? "Incoming" : "Past"
-                } Contests`}
-              >
-                <div className="w-full sm:flex items-center justify-between">
-                  <div className="flex items-center gap-x-5  w-full">
-                    <Tab mode={mode} setMode={setMode} title="Active" tab={0} />
-                    <Tab
-                      mode={mode}
-                      setMode={setMode}
-                      title="Incomming"
-                      tab={1}
+            <CreateContestModal
+              showModal={showModal}
+              setShowModal={setShowModal}
+            />
+          </Section>
+          <Section
+            title={`${
+              mode === 0 ? "Active" : mode === 1 ? "Incoming" : "Past"
+            } Contests`}
+          >
+            <div className="w-full sm:flex items-center justify-between">
+              <div className="flex lg:flex-row flex-col items-center gap-5  w-full">
+                <Tab mode={mode} setMode={setMode} title="Active" tab={0} />
+                <Tab mode={mode} setMode={setMode} title="Incomming" tab={1} />
+                <Tab mode={mode} setMode={setMode} title="Past" tab={2} />
+              </div>
+            </div>
+            <div className="mt-10">
+              {loading ? (
+                <Skeleton />
+              ) : (
+                <div className="w-full flex gap-x-6 gap-y-10 flex-wrap justify-center">
+                  {contests?.map((contest, index) => (
+                    <ContestItem
+                      small
+                      contest={contest}
+                      index={index}
+                      handleJoin={() => setShowJoinModal(true)}
                     />
-                    <Tab mode={mode} setMode={setMode} title="Past" tab={2} />
-                  </div>
+                  ))}
                 </div>
-                <div className="mt-10">
-                  {loading ? (
-                    <Skeleton />
-                  ) : (
-                    <div className="w-full flex gap-x-6 gap-y-10 flex-wrap justify-center">
-                      {contests?.map((contest, index) => (
-                        <ContestItem
-                          small
-                          contest={contest}
-                          index={index}
-                          handleJoin={() => setShowJoinModal(true)}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </Section>
-            </Container>
-          </>
+              )}
+            </div>
+          </Section>
         </div>
       </div>
     </>

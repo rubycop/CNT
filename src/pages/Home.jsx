@@ -240,7 +240,7 @@ export const Home = () => {
       </div>
 
       <Section title="Incoming Contests">
-        <div className="wow fadeInUp w-full px-10 flex gap-10 flex-col lg:flex-row justify-center">
+        <div className="wow fadeInUp w-full lg:px-0 flex gap-10 flex-col lg:flex-row justify-center">
           {contests.map((contest, index) => (
             <ContestItem contest={contest} index={index} />
           ))}
@@ -249,7 +249,7 @@ export const Home = () => {
 
       <Section title="Latest Winners">
         <div className="wow fadeIn container-fluid">
-          <div className="flex-row">
+          <div className="hidden lg:flex flex-row justify-center">
             {participants.length > 3 ? (
               <div className="w-full justify-center">
                 <AliceCarousel
@@ -285,6 +285,34 @@ export const Home = () => {
                 ))}
               </div>
             )}
+          </div>
+          <div className="flex flex-row lg:hidden">
+            <div className="w-full justify-center">
+              <AliceCarousel
+                mouseTracking
+                autoPlay
+                autoPlayInterval={2000}
+                disableDotsControls
+                infinite
+                responsive={{
+                  2000: {
+                    items: 11,
+                  },
+                  1200: {
+                    items: 4,
+                  },
+                  800: {
+                    items: 3,
+                  },
+                  0: {
+                    items: 1,
+                  },
+                }}
+                items={participants.map((p, i) => (
+                  <ContestImage contest={p.contest} participant={p} />
+                ))}
+              />
+            </div>
           </div>
         </div>
       </Section>

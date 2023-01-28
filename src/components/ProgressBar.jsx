@@ -26,7 +26,7 @@ export const ProgressBar = ({ time, plain }) => {
       />
       <div
         style={{
-          width: timeRange > 1 ? 10 : parseInt((1 - timeRange) * 100) + "%",
+          width: timeRange >= 1 ? 10 : parseInt((1 - timeRange) * 100) + "%",
         }}
         className={`absolute z-10 h-2 ${
           !plain && "rounded-full"

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export CONTRACT_ID=contesty-v1.testnet
+export CONTRACT_ID=contesty-v2.testnet
 
 near deploy --accountId $CONTRACT_ID --wasmFile out/main.wasm
 

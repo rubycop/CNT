@@ -89,7 +89,7 @@ export const ContestItem = ({ contest, small }) => {
   return (
     <div
       className={`hover:border-violet-700 hover:shadow-lg hover:shadow-violet-500/50 flex flex-col ${
-        small ? "w-[22rem]" : "w-[30rem]"
+        small ? "w-full lg:w-[22rem]" : "w-full lg:w-[30rem]"
       } p-7 rounded-2xl bg-gray-900 border border-solid border-violet-300/20`}
     >
       {winners.length > 0 && (
