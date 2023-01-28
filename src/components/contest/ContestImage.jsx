@@ -31,7 +31,7 @@ export const ContestImage = ({ contest, participant, winner }) => {
         <>
           <img
             className="w-72 h-64 object-cover rounded-xl"
-            src={participant.nft_src}
+            src={mediaURL(participant.nft_src)}
             onError={(error) =>
               (error.target.src = require("../../assets/images/no-image.png"))
             }
@@ -50,7 +50,7 @@ export const ContestImage = ({ contest, participant, winner }) => {
       <h6 className="text-sm mb-3">{participant.owner_id}</h6>
       <div className="flex justify-between">
         <a href={"/contest/${contest.id}"} className="text-sm mb-1">
-          {contest.title}
+          View Contest
           <i className="fa fa-link ml-1"></i>
         </a>
 
@@ -59,7 +59,7 @@ export const ContestImage = ({ contest, participant, winner }) => {
           target="_blank"
           className="text-sm"
         >
-          Visit to buy <i className="fa fa-link ml-1"></i>
+          Visit to Buy <i className="fa fa-link ml-1"></i>
         </a>
       </div>
     </div>

@@ -10,12 +10,12 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
   const near = useContext(NearContext);
 
   const [loading, isLoading] = useState(false);
-  const [chosen, setChosen] = useState();
+  const [chosen, setChosen] = useState([]);
   const [chosenBtn, setChosenBtn] = useState();
   const [nfts, setNFTs] = useState([]);
 
   const joinContest = async () => {
-    if (!chosen) return;
+    if (chosen.length === 0) return;
 
     if (contest.currency_ft) {
       const txns = [
@@ -49,7 +49,8 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
               methodName: "callback_join_contest",
               args: {
                 contest_id: contest.id,
-                token_id: chosen,
+                token_id: chosen[0],
+                nft_src: chosen[1],
                 owner_id: near.wallet.accountId,
               },
               gas: convertToTera("30"),
@@ -63,7 +64,8 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
       near.mainContract.joinContest(
         {
           contest_id: contest.id,
-          token_id: chosen,
+          token_id: chosen[0],
+          nft_src: chosen[1],
         },
         convertToTera("90"),
         convertToYocto(contest.entry_fee)
@@ -109,8 +111,8 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
                 <div
                   key={index}
                   className="w-48 h-48 rounded-2xl item mx-2 relative"
-                  onMouseOver={() => !chosen && setChosenBtn(index)}
-                  onMouseOut={() => !chosen && setChosenBtn()}
+                  onMouseOver={() => chosen.length === 0 && setChosenBtn(index)}
+                  onMouseOut={() => chosen.length === 0 && setChosenBtn()}
                 >
                   <img
                     className={`w-48 h-48 bg-cover rounded-2xl object-cover ${
@@ -125,15 +127,15 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
                   >
                     <Button
                       title="choose"
-                      outlined={chosen != token}
+                      outlined={chosen[0] != token}
                       icon={<CheckIcon className="w-5 h-5 ml-3" />}
                       handleClick={() => {
-                        if (chosen) {
+                        if (chosen.length > 0) {
                           setChosen();
                           setChosenBtn();
                         } else {
                           setChosenBtn(index);
-                          setChosen(token);
+                          setChosen([token, src]);
                         }
                       }}
                     />
