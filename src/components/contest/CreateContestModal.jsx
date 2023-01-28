@@ -2,13 +2,7 @@ import { PlusIcon } from "@heroicons/react/solid";
 import React, { useContext, useState } from "react";
 import { NearContext } from "../../context/near";
 import { NotificationContext } from "../../context/notification";
-import {
-  dateInSeconds,
-  mediaURL,
-  resizeFileImage,
-  uploadMediaToIPFS,
-} from "../../utils/utils";
-import { DatePicker } from "../Datepicker";
+import { mediaURL, uploadMediaToIPFS } from "../../utils/utils";
 import { Input, Select } from "../Form";
 import { Modal } from "../Modal";
 import { format } from "date-fns";
@@ -52,8 +46,8 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
       entry_fee: entryFee.toString(),
       size: size.toString(),
       currency_ft: currencyFt === "true",
-      start_time: dateInSeconds(startTime).toString(),
-      end_time: dateInSeconds(endTime).toString(),
+      start_time: startTime.toString(),
+      end_time: endTime.toString(),
       image: ipfsResp ? mediaURL(ipfsResp) : "",
     });
 

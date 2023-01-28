@@ -188,8 +188,6 @@ export const Currency = ({ contest }) => (
   </>
 );
 
-export const dateInSeconds = (date) => Math.floor(date.getTime());
-
 export const isIncomming = (contest) =>
   new Date(parseInt(contest.start_time)) > new Date();
 
