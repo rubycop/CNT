@@ -49,7 +49,7 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
               methodName: "callback_join_contest",
               args: {
                 contest_id: contest.id,
-                nft_src: chosen,
+                token_id: chosen,
                 owner_id: near.wallet.accountId,
               },
               gas: convertToTera("30"),
@@ -63,7 +63,7 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
       near.mainContract.joinContest(
         {
           contest_id: contest.id,
-          nft_src: chosen,
+          token_id: chosen,
         },
         convertToTera("90"),
         convertToYocto(contest.entry_fee)
@@ -82,6 +82,7 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
           return { token: nft.token_id, src: nft.metadata.media };
         })
       );
+
     isLoading(false);
   };
 

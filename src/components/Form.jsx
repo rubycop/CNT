@@ -1,6 +1,5 @@
 import { CalendarIcon } from "@heroicons/react/outline";
 import React, { useState } from "react";
-import { DatePicker } from "./Datepicker";
 
 const inputClass =
   "bg-violet-200/10 border border-violet-300/40 text-white text-sm rounded-lg focus:ring-violet-900 focus:border-violet-900 block w-full p-2.5";
@@ -8,8 +7,6 @@ const labelClass = "block mb-1 text-sm font-medium text-violet-200/50";
 
 export const Input = ({
   id,
-  dateTime,
-  setDateTime,
   placeholder,
   type,
   handleChange,
@@ -21,24 +18,16 @@ export const Input = ({
       {placeholder}
     </label>
 
-    {type == "date" ? (
-      <DatePicker
-        dateTime={dateTime}
-        setDateTime={setDateTime}
-        placeholder={placeholder}
-      />
-    ) : (
-      <input
-        type={type}
-        id={id}
-        className={inputClass}
-        required
-        placeholder={placeholder}
-        value={val}
-        onChange={(e) => handleChange(e.target.value)}
-        {...rest}
-      />
-    )}
+    <input
+      type={type}
+      id={id}
+      className={inputClass}
+      required
+      placeholder={placeholder}
+      value={val}
+      onChange={(e) => handleChange(e.target.value)}
+      {...rest}
+    />
   </div>
 );
 

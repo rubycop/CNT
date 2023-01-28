@@ -23,3 +23,7 @@ body {
   font-family: "Poppins", sans-serif;
   color: #242424;
 }
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}

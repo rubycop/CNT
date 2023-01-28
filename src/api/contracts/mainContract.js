@@ -106,6 +106,18 @@ export class MainContract {
     }
   }
 
+  async nftToken(args) {
+    try {
+      return await this.wallet.viewMethod({
+        contractId: this.parasContractId,
+        method: "nft_token",
+        args,
+      });
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
   async nftTokensForOwner(args) {
     try {
       return await this.wallet.viewMethod({

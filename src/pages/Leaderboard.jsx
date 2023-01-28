@@ -89,7 +89,7 @@ export const Leaderboard = () => {
                   <div className="font-semibold text-base text-gray-700">
                     <img
                       className="w-12"
-                      src={defaultImg || `https://ipfs.io/ipfs/${p.nft_src}`}
+                      src={defaultImg || `https://ipfs.io/ipfs/${p.token_id}`}
                       onError={() =>
                         setDefaultImg(
                           "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg"

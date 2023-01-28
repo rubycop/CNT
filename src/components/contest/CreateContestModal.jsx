@@ -11,6 +11,11 @@ import {
 import { DatePicker } from "../Datepicker";
 import { Input, Select } from "../Form";
 import { Modal } from "../Modal";
+import { format } from "date-fns";
+
+const inputClass =
+  "bg-violet-200/10 border border-violet-300/40 text-white text-sm rounded-lg focus:ring-violet-900 focus:border-violet-900 block w-full p-2.5";
+const labelClass = "block mb-1 text-sm font-medium text-violet-200/50";
 
 export const CreateContestModal = ({ showModal, setShowModal }) => {
   const near = useContext(NearContext);
@@ -25,8 +30,8 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
   const [entryFee, setEntryFee] = useState(0);
   const [size, setSize] = useState(2);
   const [currencyFt, setCurrencyFt] = useState("true");
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+  const [startTime, setStartTime] = useState(new Date().getTime());
+  const [endTime, setEndTime] = useState(startTime);
   const [image, setImage] = useState({ preview: null, raw: null });
 
   const uploadPhoto = (e) => {
@@ -146,19 +151,30 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
           </div>
           <div className="flex w-full gap-x-5 justify-between bg-gray-900">
             <div className="w-full">
-              <Input
-                dateTime={startTime}
-                setDateTime={setStartTime}
-                type="date"
-                placeholder="Start Date"
+              <label className={labelClass}>Start Date</label>
+              <input
+                className={inputClass}
+                type="datetime-local"
+                min={format(new Date().getTime(), "yyyy-MM-dd HH:mm")}
+                value={format(startTime, "yyyy-MM-dd HH:mm")}
+                onChange={(e) => {
+                  const val = new Date(e.target.value).getTime();
+                  setStartTime(val);
+                  if (val > endTime)
+                    setEndTime(new Date(e.target.value).getTime());
+                }}
               />
             </div>
             <div className="w-full">
-              <Input
-                dateTime={endTime}
-                setDateTime={setEndTime}
-                type="date"
-                placeholder="End Date"
+              <label className={labelClass}>End Date</label>
+              <input
+                className={inputClass}
+                type="datetime-local"
+                min={format(startTime, "yyyy-MM-dd HH:mm")}
+                value={format(endTime, "yyyy-MM-dd HH:mm")}
+                onChange={(e) => {
+                  setEndTime(new Date(e.target.value).getTime());
+                }}
               />
             </div>
           </div>

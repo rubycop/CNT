@@ -31,7 +31,8 @@ pub struct Participant {
     pub id: String,
     pub owner_id: AccountId,
     pub contest_id: String,
-    pub nft_src: TokenId,
+    pub token_id: String,
+    pub nft_src: String,
     pub votes_count: u8,
 }
 
@@ -143,6 +144,7 @@ impl Clone for Participant {
             id: self.id.clone(),
             owner_id: self.owner_id.clone(),
             contest_id: self.contest_id.clone(),
+            token_id: self.token_id.clone(),
             nft_src: self.nft_src.clone(),
             votes_count: self.votes_count.clone()
         }
@@ -303,7 +305,7 @@ impl Contract {
     }
 
     #[payable]
-    pub fn join_contest(&mut self, contest_id: String, nft_src: String) -> () {
+    pub fn join_contest(&mut self, contest_id: String, token_id: String, nft_src: String) -> () {
         let contest = self.get_contest_by_id(&contest_id)
                                    .expect("[JOIN]: There is no contest with such id");
         let transfer_amount: u128 = contest.entry_fee.parse::<u128>().unwrap() * u128::from(ONE_NEAR);
@@ -320,13 +322,14 @@ impl Contract {
                     .callback_join_contest(
                         contest_id.clone(),
                         sender_id,
-                        nft_src.to_string(),
+                        token_id.to_string(),
+                        nft_src.to_string()
                     )
             );
         }
     }
 
-    pub fn callback_join_contest(&mut self, contest_id: String, owner_id: AccountId, nft_src: String) -> () {
+    pub fn callback_join_contest(&mut self, contest_id: String, owner_id: AccountId, token_id: String, nft_src: String) -> () {
         let mut sender_id = env::predecessor_account_id();
         let contest = self.get_contest_by_id(&contest_id)
                                    .expect("[CALLBACK JOIN]: There is no contest with such id");
@@ -347,6 +350,7 @@ impl Contract {
             id: env::block_timestamp().to_string(),
             contest_id: contest_id,
             owner_id: sender_id,
+            token_id: token_id.to_string(),
             nft_src: nft_src.to_string(),
             votes_count: 0
         };
