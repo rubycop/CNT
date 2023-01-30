@@ -1,5 +1,5 @@
 import { utils } from "near-api-js";
-import { convertToTera } from "../../utils/utils";
+import { convertToTera, convertToYocto } from "../../utils/utils";
 
 export class MainContract {
   constructor({ contractId, wallet, parasContractId }) {
@@ -138,6 +138,19 @@ export class MainContract {
         method: "create_contest",
         args,
         gas,
+      });
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  async updateLevel(deposit) {
+    try {
+      return await this.wallet.callMethod({
+        contractId: this.contractId,
+        method: "update_level",
+        gas: convertToTera(50),
+        deposit: convertToYocto(deposit),
       });
     } catch (e) {
       return { error: e };

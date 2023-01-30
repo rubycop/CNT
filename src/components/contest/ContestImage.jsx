@@ -1,4 +1,5 @@
 import { HeartIcon } from "@heroicons/react/outline";
+import { CurrencyDollarIcon, LinkIcon } from "@heroicons/react/solid";
 import React, { useContext, useEffect, useState } from "react";
 import { NearContext } from "../../context/near";
 import { mediaURL, TrophyIcon } from "../../utils/utils";
@@ -47,19 +48,20 @@ export const ContestImage = ({ contest, participant, winner }) => {
         </>
       )}
 
-      <h6 className="text-sm mb-3">{participant.owner_id}</h6>
-      <div className="flex justify-between">
-        <a href={"/contest/${contest.id}"} className="text-sm mb-1">
+      <h6 className="text-sm mt-1 mb-3">{participant.owner_id}</h6>
+      <div className="flex justify-between items-center">
+        <a href={"/contest/${contest.id}"} className="text-base flex ">
+          <LinkIcon className="mr-1 w-5 h-5" />
           View Contest
-          <i className="fa fa-link ml-1"></i>
         </a>
 
         <a
           href={`${process.env.PARAS_VIEW_URL}::${collectionId}/${participant.token_id}`}
           target="_blank"
-          className="text-sm"
+          className="text-sm flex bg-violet-600/70 hover:bg-violet-600 text-white p-2 px-4 rounded-full"
         >
-          Visit to Buy <i className="fa fa-link ml-1"></i>
+          Visit to Buy
+          <CurrencyDollarIcon className="ml-1 w-5 h-5" />
         </a>
       </div>
     </div>

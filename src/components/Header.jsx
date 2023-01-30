@@ -1,4 +1,5 @@
 import {
+  ArrowUpIcon,
   CheckCircleIcon,
   LoginIcon,
   LogoutIcon,
@@ -9,14 +10,10 @@ import { Col, Container, Row } from "../assets/styles/common.style";
 import { Button } from "./Button";
 import logo from "../assets/images/logo.png";
 import { NearContext } from "../context/near";
-import { convertFromYocto, formatNumber } from "../utils/utils";
-import {
-  BellIcon,
-  ChartBarIcon,
-  DatabaseIcon,
-  ViewListIcon,
-} from "@heroicons/react/outline";
+import { convertFromYocto, formatNumber, getLevel } from "../utils/utils";
+import { BellIcon, ChartBarIcon, DatabaseIcon } from "@heroicons/react/outline";
 import { AccountContext } from "../context/account";
+import { UpgradeModal } from "./contest/UpgradeModal";
 
 export const Header = ({ dark }) => {
   const near = useContext(NearContext);
@@ -26,6 +23,7 @@ export const Header = ({ dark }) => {
   const [small, setSmall] = useState(false);
   const [show, setShow] = useState(false);
   const [toggleAccount, setToggleAccount] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const getReward = async () => {
     isLoading(true);
@@ -169,7 +167,7 @@ export const Header = ({ dark }) => {
                   </div>
                 </div>
                 <div className="w-full">
-                  <div className="p-5 rounded-lg bg-black/40">
+                  <div className="p-5 rounded-lg bg-black/40 flex  flex-col gap-2">
                     <div className="flex justify-between text-sm">
                       <div>Earned</div>
                       <div className="text-green-500">
@@ -177,8 +175,24 @@ export const Header = ({ dark }) => {
                       </div>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <div>Level 1</div>
+                      <div>Level {getLevel(xp)}</div>
                       <div>{formatNumber(xp)} XP</div>
+                    </div>
+                    <div className="mt-1">
+                      <div className="w-full">
+                        <Button
+                          full
+                          secondary
+                          small
+                          handleClick={() => setShowUpgradeModal(true)}
+                          title="Upgrade Level"
+                          icon={<ArrowUpIcon className="ml-2 w-4 h-4" />}
+                        />
+                      </div>
+                      <UpgradeModal
+                        showModal={showUpgradeModal}
+                        setShowModal={setShowUpgradeModal}
+                      />
                     </div>
                   </div>
                   <a

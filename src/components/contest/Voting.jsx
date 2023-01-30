@@ -15,7 +15,7 @@ export const Voting = ({ participants, loading, respReward, vote }) => (
               <div className="flex bg-black/50 justify-center items-center w-full h-full backdrop-blur-md">
                 <svg
                   aria-hidden="true"
-                  class="w-10 h-10 text-gray-900 animate-spin fill-white"
+                  className="w-10 h-10 text-gray-900 animate-spin fill-white"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"

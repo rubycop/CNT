@@ -1,4 +1,4 @@
-import { PlusIcon } from "@heroicons/react/solid";
+import { LockClosedIcon, PlusIcon } from "@heroicons/react/solid";
 import React, { useContext, useEffect, useState } from "react";
 import { Container, Row, Wrapper } from "../../assets/styles/common.style";
 import { Button } from "../../components/Button";
@@ -12,9 +12,15 @@ import { Tab } from "../../components/Tab";
 import { NearContext } from "../../context/near";
 import private_contest from "../../assets/images/private_contest.png";
 import public_contest from "../../assets/images/public_contest.jpeg";
+import { Notification } from "../../components/Notification";
+import { getLevel } from "../../utils/utils";
+import { AccountContext } from "../../context/account";
+import { LockOpenIcon } from "@heroicons/react/outline";
+import { UpgradeModal } from "../../components/contest/UpgradeModal";
 
 export const ContestList = () => {
   const near = useContext(NearContext);
+  const { xp } = useContext(AccountContext);
 
   const [loading, isLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -65,9 +71,27 @@ export const ContestList = () => {
     if (mode === 2) showPast();
   }, [mode]);
 
-  const Section = ({ title, children }) => (
-    <div className="shadow-md mx-10 py-16" id="infos">
-      <h1 className="wow fadeIn text-white text-4xl font-semibold">{title}</h1>
+  const Section = ({ title, children, label }) => (
+    <div className="shadow-md mx-10 pt-16" id="infos">
+      {label ? (
+        <div className="flex lg:flex-row flex-col justify-between lg:items-center">
+          <div className="flex gap-x-7 items-center">
+            <h1 className="wow fadeIn text-white text-4xl font-semibold">
+              {title}
+            </h1>
+            <div className="wow fadeIn text-red-500 flex flex-row items-center justify-cente text-sm text-center p-2 px-4  border border-solid border-red-500 rounded-full">
+              <span>
+                <LockClosedIcon className="w-4 h-4 mr-2" />
+              </span>
+              <span>{label}</span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <h1 className="wow fadeIn text-white text-4xl font-semibold">
+          {title}
+        </h1>
+      )}
       <div className="w-full bg-gray-800 mt-8 mb-12 h-[1px]"></div>
       {children}
     </div>
@@ -98,6 +122,7 @@ export const ContestList = () => {
   return (
     <>
       <Header />
+      <Notification />
 
       <div className="relative lg:block hidden">
         <img
@@ -111,35 +136,42 @@ export const ContestList = () => {
         />
       </div>
 
-      <div className="flex flex-col lg:flex-row mx-0 lg:mx-20 mt-16">
+      <div className="flex flex-col lg:flex-row mx-0 lg:mx-20 my-10">
         <div className="w-full">
-          <Section title="Create Contest">
-            <div className="wow fadeInUp w-full lg:px-0 flex gap-10 flex-col lg:flex-row justify-center">
-              <CreateContestItem
-                src={public_contest}
-                title="Public Contest"
-                description="Everyone can join contest"
-                handleClick={() => setShowModal(true)}
-              />
+          <Section
+            title="Create Contest"
+            label={parseInt(xp) && getLevel(xp) < 4 && "Level 4"}
+          >
+            {getLevel(xp) >= 4 && (
+              <>
+                <div className="wow fadeInUp w-full lg:px-0 flex gap-10 flex-col lg:flex-row justify-center">
+                  <CreateContestItem
+                    src={public_contest}
+                    title="Public Contest"
+                    description="Everyone can join contest"
+                    handleClick={() => setShowModal(true)}
+                  />
 
-              <CreateContestItem
-                src={private_contest}
-                title="1-to-1 Contest"
-                description={
-                  <>
-                    Only requester can join contest.
-                    <br />
-                    Coming soon...
-                  </>
-                }
-                handleClick={() => {}}
-              />
-            </div>
+                  <CreateContestItem
+                    src={private_contest}
+                    title="1-to-1 Contest"
+                    description={
+                      <>
+                        Only requester can join contest.
+                        <br />
+                        Coming soon...
+                      </>
+                    }
+                    handleClick={() => {}}
+                  />
+                </div>
 
-            <CreateContestModal
-              showModal={showModal}
-              setShowModal={setShowModal}
-            />
+                <CreateContestModal
+                  showModal={showModal}
+                  setShowModal={setShowModal}
+                />
+              </>
+            )}
           </Section>
           <Section
             title={`${

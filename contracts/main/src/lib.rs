@@ -17,7 +17,7 @@ pub const XP_JOIN_CNT: u32 = 10;
 pub const XP_JOIN_NEAR: u32 = 25;
 pub const XP_PREDICT: u32 = 15;
 pub const XP_WIN: u32 = 50;
-pub const XP_REWARD_MAP: [u32; 6] = [3,5,7,10,15,20];
+pub const XP_REWARD_MAP: [u32; 6] = [3,4,5,7,10,15];
 
 #[derive(BorshStorageKey, BorshSerialize)]
 pub enum StorageKeys {
@@ -264,11 +264,10 @@ impl Contract {
         let mut xp = self.get_account_xp(account_id.clone());
         let earned_xp = match xp {
             0..=29 => XP_REWARD_MAP[0],
-            30..=59 => XP_REWARD_MAP[1],
-            60..=149 => XP_REWARD_MAP[2],
-            150..=449 => XP_REWARD_MAP[3],
-            450..=1574 => XP_REWARD_MAP[4],
-            1575..=6299 => XP_REWARD_MAP[5],
+            30..=49 => XP_REWARD_MAP[1],
+            50..=119 => XP_REWARD_MAP[2],
+            120..=249 => XP_REWARD_MAP[3],
+            250..=599 => XP_REWARD_MAP[4],
             _ => XP_REWARD_MAP[5],
         };
         xp += earned_xp;
@@ -286,6 +285,12 @@ impl Contract {
             end_time: String,
             currency_ft: bool
         ) -> String {
+        let xp = self.get_account_xp(env::predecessor_account_id());
+
+        if xp < 120 {
+            env::panic_str("Reach 4 Level (120 XP) to create contest");
+        }
+        
         let id = env::block_timestamp();
         let new_contest = Contest {
             id: id.to_string(),
@@ -327,6 +332,26 @@ impl Contract {
                     )
             );
         }
+    }
+
+    #[payable]
+    pub fn update_level(&mut self) -> () {
+        let account_id = env::predecessor_account_id();
+        let transfer_amount: u128 = env::attached_deposit();
+        
+        let mut xp = self.get_account_xp(env::predecessor_account_id());
+        xp += 10 * (transfer_amount / u128::from(ONE_NEAR)) as u32;
+
+        Promise::new(env::current_account_id()).transfer(transfer_amount).then(
+            Self::ext(env::current_account_id())
+                .with_static_gas(Contract::convert_to_tera(30))
+                .callback_update_level(account_id.clone(), xp.clone())
+        );
+        
+    }
+
+    pub fn callback_update_level(&mut self, account_id: AccountId, xp: u32) -> () {
+        self.accounts.insert(&account_id, &xp);
     }
 
     pub fn callback_join_contest(&mut self, contest_id: String, owner_id: AccountId, token_id: String, nft_src: String) -> () {
@@ -462,20 +487,24 @@ impl Contract {
                 self.add_xp(acc_id.clone(), XP_WIN);
                 self.add_token_storage(&acc_id);
 
-                Promise::new(self.contract_ft.clone()).function_call(
-                    "ft_transfer".to_string(),
-                    json!({
-                        "receiver_id": acc_id,
-                        "amount": transfer_amount.to_string(),
-                    }).to_string().as_bytes().to_vec(),
-                    1,
-                    Contract::convert_to_tera(20),
-                );
-            } else {
-                if env::attached_deposit() != (reward + fee) as u128 * u128::from(ONE_NEAR) {
-                    env::panic_str("Attached amount does not match entry fee");
+                if reward > 0.0 {
+                    Promise::new(self.contract_ft.clone()).function_call(
+                        "ft_transfer".to_string(),
+                        json!({
+                            "receiver_id": acc_id,
+                            "amount": transfer_amount.to_string(),
+                        }).to_string().as_bytes().to_vec(),
+                        1,
+                        Contract::convert_to_tera(20),
+                    );
                 }
-                Promise::new(acc_id).transfer(transfer_amount);
+            } else {
+                if reward > 0.0 {
+                    if env::attached_deposit() != (reward + fee) as u128 * u128::from(ONE_NEAR) {
+                        env::panic_str("Attached amount does not match entry fee");
+                    }
+                    Promise::new(acc_id).transfer(transfer_amount);
+                }
             }
         }
         self.contests.remove(index);

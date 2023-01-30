@@ -56,9 +56,9 @@ export const ContestItem = ({ contest, small }) => {
   }, []);
 
   const Participants = ({ contest }) => (
-    <div className="mb-2 text-sm font-semibold uppercase tracking-wider">
+    <div className="mb-2 font-semibold uppercase tracking-wider">
       {!loading && isIncomming(contest) && (
-        <div className="flex mb-1 flex-row justify-between">
+        <div className="flex mb-2 flex-row justify-between">
           <div>Participants</div>
           <div>
             {participants?.length} / {contest.size}
@@ -67,7 +67,7 @@ export const ContestItem = ({ contest, small }) => {
       )}
       {isActive(contest) && (
         <>
-          <div className="flex mb-1 flex-row justify-between">
+          <div className="flex mb-2 flex-row justify-between">
             <div>Participants</div>
             <div>
               {participants?.length} / {contest.size}
@@ -112,19 +112,19 @@ export const ContestItem = ({ contest, small }) => {
       </div>
       <div className="justify-between flex flex-col w-full flex-1">
         <div className="relative">
-          <div className="mt-6 mb-5 w-full">
+          <div className="mt-6 w-full text-sm relative">
             <h2 className="text-2xl mb-5 font-semibold line-clamp-1">
               {contest.title}
             </h2>
 
-            <div className="mb-1 text-sm flex flex-row font-semibold uppercase tracking-wider  justify-between">
-              <div>Prize pool</div>
+            <div className="z-30 p-2 px-5 absolute -top-11 text-base -right-2 bg-gray-900 rounded-xl flex flex-row font-semibold tracking-wider justify-between">
               <div
-                className="ml-2 flex items-center
+                className="flex items-center
                  text-green-500"
               >
                 {participants?.length > 0 ? (
                   <>
+                    <TrophyIcon styles="w-5 h-5 mr-2" onlyIcon />
                     <div>{getPrizePool}</div>
                     <Currency contest={contest} />
                   </>
@@ -138,7 +138,7 @@ export const ContestItem = ({ contest, small }) => {
           </div>
 
           {(isIncomming(contest) || isActive(contest)) && (
-            <div className="hidden text-sm lg:block mb-12">
+            <div className="hidden lg:block mt-5">
               <div className="mb-2">
                 <Timer contest={contest} />
               </div>
@@ -153,9 +153,9 @@ export const ContestItem = ({ contest, small }) => {
           )}
         </div>
 
-        <div className="flex-col items-end justify-center w-full">
+        <div className="flex-col mt-10 items-end justify-center w-full">
           {isIncomming(contest) && !participated() ? (
-            <>
+            <div className="mb-5">
               <Button
                 full
                 disabled={!near.isSigned}
@@ -173,14 +173,16 @@ export const ContestItem = ({ contest, small }) => {
                 setShowModal={setShowJoinModal}
                 contest={contest}
               />
-            </>
+            </div>
           ) : isIncomming(contest) && participated() ? (
-            <Button full disabled title="Joined" handleClick={() => {}} />
+            <div className="mb-5">
+              <Button full disabled title="Joined" handleClick={() => {}} />
+            </div>
           ) : (
             <></>
           )}
           <div
-            className="text-center w-full pt-5 text-violet-300/40 hover:text-violet-300 cursor-pointer"
+            className="text-center w-full text-violet-300/40 hover:text-violet-300 cursor-pointer"
             onClick={(e) => {
               navigate(`/contest/${contest.id}`);
             }}

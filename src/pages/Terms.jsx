@@ -6,10 +6,10 @@ export const Terms = () => (
   <>
     <Header dark />
     <div className="relative p-32 z-10 bg-white shadow-lg">
-      <h1 class="text-black font-bold text-3xl sm:text-4xl md:text-[45px] mb-4 text-center">
+      <h1 className="text-black font-bold text-3xl sm:text-4xl md:text-[45px] mb-4 text-center">
         Terms &amp; Conditions
       </h1>
-      <div class="text-base mt-8">
+      <div className="text-base mt-8">
         <p>
           The site contesty.app is a web browser application (here and hereafter
           "App") that provides users to participate in platform contests, vote
@@ -68,22 +68,22 @@ export const Terms = () => (
           (iii) are prohibited from accessing or using this App or any of this
           App’s contents, products or services by applicable law.
         </p>
-        <p class="text-xl font-semibold mt-6">
+        <p className="text-xl font-semibold mt-6">
           1. USE OF THE APP; ACCOUNT SET-UP AND SECURITY
         </p>
         <ul>
-          <li class="mb-2">
+          <li className="mb-2">
             1.1 Account and Wallet Set-Up. To most easily use the App, you
             should first install a web browser (such as the Google Chrome web
             browser). You will also need register to establish an account
             affiliated with an electronic wallet, which will enable you to store
             information in blockchain via the App.
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             1.2 Account Registration. You Account will be register automatically
             after login using your NEAR Wallet.
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             1.3 Account Security. You are responsible for the security of your
             account for the App and for your electronic wallets. If you become
             aware of any unauthorized use of your password or of your account
@@ -99,9 +99,11 @@ export const Terms = () => (
             on the App.
           </li>
         </ul>
-        <p class="text-xl font-semibold mt-6">2. PAYMENT, GAS FEES AND TAXES</p>
+        <p className="text-xl font-semibold mt-6">
+          2. PAYMENT, GAS FEES AND TAXES
+        </p>
         <ul>
-          <li class="mb-2">
+          <li className="mb-2">
             2.1 Financial Transactions on App. Any payments or financial
             transactions that you engage in via the App will be conducted solely
             through the NEAR Network. We have no control over these payments or
@@ -113,7 +115,7 @@ export const Terms = () => (
             provide refunds for any token transfer or purchases that you might
             make on or through the App.
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             2.2 Gas Fees. Every transaction on the NEAR Network requires the
             payment of a transaction fee (each, a “Gas Fee”). The Gas Fees fund
             the network of computers that run the decentralized NEAR Network.
@@ -145,7 +147,7 @@ export const Terms = () => (
             Canada, and will inform us if your status changes in the future.
           </li>
         </ul>
-        <p class="text-xl font-semibold mt-6">
+        <p className="text-xl font-semibold mt-6">
           3. OWNERSHIP, LICENSE, AND OWNERSHIP RESTRICTIONS
         </p>
         <p>
@@ -158,7 +160,7 @@ export const Terms = () => (
         </p>
         <br />
         <ul>
-          <li class="mb-2">
+          <li className="mb-2">
             3.1 We Own the App. You acknowledge and agree that we (or, as
             applicable, our licensors) owns all legal right, title and interest
             in and to all other elements of the App, and all intellectual
@@ -175,7 +177,7 @@ export const Terms = () => (
             associated with the App or otherwise contained in the App Materials
             are proprietary to us or our licensors.
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             3.2 No User License or Ownership of App Materials. Except as
             expressly set forth herein, your use of the App does not grant you
             ownership of or any other rights with respect to any content, code,
@@ -183,7 +185,7 @@ export const Terms = () => (
             App. We reserve all rights in and to the App Materials that are not
             expressly granted to you in these Terms.
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             3.3 Further User Ownership Acknowledgements. For the sake of
             clarity, you understand and agree: (a) that your purchase of a User
             Account, whether via the App or otherwise, does not give you any
@@ -213,7 +215,7 @@ export const Terms = () => (
             purpose.
           </li>
         </ul>
-        <p class="text-xl font-semibold mt-6">
+        <p className="text-xl font-semibold mt-6">
           4. CONDITIONS OF USE AND PROHIBITED ACTIVITIES
         </p>
         <p>
@@ -337,7 +339,7 @@ export const Terms = () => (
             terminate your user account.
           </li>
         </ul>
-        <p class="text-xl font-semibold mt-6">5. DISCLAIMERS</p>
+        <p className="text-xl font-semibold mt-6">5. DISCLAIMERS</p>
         <p>
           YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR ACCESS TO AND USE OF THE
           APP IS AT YOUR SOLE RISK, AND THAT THE APP PROVIDED "AS IS" AND "AS
@@ -390,7 +392,7 @@ export const Terms = () => (
           BLOCKCHAIN SUPPORTING THE NEAR NETWORK, INCLUDING FORKS, TECHNICAL
           NODE ISSUES, OR ANY OTHER ISSUES HAVING FUND LOSSES AS A RESULT.
         </p>
-        <p class="text-xl font-semibold mt-6">6. LIMITATION OF LIABILITY</p>
+        <p className="text-xl font-semibold mt-6">6. LIMITATION OF LIABILITY</p>
         <p>
           IN NO EVENT SHALL ATOMICLAB BE LIABLE TO YOU FOR ANY PERSONAL INJURY,
           PROPERTY DAMAGE, LOST PROFITS, COST OF SUBSTITUTE GOODS OR SERVICES,
@@ -424,28 +426,28 @@ export const Terms = () => (
           YOU AND FORM AN ESSENTIAL BASIS OF THE BARGAIN BETWEEN US AND YOU. WE
           WOULD NOT BE ABLE TO PROVIDE THE APP TO YOU WITHOUT THESE LIMITATIONS.
         </p>
-        <p class="text-xl font-semibold mt-6">7. ASSUMPTION OF RISK</p>
+        <p className="text-xl font-semibold mt-6">7. ASSUMPTION OF RISK</p>
         <ul>
-          <li class="mb-2">
+          <li className="mb-2">
             7.1 Value and Volatility. The rights provided to you are for
             entertainment purposes only. Without limiting the foregoing, the
             prices of collectible blockchain assets are extremely volatile and
             subjective and collectible blockchain assets have no inherent or
             intrinsic value.
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             7.2 Tax Calculations. You are solely responsible for determining
             what, if any, taxes apply to your Collectible-related transactions.
             We are not responsible for determining the taxes that apply to your
             transactions on the App.
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             7.3 Use of Blockchain. The App store all information in NEAR
             Blockchain. This information can't be removed or changed after
             creation. All blockchain transaction indexed by The Graph to
             delivery messages for end users.
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             7.4 Inherent Risks with Internet Currency. There are risks
             associated with using an Internet-based currency, including, but not
             limited to, the risk of hardware, software and Internet connections,
@@ -456,7 +458,7 @@ export const Terms = () => (
             distortions or delays you may experience when using the NEAR
             Network, however caused.
           </li>
-          <li class="mb-2">
+          <li className="mb-2">
             7.5 Regulatory Uncertainty. The regulatory regime governing
             blockchain technologies, cryptocurrencies and tokens is uncertain,
             and new regulations or policies may materially adversely affect the
@@ -476,7 +478,7 @@ export const Terms = () => (
             be construed as professional or financial advice of any kind.
           </li>
         </ul>
-        <p class="text-xl font-semibold mt-6">8. INDEMNIFICATION</p>
+        <p className="text-xl font-semibold mt-6">8. INDEMNIFICATION</p>
         <p>
           You agree to hold harmless and indemnify each of AtomicLab and each of
           their respective parents, subsidiaries, affiliates, officers, agents,
@@ -490,7 +492,7 @@ export const Terms = () => (
           You agree that we will have control of the defense or settlement of
           any such claims.
         </p>
-        <p class="text-xl font-semibold mt-6">9. EXTERNAL SITES</p>
+        <p className="text-xl font-semibold mt-6">9. EXTERNAL SITES</p>
         <p>
           The App may include hyperlinks to other websites or resources
           (collectively, the “External Sites”), which are provided solely as a
@@ -505,8 +507,8 @@ export const Terms = () => (
           accuracy or existence of any advertising, products or other materials
           on, or made available from, any External Sites.
         </p>
-        <p class="text-xl font-semibold mt-6">10. FORCE MAJEURE</p>
-        <p class="mb-2">
+        <p className="text-xl font-semibold mt-6">10. FORCE MAJEURE</p>
+        <p className="mb-2">
           10.1 Force Majeure Events. AtomicLab will not be liable or responsible
           to the you, nor be deemed to have defaulted under or breached these
           Terms, for any failure or delay in fulfilling or performing any of
@@ -536,7 +538,7 @@ export const Terms = () => (
           under this Section 11, we may thereafter terminate these Terms upon
           fifteen (15) days' written notice.
         </p>
-        <p class="text-xl font-semibold mt-6">11. CHANGES TO THE APP</p>
+        <p className="text-xl font-semibold mt-6">11. CHANGES TO THE APP</p>
         <p>
           We are constantly innovating the App to help provide the best possible
           experience. You acknowledge and agree that the form and nature of the
@@ -544,7 +546,7 @@ export const Terms = () => (
           notice to you, and that we may add new features and change any part of
           the App at any time without notice.
         </p>
-        <p class="text-xl font-semibold mt-6">12. CHILDREN</p>
+        <p className="text-xl font-semibold mt-6">12. CHILDREN</p>
         <p>
           You affirm that you are over the age of 18. The App is not intended
           for children under 18. If you are under the age of 18, you may not use
@@ -556,7 +558,7 @@ export const Terms = () => (
           minimum age for providing consent for data collection in your country,
           you may not use the App.
         </p>
-        <p class="text-xl font-semibold mt-6">13. PRIVACY POLICY</p>
+        <p className="text-xl font-semibold mt-6">13. PRIVACY POLICY</p>
         <p>
           Our <a href="/privacy">Privacy Policy</a> describes the ways we
           collect, use, store and disclose your personal information, and is

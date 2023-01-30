@@ -58,6 +58,25 @@ export const formatNumber = (n) => {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+export const getLevel = (n) => {
+  switch (true) {
+    case n < 30:
+      return 1;
+    case n >= 30 && n < 50:
+      return 2;
+    case n >= 50 && n < 120:
+      return 3;
+    case n >= 120 && n < 250:
+      return 4;
+    case n >= 250 && n < 600:
+      return 5;
+    case n >= 60:
+      return 6;
+    default:
+      return 1;
+  }
+};
+
 export const convertToTera = (amount) => {
   return Big(amount)
     .times(10 ** 12)
@@ -98,8 +117,12 @@ export const shuffle = (array) => {
   return array;
 };
 
-export const TrophyIcon = ({ styles }) => (
-  <div className="rounded-full p-4 bg-black/80 text-yellow-400 shadow-xl">
+export const TrophyIcon = ({ styles, onlyIcon }) => (
+  <div
+    className={`${
+      !onlyIcon && "rounded-full p-4 bg-black/80 text-yellow-400 shadow-xl"
+    }`}
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

@@ -10,10 +10,12 @@ export const Button = ({
   secondary,
   white,
   full,
+  small,
 }) => (
   <button
     disabled={disabled}
-    className={`${
+    className={`${small && "p-2 text-xs"}
+    ${
       full && "w-full"
     } flex flex-row items-center text-white p-4 px-6 rounded-full
     ${
@@ -32,7 +34,11 @@ export const Button = ({
           }`
     } ${
       secondary &&
-      "text-violet-500 hover:text-violet-700 border-2 hover:border-violet-700 border-violet-500"
+      `${
+        !outlined
+          ? "bg-violet-400/20 text-violet-100/50 hover:text-violet-100/70 hover:bg-violet-400/30"
+          : "text-violet-300/40 hover:text-violet-300/70 border-2 hover:border-violet-300/70 border-violet-300/40"
+      }`
     } 
     `}
     onClick={handleClick}

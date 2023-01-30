@@ -67,7 +67,7 @@ export const PredictContestModal = ({
       loading={loading}
     >
       <div className="mb-6 w-full h-full flex flex-wrap gap-3 overflow-y-auto">
-        <div className="flex flex-col w-2/3">
+        <div className="flex flex-col w-full">
           <Input
             id="amount"
             placeholder="Enter CNT amount"

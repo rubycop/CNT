@@ -1,11 +1,12 @@
-import { PlusIcon } from "@heroicons/react/solid";
+import { LockClosedIcon, PlusIcon } from "@heroicons/react/solid";
 import React, { useContext, useState } from "react";
 import { NearContext } from "../../context/near";
 import { NotificationContext } from "../../context/notification";
-import { mediaURL, uploadMediaToIPFS } from "../../utils/utils";
+import { getLevel, mediaURL, uploadMediaToIPFS } from "../../utils/utils";
 import { Input, Select } from "../Form";
 import { Modal } from "../Modal";
 import { format } from "date-fns";
+import { AccountContext } from "../../context/account";
 
 const inputClass =
   "bg-violet-200/10 border border-violet-300/40 text-white text-sm rounded-lg focus:ring-violet-900 focus:border-violet-900 block w-full p-2.5";
@@ -13,6 +14,8 @@ const labelClass = "block mb-1 text-sm font-medium text-violet-200/50";
 
 export const CreateContestModal = ({ showModal, setShowModal }) => {
   const near = useContext(NearContext);
+  const { xp } = useContext(AccountContext);
+
   const {
     setShowNotification,
     setNotificationText,
@@ -50,6 +53,8 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
       end_time: endTime.toString(),
       image: ipfsResp ? mediaURL(ipfsResp) : "",
     });
+
+    console.log(resp);
 
     if (resp.error) {
       setShowNotification(true);
@@ -143,6 +148,7 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
               />
             </div>
           </div>
+
           <div className="flex w-full gap-x-5 justify-between bg-gray-900">
             <div className="w-full">
               <label className={labelClass}>Start Date</label>
@@ -172,6 +178,27 @@ export const CreateContestModal = ({ showModal, setShowModal }) => {
               />
             </div>
           </div>
+
+          {getLevel(xp) < 6 ? (
+            <div
+              className="w-full hover:cursor-not-allowed
+             p-3 mt-5 relative rounded-xl bg-violet-300/10 border border-solid border-red-400/80"
+            >
+              <div className="absolute text-red-400/80 p-1 top-2 rounded-xl px-2 right-3 text-xs flex">
+                <LockClosedIcon className="w-4 h-4 mr-2" />
+                <span>Level 6</span>
+              </div>
+              <Input disabled placeholder="Royalty %" val={0} />
+            </div>
+          ) : (
+            <Input
+              type="number"
+              min={0}
+              placeholder="Royalty %"
+              val={entryFee}
+              handleChange={setEntryFee}
+            />
+          )}
         </div>
       </div>
     </Modal>

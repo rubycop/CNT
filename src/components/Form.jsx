@@ -6,6 +6,7 @@ const inputClass =
 const labelClass = "block mb-1 text-sm font-medium text-violet-200/50";
 
 export const Input = ({
+  disabled,
   id,
   placeholder,
   type,
@@ -19,9 +20,12 @@ export const Input = ({
     </label>
 
     <input
+      disabled={disabled}
       type={type}
       id={id}
-      className={inputClass}
+      className={`${
+        disabled ? "text-violet-300/40 border-0 bg-violet-300/10" : "text-white"
+      }  ${inputClass}`}
       required
       placeholder={placeholder}
       value={val}
@@ -37,8 +41,10 @@ export const Select = ({ id, placeholder, handleChange, options }) => (
       {placeholder}
     </label>
     <select id={id} onChange={handleChange} className={inputClass}>
-      {options.map(({ label, value }) => (
-        <option value={value}>{label}</option>
+      {options.map(({ label, value }, i) => (
+        <option key={i} value={value}>
+          {label}
+        </option>
       ))}
     </select>
   </div>
