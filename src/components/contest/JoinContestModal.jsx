@@ -26,12 +26,9 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
             {
               type: "FunctionCall",
               params: {
-                methodName: "callback_join_contest",
+                methodName: "add_token_storage",
                 args: {
-                  contest_id: contest.id,
-                  token_id: chosen[0],
-                  nft_src: chosen[1],
-                  owner_id: near.wallet.accountId,
+                  account_id: near.wallet.accountId,
                 },
                 gas: convertToTera("30"),
               },
@@ -52,8 +49,28 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
                 receiver_id: `burn.${near.mainContract.contractId}`,
                 amount: convertToYocto(contest.entry_fee),
               },
-              gas: convertToTera("90"),
+              gas: convertToTera("50"),
               deposit: 1,
+            },
+          },
+        ],
+      });
+
+      txns.push({
+        signerId: near.wallet.accountId,
+        receiverId: near.mainContract.contractId,
+        actions: [
+          {
+            type: "FunctionCall",
+            params: {
+              methodName: "callback_join_contest",
+              args: {
+                contest_id: contest.id,
+                token_id: chosen[0],
+                nft_src: chosen[1],
+                owner_id: near.wallet.accountId,
+              },
+              gas: convertToTera("30"),
             },
           },
         ],
@@ -143,12 +160,12 @@ export const JoinContestModal = ({ showModal, setShowModal, contest }) => {
                 </div>
               ))
             ) : (
-              <p className="text-2xl font-normal text-center leading-relaxed">
+              <p className="text-xl font-normal text-center leading-relaxed w-full">
                 You don't have any NFTs on Paras. <br />
                 Visit{" "}
                 <a
                   className="text-violet-600 underline"
-                  href="https://paras.id/"
+                  href={process.env.PARAS_VIEW_URL}
                 >
                   paras.id
                 </a>{" "}

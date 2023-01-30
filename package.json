@@ -8,7 +8,7 @@
     "dev:build:web": "NODE_ENV=development parcel build src/index.html --public-url ./",
     "local:deploy:clear": "rm -rf ./neardev",
     "local:deploy:contract": "yarn build:contracts && ./local-deploy.sh",
-    "dev:deploy:contract": "NEAR_ENV=testnet near deploy --accountId \"beat_my_nft.testnet\" --wasmFile out/main.wasm",
+    "dev:deploy:contract": "NEAR_ENV=testnet near deploy --accountId \"contesty-v2.testnet\" --wasmFile out/main.wasm",
     "prod:deploy:contract": "NEAR_ENV=mainnet near deploy --accountId \"beat_my_nft.near\" --wasmFile out/main.wasm",
     "prestart": "rm -rf ./parcel-cache",
     "cleanup": "rm -rf .parcel-cache && rm -rf ./dist",

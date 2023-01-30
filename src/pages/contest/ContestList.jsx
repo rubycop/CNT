@@ -140,7 +140,7 @@ export const ContestList = () => {
         <div className="w-full">
           <Section
             title="Create Contest"
-            label={parseInt(xp) && getLevel(xp) < 4 && "Level 4"}
+            label={xp != "-" && getLevel(xp) < 4 && "Level 4"}
           >
             {getLevel(xp) >= 4 && (
               <>

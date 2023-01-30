@@ -19,13 +19,15 @@ export const Modal = ({
       <>
         <div className="flex border-2 justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
           <div className="mx-auto md:w-1/2 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-gray-900 outline-none focus:outline-none">
-            <div className="p-10 pb-0 flex items-start justify-between">
-              <h3 className=" text-3xl font-semibold">{title}</h3>
+            <div className="p-8 pb-0 flex items-start justify-between">
+              <h3 className="text-3xl font-semibold">{title}</h3>
               <button
-                className="p-1 ml-auto bg-transparent border-0 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                className="ml-auto bg-transparent border-0 float-right outline-none focus:outline-none"
                 onClick={() => setShowModal(false)}
               >
-                <span className="text-white h-6 w-6 text-2xl block">×</span>
+                <span className="text-violet-300/40 hover:text-violet-300 h-6 w-6 text-4xl font-normal block">
+                  ×
+                </span>
               </button>
             </div>
 
