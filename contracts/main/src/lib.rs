@@ -500,9 +500,6 @@ impl Contract {
                 }
             } else {
                 if reward > 0.0 {
-                    if env::attached_deposit() != (reward + fee) as u128 * u128::from(ONE_NEAR) {
-                        env::panic_str("Attached amount does not match entry fee");
-                    }
                     Promise::new(acc_id).transfer(transfer_amount);
                 }
             }

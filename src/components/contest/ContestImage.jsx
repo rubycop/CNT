@@ -32,7 +32,7 @@ export const ContestImage = ({ contest, participant, winner }) => {
         <>
           <img
             className="w-72 h-64 object-cover rounded-xl"
-            src={mediaURL(participant.nft_src)}
+            src={participant.nft_src}
             onError={(error) =>
               (error.target.src = require("../../assets/images/no-image.png"))
             }

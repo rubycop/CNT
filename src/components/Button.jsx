@@ -14,7 +14,7 @@ export const Button = ({
 }) => (
   <button
     disabled={disabled}
-    className={`${small && "p-2 text-xs"}
+    className={`${small && "p-2 text-xs "}
     ${
       full && "w-full"
     } flex flex-row items-center text-white p-4 px-6 rounded-full
