@@ -14,10 +14,10 @@ export const Button = ({
 }) => (
   <button
     disabled={disabled}
-    className={`${small && "p-2 text-xs "}
-    ${
-      full && "w-full"
-    } flex flex-row items-center text-white p-4 px-6 rounded-full
+    className={`
+    ${full && "w-full"} flex flex-row items-center text-white ${
+      small ? "p-3 text-sm" : "p-4"
+    } px-6 rounded-full
     ${
       disabled
         ? "text-violet-200/50 bg-violet-300/20 hover:bg-violet-300/20 cursor-not-allowed"
