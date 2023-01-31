@@ -1,6 +1,7 @@
 import { EyeIcon, HeartIcon } from "@heroicons/react/outline";
 import { TrendingDownIcon, TrendingUpIcon } from "@heroicons/react/solid";
 import React, { useState } from "react";
+import { mediaURL } from "../../utils/utils";
 import { Button } from "../Button";
 import { PredictContestModal } from "./PredictContestModal";
 
@@ -47,7 +48,7 @@ export const PredictImage = ({ participant, totalStake, predictions }) => {
     <div className=" mx-3 p-5 text-base bg-gray-900 border border-solid border-violet-300/20 rounded-2xl">
       <img
         className="w-72 h-64 object-cover rounded-xl"
-        src={participant.nft_src}
+        src={mediaURL(participant.nft_src)}
         onError={(error) =>
           (error.target.src = require("../../assets/images/no-image.png"))
         }

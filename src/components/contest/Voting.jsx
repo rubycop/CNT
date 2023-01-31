@@ -1,5 +1,6 @@
 import { LikeButton } from "./LikeButton";
 import { Carousel } from "flowbite-react";
+import { mediaURL } from "../../utils/utils";
 
 export const Voting = ({ participants, loading, respReward, vote }) => (
   <div className="flex w-full lg:w-1/2 justify-center mb-10">
@@ -8,7 +9,7 @@ export const Voting = ({ participants, loading, respReward, vote }) => (
         {participants.map((p, i) => (
           <div
             key={i}
-            style={{ backgroundImage: "url(" + p.nft_src + ")" }}
+            style={{ backgroundImage: "url(" + mediaURL(p.nft_src) + ")" }}
             className="w-full bg-cover bg-no-repeat bg-center h-[30rem] rounded-2xl"
           >
             {loading ? (
