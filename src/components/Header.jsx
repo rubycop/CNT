@@ -14,10 +14,8 @@ import { convertFromYocto, formatNumber, getLevel } from "../utils/utils";
 import { BellIcon, ChartBarIcon, DatabaseIcon } from "@heroicons/react/outline";
 import { AccountContext } from "../context/account";
 import { UpgradeModal } from "./contest/UpgradeModal";
-import { useNavigate } from "react-router-dom";
 
 export const Header = ({ dark }) => {
-  const navigate = useNavigate();
   const near = useContext(NearContext);
   const { reward, setReward, xp, setXP } = useContext(AccountContext);
 
@@ -123,7 +121,7 @@ export const Header = ({ dark }) => {
             full={show}
             title="Try Testnet app"
             icon={<LoginIcon className="ml-3 h-5 w-5" />}
-            handleClick={() => navigate("test.contesty.app")}
+            handleClick={() => window.location.replace("test.contesty.app")}
             white
           />
         </div>
