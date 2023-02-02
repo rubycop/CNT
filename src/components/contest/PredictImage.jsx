@@ -26,7 +26,7 @@ export const PredictImage = ({ participant, totalStake, predictions }) => {
         <h6 className="text-base flex">
           Win rate
           <div
-            className={`ml-3 text-center py-1 px-2 border border-solid border-${rate[1]}-500 bg-${rate[1]}-500/60 text-white text-xs rounded-full`}
+            className={`ml-3 text-center py-1 px-2 border border-solid border-${rate[1]}-500 text-${rate[1]}-500 text-xs rounded-full`}
           >
             {rate[0]}
           </div>

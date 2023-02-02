@@ -17,6 +17,7 @@ import { NotificationContext } from "../../context/notification";
 import { isActive, mediaURL } from "../../utils/utils";
 import public_contest from "../../assets/images/public_contest.jpeg";
 import { Voting } from "../../components/contest/Voting";
+import { PieChart } from "react-minimal-pie-chart";
 
 export const Contest = () => {
   let { id } = useParams();
@@ -98,9 +99,41 @@ export const Contest = () => {
     setVotes(_votes);
   };
 
+  const participantStake = (prediction) =>
+    prediction?.map((p) => p.amount)?.reduce((a, b) => a + b, 0) || 0.1;
+
+  const randColor = () => {
+    const colors = [
+      "#ffe4f2",
+      "#e54ed0",
+      "#9f45b0",
+      "#44008b",
+      "#00076f",
+      "#75fbed",
+      "#c7e3f2",
+      "#6a7bc4",
+      "#eb0095",
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+
   const Prediction = () => (
-    <div className="flex w-full lg:w-1/2 justify-center mb-10">
-      <div className="flex w-full justify-center gap-x-5">
+    <div className="flex flex-col w-full items-center justify-center mb-10">
+      {/* <div className="flex mb-5 w-64">
+        <PieChart
+          animate
+          lineWidth={10}
+          paddingAngle={3}
+          data={participants.map((p, i) => {
+            return {
+              title: `Participant #${i + 1}`,
+              value: participantStake(predictions[i]),
+              color: randColor(),
+            };
+          })}
+        />
+      </div> */}
+      <div className="flex w-full flex-wrap justify-center gap-x-5">
         {participants.map((p, i) => (
           <PredictImage
             key={i}

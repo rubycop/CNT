@@ -351,6 +351,7 @@ impl Contract {
     }
 
     pub fn callback_update_level(&mut self, account_id: AccountId, xp: u32) -> () {
+        self.add_token_storage(&account_id);
         self.accounts.insert(&account_id, &xp);
     }
 
