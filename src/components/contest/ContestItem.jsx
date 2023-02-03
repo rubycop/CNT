@@ -154,7 +154,9 @@ export const ContestItem = ({ contest, small }) => {
         </div>
 
         <div className="flex-col mt-10 items-end justify-center w-full">
-          {isIncomming(contest) && !participated() ? (
+          {isIncomming(contest) &&
+          !participated() &&
+          participants?.length < contest.size ? (
             <div className="mb-5">
               <Button
                 full
