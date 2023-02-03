@@ -121,7 +121,9 @@ export const Header = ({ dark }) => {
             full={show}
             title="Try Testnet app"
             icon={<LoginIcon className="ml-3 h-5 w-5" />}
-            handleClick={() => window.location.replace("test.contesty.app")}
+            handleClick={() =>
+              window.location.replace("https://test.contesty.app/")
+            }
             white
           />
         </div>
